@@ -4,12 +4,12 @@ const CreateRoom = () => {
   <div className="mt-8 mx-6">
     <div>
       <button className="text-2xl font-black mr-3">X</button>
-      <h2 className="inline-block text-2xl font-black ml-5">모임 만들기</h2>
+      <h2 className="inline-block text-xl font-black ml-5">모임 만들기</h2>
     </div>
 
     <div className="mt-8">
       {/* 기본 정보 작성 */}
-      <h3 className="text-xl font-semibold">기본 정보 작성</h3>
+      <h3 className="text-lg font-semibold">기본 정보 작성</h3>
       <hr className="my-5" />
 
       {/* 방 제목 작성 */}
@@ -34,13 +34,33 @@ const CreateRoom = () => {
     <hr className="my-5" />
     
     {/* 모집 인원 */}
-    <div>
-      <p className="inline-block">모집인원</p>
-      <input type="number" id="minPerson" className="inline-block"/>
-      <label htmlFor="minPerson" className="ml-2">명 </label>
-        
-      <input type="number" id="maxPerson" className="inline-block" />
-      <label htmlFor="maxPerson" className="ml-2">명 </label>
+    {/* <div>
+      <p className="inline-block mr-3">모집인원</p>
+      <div className="inline-block">
+        <div className="w-per20 inline-block">
+          <input type="number" id="minPerson" className="inline-block w-per30"/>
+          <label htmlFor="minPerson" className="ml-2">명</label>
+          <span className="ml-2">~</span>
+        </div>
+        <div className="w-per20 inline-block">
+          <input type="number" id="maxPerson" className="inline-block w-per30" />
+          <label htmlFor="maxPerson" className="ml-2">명 </label>
+        </div>
+      </div>
+    </div> */}
+    <div className="flex justify-evenly">
+      <p className="flex">모집인원</p>
+      <div className="flex justify-evenly">
+        <div className="flex w-per50">
+          <input type="number" id="minPerson" className="w-per70" />
+          <label htmlFor="minPerson">명</label>
+        </div>
+        <span className="flex">~</span>
+        <div className="flex w-per50">
+          <input type="number" id="maxPerson" className="w-per70" />
+          <label htmlFor="maxPerson">명 </label>
+        </div>
+      </div>
     </div>
   </div>
   );
