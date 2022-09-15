@@ -59,7 +59,8 @@ module.exports = {
         per115: "115%",
         per120: "120%",
       },
-      colors: {},
+      colors: {
+      },
     },
   },
   plugins: [],
