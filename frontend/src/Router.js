@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Main from "./pages/Main";
 import CreateRoom from "./pages/room/CreateRoom";
-import CreateRoomMore from "./pages/room/CreateRoomMore";
+import Profile from "./pages/mypage/Profile";
 
 function Router() {
   return (
@@ -10,9 +10,10 @@ function Router() {
       <Route path="/" element={<Main />} />
 
       {/* 방 create */}
-      <Route path="/meeting/create" element={<CreateRoom/>} />
+      <Route path="/meeting/create" element={<CreateRoom />} />
 
-      <Route path="/meeting/create/more" element={<CreateRoomMore/>} />
+      {/* 마아페이지(프로필) */}
+      <Route path="/profile/:userId" element={<Profile />} />
     </Routes>
   );
 }
