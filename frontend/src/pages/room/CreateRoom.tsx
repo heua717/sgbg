@@ -48,20 +48,36 @@ const CreateRoom = () => {
         </div>
       </div>
     </div> */}
-    <div className="flex justify-evenly">
-      <p className="flex">모집인원</p>
-      <div className="flex justify-evenly">
-        <div className="flex w-per50">
-          <input type="number" id="minPerson" className="w-per70" />
-          <label htmlFor="minPerson">명</label>
-        </div>
-        <span className="flex">~</span>
-        <div className="flex w-per50">
-          <input type="number" id="maxPerson" className="w-per70" />
-          <label htmlFor="maxPerson">명 </label>
-        </div>
+    <div className="grid grid-cols-6">
+      <p className="col-span-2">모집인원</p>
+      {/* grid grid-cols-3 */}
+      <div className="col-span-4 grid grid-cols-5">
+        <input type="number" id="minPerson" className="" />
+        <label htmlFor="minPerson" className="text-center">명</label>
+        <span className="text-center">~</span>
+        <input type="number" id="maxPerson" className="" />
+        <label htmlFor="maxPerson" className="text-center">명 </label>
       </div>
     </div>
+    <hr className="my-5" />
+
+    <div className="flex justify-between">
+      <p className="flex">모임 위치</p>
+      <button className="flex">▷</button>
+    </div>
+    <hr className="my-5" />
+
+    <div className="grid">
+      <label htmlFor="roomExplanation" className="mb-3">모임 설명</label>
+      <textarea name="exp" id="roomExplanation" cols={30} rows={8}
+        placeholder="모임에 대한 설명을 입력하세요"></textarea>
+    </div>
+
+    <div className="grid grid-cols-1 mt-3">
+      <button type="button"
+        className="text-center bg-gray-200 rounded py-1">다음으로</button>
+    </div>
+
   </div>
   );
 };
