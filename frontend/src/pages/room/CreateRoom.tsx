@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const CreateRoom = () => {
   return (
     // markup 0915 임지민
@@ -26,10 +28,12 @@ const CreateRoom = () => {
         - 아래 줄 자체를 클릭하면 카테고리 선택 페이지로 넘어가게
         - 클릭하면 회색 그림자?가 나오도록
       */}
-      <div className="flex justify-between">
-        <p className="flex">카테고리</p>
-        <button className="flex">&gt;</button>
-      </div>
+      <Link to="/meeting/category">
+        <div className="flex justify-between">
+            <p className="flex">카테고리</p>
+            <button className="flex">&gt;</button>
+        </div>
+      </Link>
     </div>
     <hr className="my-5" />
     
@@ -70,6 +74,7 @@ const CreateRoom = () => {
     <div className="grid">
       <label htmlFor="roomExplanation" className="mb-3">모임 설명</label>
       <textarea name="exp" id="roomExplanation" cols={30} rows={8}
+        style={{resize: "none"}}
         placeholder="모임에 대한 설명을 입력하세요"></textarea>
     </div>
 
