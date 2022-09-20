@@ -30,7 +30,7 @@ function Router() {
       <Route path="/meeting/create/category" element={<CreateRoomCategory/>} />
 
       {/* 방 create -- 지도 */}
-      <Route path="/meeting/create/location" element={<CreateRoomMap/>}
+      <Route path="/meeting/create/location" element={<CreateRoomMap/>} />
 
       {/* 방 create -- 상세정보 */}
       <Route path="/meeting/create/more" element={<CreateRoomMore/>} />
