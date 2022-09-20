@@ -1,7 +1,15 @@
+import { Link } from "react-router-dom";
+
+
 const CreateRoomCategory = () => {
   return (
-  <div>
-    <h2 className="text-lg font-bold text-center mt-8 mx-6 mb-5">카테고리</h2>
+  <div className="mt-8">
+    <div className="mx-3 grid grid-cols-6">
+      <Link to="/meeting/create/">
+        <p>&lt;</p>
+      </Link>
+      <h2 className="text-lg font-bold text-center mb-5 col-span-4">카테고리</h2>
+    </div>
     {/* 
       아래 p 태그 요소를 클릭할 때마다 recoil에 저장됨(저장되는 것은 하나이기 때문에 새로 클릭하면 값이 갱신됨)
       클릭한 것은 배경이 바뀌던가, 밑줄을 긋던가 하는 방법으로 표시가 됨

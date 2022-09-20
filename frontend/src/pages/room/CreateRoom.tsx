@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
+import BtnExitToHome from "../../components/buttons/BtnExitToHome";
 
 const CreateRoom = () => {
   return (
     // markup 0915 임지민
+    /*
+      필수 항목 입력 안하면 못 넘어가도록 유효성 검사하기 0920 임지민
+    */
   <div className="mt-8 mx-6">
     <div>
-      <button className="text-2xl font-black mr-3">X</button>
+      <BtnExitToHome/>
       <h2 className="inline-block text-xl font-black ml-5">모임 만들기</h2>
     </div>
 
@@ -28,7 +32,7 @@ const CreateRoom = () => {
         - 아래 줄 자체를 클릭하면 카테고리 선택 페이지로 넘어가게
         - 클릭하면 회색 그림자?가 나오도록
       */}
-      <Link to="/meeting/category">
+      <Link to="/meeting/create/category">
         <div className="flex justify-between">
             <p className="flex">카테고리</p>
             <button className="flex">&gt;</button>
@@ -78,10 +82,12 @@ const CreateRoom = () => {
         placeholder="모임에 대한 설명을 입력하세요"></textarea>
     </div>
 
-    <div className="grid grid-cols-1 mt-3">
-      <button type="button"
+    <Link to="/meeting/create/more">
+      <div className="grid grid-cols-1 mt-3">
+        <button type="button"
         className="text-center bg-gray-200 rounded py-1">다음으로</button>
-    </div>
+      </div>
+    </Link>
 
   </div>
   );
