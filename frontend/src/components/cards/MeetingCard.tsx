@@ -1,4 +1,4 @@
-const MeetingCard = () => {
+const MeetingCard = (props:any) => {
   const getStateBadgeColor = () => {
     return 'bg-yellow-100';
   }
