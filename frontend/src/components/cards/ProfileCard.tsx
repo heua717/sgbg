@@ -6,11 +6,10 @@ import {
   getProgressColor,
   getHostBadge
 } from "../../util/profile";
-import ProfileTab from "../tabs/ProfileTab";
 const ProfileCard = (props: any) => {
   const { user } = props;
   return (
-    <div className="flex flex-col p-3">
+    <div className="flex flex-col p-2">
       {/* 유저 뱃지, 아이디 */}
       <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
         <div className="w-[35px] h-[35px] mr-2">
@@ -25,7 +24,7 @@ const ProfileCard = (props: any) => {
         <span className="font-bold text-xl leading-tightl">{user.userId}</span>
       </div>
       {/* More Info */}
-      <Link to="" className="self-end mt-1 mr-2 font-light text-sm">
+      <Link to={`/profile/history/${user.userId}`} className="self-end mt-1 mr-2 font-light text-sm">
         {" "}
         More+{" "}
       </Link>
