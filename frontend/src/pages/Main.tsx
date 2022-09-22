@@ -2,8 +2,9 @@ import CategoriesBar from "../components/bars/CategoriesBar";
 import FilterBar from "../components/bars/FilterBar";
 import BtnCreateRoom from "../components/buttons/BtnCreateRoom";
 import MeetingCard from "../components/cards/MeetingCard";
-import Logo from "../components/Logo";
+import Logo from "../components/etc/Logo";
 import MeetingReviewModal from "../components/modals/MeetingReviewModal";
+import { Link } from "react-router-dom";
 
 
 const Main = () => {
@@ -12,15 +13,6 @@ const Main = () => {
     <div>
       {/* 로고 */}
       <Logo />
-      
-      <div className="w-full h-20 my-3">
-        <img
-          className="max-h-20 m-auto"
-          src={process.env.PUBLIC_URL + `/img/sgbg-logo.png`}
-          alt="SgBg 로고"
-        />
-      </div>
-
       {/* 카테고리 */}
       <CategoriesBar />
       {/* 필터바 */}
@@ -28,7 +20,9 @@ const Main = () => {
       {/* 모임리스트 */}
       <div className="w-per90 m-auto grid grid-cols-1 gap-1">
         {list.map(() => (
-          <MeetingCard></MeetingCard>
+          <Link to="/meeting">
+            <MeetingCard></MeetingCard>
+          </Link>
         ))}
       </div>
 
