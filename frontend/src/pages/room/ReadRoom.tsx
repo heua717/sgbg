@@ -3,8 +3,6 @@ import RoomTabs from "../../components/tabs/RoomTabs";
 import Logo from "../../components/Logo"
 
 const ReadRoom = () => {
-  
-
   return (<div>
     <div className="mx-6">
       <Logo/>

@@ -2,14 +2,16 @@ import CategoriesBar from "../components/bars/CategoriesBar";
 import FilterBar from "../components/bars/FilterBar";
 import BtnCreateRoom from "../components/buttons/BtnCreateRoom";
 import MeetingCard from "../components/cards/MeetingCard";
+import Logo from "../components/Logo";
+
+
 const Main = () => {
   let list = [0, 0, 0, 0, 0];
   return (
     <div>
       {/* 로고 */}
-      <div className="w-full h-20 my-3">
-        <img className="max-h-20 m-auto" src={process.env.PUBLIC_URL + `/img/sgbg-logo.png`} alt="SgBg 로고"/>
-      </div>
+      <Logo />
+      
       {/* 카테고리 */}
       <CategoriesBar />
       {/* 필터바 */}
