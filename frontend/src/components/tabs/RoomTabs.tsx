@@ -4,6 +4,28 @@ import ParticipantListTab from "./ParticipantListTab";
 import CommunityTab from "./CommunityTab";
 
 const RoomTabs = () => {
+    /* const user = [
+      {
+        participantScore: 99,
+        userId: "host",
+      },
+      {
+        participantScore: 23,
+        userId: "user1",
+      },
+      {
+        participantScore: 72,
+        userId: "user2",
+      },
+      {
+        participantScore: 52,
+        userId: "user3",
+      },
+      {
+        participantScore: 46,
+        userId: "user4",
+      },
+  ]; */
     const data = [
         {
           id: 0,
@@ -13,7 +35,7 @@ const RoomTabs = () => {
         {
           id: 1,
           title: "참여자 목록",
-          component: <ParticipantListTab/>
+          component: <ParticipantListTab />
         },
         {
           id: 2,
@@ -21,6 +43,8 @@ const RoomTabs = () => {
           component: <CommunityTab/>
         }
     ];
+    
+  
     const [index, setIndex] = useState(0);
 
     return (<div className="mt-6">
