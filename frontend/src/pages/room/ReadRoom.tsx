@@ -1,6 +1,7 @@
 import MeetingCard from "../../components/cards/MeetingCard";
+import Logo from "../../components/etc/Logo";
 import RoomTabs from "../../components/tabs/RoomTabs";
-import Logo from "../../components/Logo"
+
 
 const ReadRoom = () => {
   return (<div>
