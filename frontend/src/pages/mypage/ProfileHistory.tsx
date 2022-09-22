@@ -129,7 +129,7 @@ const ProfileHistory = () => {
         <ProfileCard user={user} />
       </div>
       {/* 완료 모임 내역 카드 */}
-      <div className="w-per90 h-per75 m-auto grid grid-cols-1 gap-1">
+      <div className="w-per90 h-per75 mx-auto grid grid-cols-1 gap-1">
         {
           list.map(() => <FinishedMeetingCard/>)
         }
