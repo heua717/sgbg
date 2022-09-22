@@ -1,5 +1,5 @@
 import ProfileCard from "../../components/cards/ProfileCard";
-import Logo from "../../components/Logo";
+import Logo from "../../components/etc/Logo";
 import ProfileTab from "../../components/tabs/ProfileTab";
 
 const Profile = () => {

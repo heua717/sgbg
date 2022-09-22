@@ -1,8 +1,8 @@
 import UserReviewCard from "../components/cards/UserReviewCard";
-import Logo from "../components/Logo";
+import Logo from "../components/etc/Logo";
 
 const UserReview = () => {
-  const list = [ 0, 0, 0, 0, 0, 0];
+  const list = [0, 0, 0, 0, 0, 0];
   return (
     <div className="w-full h-full">
       <div className="h-[25vh] overflow-hidden">
@@ -16,12 +16,16 @@ const UserReview = () => {
         </div>
         {/* 제출 버튼 */}
         <div className="flex justify-end px-2 mb-1">
-          <button className=" bg-blue-300 text-white text-sm rounded-xl py-1 px-3">제출하기</button>
+          <button className=" bg-blue-300 text-white text-sm rounded-xl py-1 px-3">
+            제출하기
+          </button>
         </div>
       </div>
       {/* 참여자 내역 */}
       <div className="w-per95 h-[75vh] m-auto">
-        { list.map(() => <UserReviewCard/>) }
+        {list.map(() => (
+          <UserReviewCard />
+        ))}
       </div>
     </div>
   );
