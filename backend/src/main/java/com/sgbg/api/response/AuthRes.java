@@ -13,20 +13,18 @@ public class AuthRes extends BaseResponseBody {
     @ApiModelProperty(name = "Access Token")
     private String accessToken;
 
-    @ApiModelProperty(name = "is completed")
-    private boolean isCompleted;
+    @ApiModelProperty(name = "Refresh Token")
+    private String refreshToken;
 
     @ApiModelProperty(name = "user id")
     private Long userId;
 
-    public static AuthRes of(Integer statusCode, String message, String accessToken, boolean isCompleted, Long userId) {
+    public static AuthRes of(Integer statusCode, String message, String accessToken, String refreshToken, Long userId) {
         AuthRes res = new AuthRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);
-        res.setAccessToken(accessToken);
-        res.setCompleted(isCompleted);
+        res.setRefreshToken(refreshToken);
         res.setUserId(userId);
         return res;
     }
-
 }

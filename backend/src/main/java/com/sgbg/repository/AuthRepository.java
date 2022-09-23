@@ -1,8 +1,12 @@
 package com.sgbg.repository;
 
+import com.sgbg.domain.Auth;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public class AuthRepository {
-    // TODO: Spring Data JPA + QueryDSL 방식 적용하기
+public interface AuthRepository extends JpaRepository<Auth, Long> {
+    Optional<Auth> findByKakaoNumber(Long kakaoNumber);
 }

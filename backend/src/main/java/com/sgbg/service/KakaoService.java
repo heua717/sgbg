@@ -1,5 +1,6 @@
 package com.sgbg.service;
 
+import com.sgbg.service.interfaces.IKakaoService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -12,8 +13,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
-public class KakaoService {
+public class KakaoService implements IKakaoService {
 
     @Value("${kakao.client.id}")
     String CLIENT_ID;
@@ -24,9 +28,9 @@ public class KakaoService {
     @Value("${kakao.redirect.uri}")
     String REDIRECT_URI;
 
-    public String getKakaoAccessToken(String code) {
-        String access_token = "";
-        String refresh_token = "";
+    @Override
+    public Map<String, String> getKakaoTokenInfo(String code) {
+        Map<String, String> tokenInfo = new HashMap<>();
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -52,20 +56,23 @@ public class KakaoService {
             // 토큰 전달 받음
             JSONObject jsonObject = new JSONObject(tokenResponse.getBody());
 
-            access_token = jsonObject.getString("access_token");
-            refresh_token = jsonObject.getString("refresh_token");
-//            Integer expires_in = (Integer) jsonObject.get("expires_in");
-//            Integer refresh_token_expires_in = (Integer) jsonObject.get("refresh_token_expires_in");
+            tokenInfo.put("access_token", jsonObject.getString("access_token"));
+            tokenInfo.put("refresh_token", jsonObject.getString("refresh_token"));
+            tokenInfo.put("expires_in", String.valueOf(jsonObject.get("expires_in")));
+            tokenInfo.put("refresh_token_expires_in", String.valueOf(jsonObject.get("refresh_token_expires_in")));
 //            String token_type = jsonObject.getString("token_type");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return access_token;
+        return tokenInfo;
     }
 
-    public String getKakaoUserInfo(String access_token) {
+    @Override
+    public Map<String, String> getKakaoUserInfo(String access_token) {
+        Map<String, String> userInfo = new HashMap<>();
+
         try {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
@@ -83,16 +90,17 @@ public class KakaoService {
                     String.class
             );
 
-            JSONObject jsonObject2 = new JSONObject(apiResponse.getBody());
+            JSONObject jsonObject = new JSONObject(apiResponse.getBody());
+            JSONObject kakaoAccount = (JSONObject) jsonObject.get("kakao_account");
 
-            System.out.println(jsonObject2.toString());
+            userInfo.put("id", String.valueOf(jsonObject.get("id")));
+            userInfo.put("email", kakaoAccount.getString("email"));
+            userInfo.put("name", ((JSONObject) kakaoAccount.get("profile")).getString("nickname"));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        JSONObject kakao_account = (JSONObject) jsonObject2.get("kakao_account");
-//        String email = kakao_account.getString("email");
 
-        return "Hello";
+        return userInfo;
     }
 }
