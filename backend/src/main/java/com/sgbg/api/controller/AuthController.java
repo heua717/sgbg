@@ -3,6 +3,7 @@ package com.sgbg.api.controller;
 import com.sgbg.api.response.AuthRes;
 import com.sgbg.api.response.BaseResponseBody;
 import com.sgbg.common.util.CookieUtil;
+import com.sgbg.domain.Auth;
 import com.sgbg.domain.User;
 import com.sgbg.service.AuthService;
 import com.sgbg.service.KakaoService;
@@ -46,7 +47,6 @@ public class AuthController {
             if (!authService.isUser(kakaoId)) {
                 // TODO: User 변경
 //            User user = userService.createUser();
-                System.out.println("어디서 멈추는거지?");
                 User user = new User();
                 authService.createAuth(user, kakaoId);
             }
