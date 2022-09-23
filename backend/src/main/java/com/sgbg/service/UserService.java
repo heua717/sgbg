@@ -50,8 +50,6 @@ public class UserService implements IUserService {
             user.setId(found.getId());
         if(user.getName() == null)
             user.setName(found.getName());
-        if(user.getPassword() == null)
-            user.setPassword(found.getPassword());
 
         int affected = this.userRepository.update(user);
         if(affected == 0)

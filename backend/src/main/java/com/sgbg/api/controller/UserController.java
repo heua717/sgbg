@@ -49,14 +49,14 @@ public class UserController {
         return user;
     }
 
-    @RequestMapping(value = "/users/login", method = RequestMethod.POST)
-    public User login(@RequestBody User user) {
-        User userFetched = userService.get(user.getEmail());
-        if (!userFetched.getPassword().equals(user.getPassword()))
-            throw new DomainException("비밀번호가 일치하지 않습니다.");
-        userFetched.setPassword("");
-        return userFetched;
-    }
+//    @RequestMapping(value = "/users/login", method = RequestMethod.POST)
+//    public User login(@RequestBody User user) {
+//        User userFetched = userService.get(user.getEmail());
+//        if (!userFetched.getPassword().equals(user.getPassword()))
+//            throw new DomainException("비밀번호가 일치하지 않습니다.");
+//        userFetched.setPassword("");
+//        return userFetched;
+//    }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public User create(@RequestBody User user) {

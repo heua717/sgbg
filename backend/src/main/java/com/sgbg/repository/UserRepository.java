@@ -73,7 +73,7 @@ public class UserRepository implements IUserRepository {
             paramMap.put("name", user.getName());
             paramMap.put("email", user.getEmail());
             paramMap.put("created_at", LocalDateTime.now());
-            paramMap.put("password", user.getPassword());
+//            paramMap.put("password", user.getPassword());
 
             this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                     .withTableName("users")
@@ -94,7 +94,7 @@ public class UserRepository implements IUserRepository {
         sbSql.append("WHERE id=?");
         try {
             return this.jdbcTemplate.update(sbSql.toString(),
-                    new Object[] { user.getName(), user.getEmail(), user.getPassword(), user.getId() });
+                    new Object[] { user.getName(), user.getEmail(), "", user.getId() });
         } catch (Exception e) {
             throw new RepositoryException(e, e.getMessage());
         }
