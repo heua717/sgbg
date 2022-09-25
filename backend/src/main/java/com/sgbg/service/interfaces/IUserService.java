@@ -4,18 +4,10 @@ import com.sgbg.domain.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
-    List<User> list();
-    User get(long id);
-    User get(String email);
 
-    @Transactional
-    User add(User user);
+    public User createUser(Map<String, String> userInfo);
 
-    @Transactional
-    User update(User user);
-
-    @Transactional
-    void delete(long id);
 }

@@ -7,9 +7,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
+
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class User {
     @Id
@@ -22,4 +21,22 @@ public class User {
     private String email;
 
     private LocalDateTime createdAt;
+
+    private int hostScore;
+
+    private int memberScore;
+
+    private int avgEvaluateScore;
+
+    // TODO: wallet, myRooms
+
+    @Builder
+    public User(String name, String email, int hostScore, int memberScore, int avgEvaluateScore) {
+        this.name = name;
+        this.email = email;
+        this.createdAt = LocalDateTime.now();
+        this.hostScore = hostScore;
+        this.memberScore = memberScore;
+        this.avgEvaluateScore = avgEvaluateScore;
+    }
 }
