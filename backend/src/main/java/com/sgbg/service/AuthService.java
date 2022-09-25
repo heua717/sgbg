@@ -29,7 +29,7 @@ public class AuthService implements IAuthService {
     public void createAuth(User user, String kakaoId) {
         Auth auth = Auth.builder()
                 .kakaoNumber(Long.valueOf(kakaoId))
-//                .user(user)
+                .user(user)
                 .build();
 
         authRepository.save(auth);

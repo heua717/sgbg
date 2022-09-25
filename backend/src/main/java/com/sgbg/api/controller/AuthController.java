@@ -5,7 +5,13 @@ import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.User;
 import com.sgbg.service.AuthService;
 import com.sgbg.service.KakaoService;
-import io.swagger.annotations.Api;
+import com.sgbg.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-//@CrossOrigin("*")
-@Api(value = "사용자 인증 API", tags = {"Auth"})
+@Tag(name = "Auth API", description = "사용자 인증을 위한 로그인, 로그아웃 기능 제공")
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -31,10 +35,20 @@ public class AuthController {
     AuthService authService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     CookieUtil cookieUtil;
 
+    @Operation(summary = "카카오 로그인 메서드")
+    @ApiResponses(
+            @ApiResponse(responseCode = "2000", description = "로그인 성공",
+                    content = @Content(schema = @Schema(implementation = BaseResponseBody.class)))
+    )
     @GetMapping("/login")
-    public ResponseEntity<? extends BaseResponseBody> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
+    public ResponseEntity<? extends BaseResponseBody> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws
+
+            IOException {
         // 1. 인가 code로 Kakao Auth Server에서 token 받기
         try {
             Map<String, String> tokenInfo = kakaoService.getKakaoTokenInfo(code);
@@ -46,9 +60,7 @@ public class AuthController {
             String kakaoId = userInfo.get("id");
             System.out.println(kakaoId);
             if (!authService.isUser(kakaoId)) {
-                // TODO: User 변경
-//            User user = userService.createUser();
-                User user = new User();
+                User user = userService.createUser(userInfo);
                 authService.createAuth(user, kakaoId);
             }
 
@@ -72,6 +84,11 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2010, "Success"));
     }
 
+    @Operation(summary = "카카오 로그아웃 메서드")
+    @ApiResponses(
+            @ApiResponse(responseCode = "2000", description = "로그아웃 성공",
+                    content = @Content(schema = @Schema(implementation = BaseResponseBody.class)))
+    )
     @GetMapping("/logout")
     public ResponseEntity<? extends BaseResponseBody> logout(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = null;
