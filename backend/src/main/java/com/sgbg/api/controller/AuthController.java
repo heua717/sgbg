@@ -1,9 +1,7 @@
 package com.sgbg.api.controller;
 
-import com.sgbg.api.response.AuthRes;
 import com.sgbg.api.response.BaseResponseBody;
 import com.sgbg.common.util.CookieUtil;
-import com.sgbg.domain.Auth;
 import com.sgbg.domain.User;
 import com.sgbg.service.AuthService;
 import com.sgbg.service.KakaoService;
