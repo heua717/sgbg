@@ -9,17 +9,20 @@ import com.sgbg.service.AuthService;
 import com.sgbg.service.KakaoService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-@CrossOrigin("*")
+//@CrossOrigin("*")
 @Api(value = "사용자 인증 API", tags = {"Auth"})
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -68,17 +71,50 @@ public class AuthController {
             e.printStackTrace();
         }
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(201, "Success"));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2010, "Success"));
     }
 
     @GetMapping("/logout")
-    public void logout() {
-        // TODO: logout 구현
+    public ResponseEntity<? extends BaseResponseBody> logout(HttpServletRequest request, HttpServletResponse response) {
+        String accessToken = null;
+        String refreshToken = null;
+        String bearer = request.getHeader("Authorization");
+
+//        if (bearer != null && !"".equals(bearer)) {
+//            accessToken = bearer.split(" ")[1];
+//        }
+
+        Cookie[] cookies = request.getCookies();
+
+        for (Cookie c : cookies) {
+            if ("accessToken".equals(c.getName())) {
+                accessToken = c.getValue();
+            } else if ("refreshToken".equals(c.getName())) {
+                refreshToken = c.getValue();
+            }
+        }
+
+        String id = kakaoService.logout(accessToken);
+
+        Cookie accessCookie = new Cookie("accessToken", null);
+        accessCookie.setMaxAge(0);
+        accessCookie.setPath("/");
+        response.addCookie(accessCookie);
+
+        Cookie refreshCookie = new Cookie("refreshToken", null);
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setPath("/");
+        response.addCookie(refreshCookie);
+
+        // TODO: Redis Session 만료
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2000, "Success"));
     }
 
     @GetMapping("/refresh")
     public void updateToken() {
         // TODO: update access/refresh token 구현
+
     }
 
 }

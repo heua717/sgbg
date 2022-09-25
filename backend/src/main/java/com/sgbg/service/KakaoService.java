@@ -103,4 +103,36 @@ public class KakaoService implements IKakaoService {
 
         return userInfo;
     }
+
+    @Override
+    public String logout(String access_token) {
+        String id = null;
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+
+            // 토큰으로 카카오 API 호출 (카카오 서버에서 토큰 유효성 확인후 사용자 데이터 받아옴)
+            HttpHeaders apiRequestHeader = new HttpHeaders();
+            apiRequestHeader.add("Authorization", "Bearer " + access_token);
+            apiRequestHeader.add("Content-type", "application/x-www-form-urlencoded");
+
+            HttpEntity<HttpHeaders> apiRequest = new HttpEntity<>(apiRequestHeader);
+            HttpEntity<String> apiResponse = restTemplate.exchange( // 토큰과 함께 api를 호출한다.
+                    "https://kapi.kakao.com/v1/user/logout",
+                    HttpMethod.POST,
+                    apiRequest,
+                    String.class
+            );
+
+            JSONObject jsonObject = new JSONObject(apiResponse.getBody());
+            id = jsonObject.getString("id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
+    // TODO: 갱신 요청
 }
