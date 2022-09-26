@@ -11,8 +11,10 @@ import UserReview from "./pages/UserReview";
 import Search from "./pages/search/Search";
 import SearchResult from "./pages/search/SearchResult";
 import Wallet from "./pages/Wallet";
+import CreateWallet from "./pages/wallet/CreateWallet";
 import CreateRoomMap from "./pages/room/CreateRoomMap";
 import NotFound from "./pages/Error/NotFound";
+
 
 function Router() {
   return (
@@ -46,6 +48,9 @@ function Router() {
 
       {/* 지갑 페이지 */}
       <Route path="/wallet" element={<Wallet />} />
+
+      {/* 지갑 생성 페이지 */}
+      <Route path="/wallet/create" element={<CreateWallet />} />
 
       {/* 모임 완료 후 개인 평가 */}
       <Route path="/eval/:meeting_id" element={<UserReview />} />
