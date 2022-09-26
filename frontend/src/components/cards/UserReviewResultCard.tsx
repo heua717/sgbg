@@ -1,7 +1,7 @@
 
 const UserReviewResultCard = () => {
     return (
-        <div className="flex justify-start items-center">
+        <div className="flex justify-start items-center my-2">
             <div className="bg-gray-300 rounded-lg p-1 font-light text-xs mr-1">
                 <span className="mr-1">😍</span>
                 <span className="mr-1">최고에요!</span>

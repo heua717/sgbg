@@ -30,8 +30,8 @@ const FinishedMeetingCard = () => {
 
       {/* 평가 정보 */}
       <div className="">
-        <UserReviewResultCard />
-        <div className="text-end">
+        <UserReviewResultCard/>
+        <div className="text-end mt-3">
           <p className="text-sm font-semibold">성공률 {`90`}%</p>
           <p className="text-xs">{`${10}명 중 ${9}명이 성공을 선택했습니다.`}</p>
         </div>
