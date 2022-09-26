@@ -1,8 +1,8 @@
 #자바 버전
 FROM openjdk:15-jdk-alpine as builder
 
-RUN chmod +x ./gradlew
-RUN ./gradlew bootJAR
+RUN chmod +x /gradlew
+RUN /gradlew bootJAR
 
 
 
