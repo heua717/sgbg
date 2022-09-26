@@ -1,10 +1,41 @@
-import React from "react";
+import { useState } from "react";
+import { inputRoomInfo } from "../../store/room";
+import { room } from "../../store/room";
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
 
-const CreateRoom = () => {
 
-  return (
+const CreateRoom = (): JSX.Element => {
+  const [room] = useRecoilState<room>(inputRoomInfo)
+  const [newRoom, setNewRoom] = useState({
+    title: '',
+    category: '',
+    minPerson: 0,
+    maxPerson: 0,
+    location: '',
+    explanation: ''
+  })
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+
+    setNewRoom({
+      ...newRoom,
+      [name]: value
+    });
+  };
+
+  const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    const { name, value } = e.target;
+
+    setNewRoom({
+      ...newRoom,
+      [name]: value
+    });
+  };
+
+  return ( 
     // markup 0915 임지민
     /*
       필수 항목 입력 안하면 못 넘어가도록 유효성 검사하기 0920 임지민
@@ -22,7 +53,7 @@ const CreateRoom = () => {
 
       {/* 방 제목 작성 */}
       <label htmlFor="meetingName" className="mr-2">방 제목 </label>
-      <input type="text" id="meetingName" />
+      <input type="text" id="meetingName" onChange={onChange} value={room.title}/>
       <hr className="my-5" />
       
       {/* 경고 문구 */}
@@ -49,10 +80,10 @@ const CreateRoom = () => {
         <p className="col-span-2">모집인원</p>
         {/* grid grid-cols-3 */}
         <div className="col-span-4 grid grid-cols-5">
-          <input type="number" id="minPerson" className="" />
+          <input type="number" id="minPerson" onChange={onChange}/>
           <label htmlFor="minPerson" className="text-center">명</label>
           <span className="text-center">~</span>
-          <input type="number" id="maxPerson" className="" />
+          <input type="number" id="maxPerson" onChange={onChange}/>
           <label htmlFor="maxPerson" className="text-center">명 </label>
         </div>
       </div>
@@ -70,7 +101,8 @@ const CreateRoom = () => {
         <label htmlFor="roomExplanation" className="mb-3">모임 설명</label>
         <textarea name="exp" id="roomExplanation" cols={30} rows={8}
           style={{resize: "none"}}
-          placeholder="모임에 대한 설명을 입력하세요"></textarea>
+          placeholder="모임에 대한 설명을 입력하세요"
+          onChange={onChangeText}></textarea>
       </div>
 
       <Link to="/meeting/create/more">
