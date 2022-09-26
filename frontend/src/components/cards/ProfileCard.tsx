@@ -10,8 +10,14 @@ const ProfileCard = (props: any): any => {
   const { user } = props;
   return (
     <div className="flex flex-col px-2 pb-2 mx-2">
-      {/* 유저 뱃지, 아이디 */}
-      <UserIdBadge />
+      {/* 유저 뱃지, 아이디, 로그아웃*/}
+      <div className="w-full flex flex-row justify-between items-center">
+        <UserIdBadge />
+        <button className="bg-blue-400 text-sm text-white rounded py-1 px-2">
+          로그아웃
+        </button>
+      </div>
+
       {/* More Info */}
       <Link
         to={`/profile/history/${user.userId}`}
@@ -40,7 +46,9 @@ const ProfileCard = (props: any): any => {
       </div>
       {/* 방장 정보 */}
       <div className="grid grid-cols-6">
-        <span className="text-lg col-span-2">{getHostNickname(user.hostScore)}</span>
+        <span className="text-lg col-span-2">
+          {getHostNickname(user.hostScore)}
+        </span>
         <div className="col-start-4 col-end-7 flex flex-row justify-end my-auto">
           <span className="text-lg mr-2">{getHostBadge(user.hostScore)}</span>
           <span className="font-light text-lg">{user.hostScore}%</span>
