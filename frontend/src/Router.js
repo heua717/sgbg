@@ -10,7 +10,7 @@ import Profile from "./pages/mypage/Profile";
 import UserReview from "./pages/UserReview";
 import Search from "./pages/search/Search";
 import SearchResult from "./pages/search/SearchResult";
-import Wallet from "./pages/Wallet";
+import Wallet from "./pages/wallet/Wallet";
 import CreateWallet from "./pages/wallet/CreateWallet";
 import CreateRoomMap from "./pages/room/CreateRoomMap";
 import NotFound from "./pages/Error/NotFound";

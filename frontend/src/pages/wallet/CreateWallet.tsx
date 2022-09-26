@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CreateWallet = () => {
   const warning = [
     {
@@ -28,9 +26,9 @@ const CreateWallet = () => {
         />
   </div>
   {/* 캐치프레이즈2 */}
-  <div className="mb-10 mx-5 ">
-    <p className='text-xl text-center text-red-100 mb-2'>
-      <strong>⚠ 경고 ⚠</strong>
+  <div className="mb-10 mx-5 p-3 rounded-lg bg-red-50">
+    <p className='text-xl mb-2'>
+      <strong>⚠ warning</strong>
     </p>
     <div className='flex flex-col justify-start font-semibold'>
       {warning.map(item => 
