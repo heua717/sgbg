@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import {
   getParticipantNickname,
-  getParticipantBadge,
   getHostNickname,
   getProgressColor,
   getHostBadge,
