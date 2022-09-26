@@ -66,7 +66,13 @@ const Login = () => {
       </div>
       {/* 카카오 로그인 */}
       {islogining ? (
-        <span>로그인 중입니다...</span>
+        <div className="flex flex-col justify-center items-center">
+          <img
+            className="w-8 h-8 animate-bounce"
+            src={process.env.PUBLIC_URL + `/img/userBadge5.png`}
+          />
+          <span className="font-semibold text-xl">로그인 중...</span>
+        </div>
       ) : (
         <a
           href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${PRIVATE_KAKAO_KEY}&redirect_uri=${kakaoRedirect}login`}
