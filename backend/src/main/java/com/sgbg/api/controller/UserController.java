@@ -1,11 +1,12 @@
-/*
 package com.sgbg.api.controller;
 
+import com.sgbg.api.response.UserRes;
 import com.sgbg.service.interfaces.IUserService;
 import com.sgbg.domain.User;
-import com.sgbg.common.exception.DomainException;
 import com.sgbg.common.exception.EmptyListException;
 import com.sgbg.common.exception.NotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/user")
 public class UserController {
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -28,51 +29,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public List<User> list() {
-        List<User> userList = userService.list();
-
-        if (userList == null || userList.isEmpty() )
-            throw new EmptyListException("NO DATA");
-
-        return userList;
-    }
-
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-    public User get(@PathVariable int id) {
-
-        User user = userService.get(id);
-        if (user == null) {
-            logger.error("NOT FOUND ID: ", id);
-            throw new NotFoundException(id + " 회원 정보를 찾을 수 없습니다.");
-        }
-
-        return user;
-    }
-
-//    @RequestMapping(value = "/users/login", method = RequestMethod.POST)
-//    public User login(@RequestBody User user) {
-//        User userFetched = userService.get(user.getEmail());
-//        if (!userFetched.getPassword().equals(user.getPassword()))
-//            throw new DomainException("비밀번호가 일치하지 않습니다.");
-//        userFetched.setPassword("");
-//        return userFetched;
+//    @Operation()
+//    @GetMapping("/")
+//    public UserRes get(@PathVariable int id) {
+//
+//            logger.error("NOT FOUND ID: ", id);
+//            throw new NotFoundException(id + " 회원 정보를 찾을 수 없습니다.");
+//        }
 //    }
-
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public User create(@RequestBody User user) {
-        return userService.add(user);
-    }
-
-    @RequestMapping(value = "/users", method = RequestMethod.PUT)
-    public User update(@RequestBody User user) {
-        return userService.update(user);
-    }
-
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id) {
-        userService.delete(id);
-    }
-
 }
-*/
