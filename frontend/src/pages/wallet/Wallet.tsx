@@ -1,4 +1,5 @@
-import Logo from "../components/etc/Logo";
+import Logo from "../../components/etc/Logo";
+
 
 const chargeList = [
   {

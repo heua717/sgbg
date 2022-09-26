@@ -58,10 +58,11 @@ const RoomTabs = () => {
             ))}
         </ul>
         {/* 탭 내용 부분 */}
-        {data.filter(item => index === item.id).map(item => (
-            <div className="mx-5">{item.component}</div>
-        ))}
-        
+        <div className="overflow-scroll max-h-[70vh]">
+          {data.filter(item => index === item.id).map(item => (
+              <div className="mx-5">{item.component}</div>
+          ))}
+        </div>
 
     </div>);
 };
