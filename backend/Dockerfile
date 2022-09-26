@@ -2,9 +2,9 @@
 FROM openjdk:15-jdk-alpine as builder
 
 WORKDIR ./backend
-
-RUN chmod +x ./gradlew
-RUN ./gradlew bootJAR
+RUN ls
+RUN chmod +x /gradlew
+RUN /gradlew bootJAR
 
 
 
