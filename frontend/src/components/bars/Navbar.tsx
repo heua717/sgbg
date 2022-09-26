@@ -1,5 +1,6 @@
 import { faSearch, faWallet, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -9,7 +10,9 @@ const Navbar = () => {
       </div>
       <FontAwesomeIcon icon={faSearch} className="text-blue-600 text-3xl" />
       <FontAwesomeIcon icon={faWallet} className="text-blue-600 text-3xl" />
-      <FontAwesomeIcon icon={faUser} className="text-blue-600 text-3xl" />
+      <Link to="/login">
+        <FontAwesomeIcon icon={faUser} className="text-blue-600 text-3xl" />
+      </Link>
     </div>
   );
 };

@@ -7,7 +7,7 @@ import {
   getHostBadge,
 } from "../../util/profile";
 import UserIdBadge from "../etc/UserIdBadge";
-const ProfileCard = (props: any) => {
+const ProfileCard = (props: any): any => {
   const { user } = props;
   return (
     <div className="flex flex-col p-2">

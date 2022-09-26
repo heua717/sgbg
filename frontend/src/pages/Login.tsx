@@ -1,4 +1,49 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { auth } from "../store/auth";
+import { login } from "../api/auth";
+import { kakaoRedirect, PRIVATE_KAKAO_KEY } from "../api/config";
+import Swal from "sweetalert2";
+
 const Login = () => {
+  const [islogining, setLogining] = useState<boolean>(false);
+  const [userAuth, setUserAuth] = useRecoilState(auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (userAuth.isLogined) {
+      Swal.fire({
+        toast: true,
+        position: "center",
+        showConfirmButton: true,
+        title: `잘못된 접근입니다.`,
+      });
+      navigate("/");
+      return;
+    }
+    const url = new URLSearchParams(window.location.search);
+    const code = url.get("code");
+    if (code) {
+      try {
+        setLogining(true);
+        login(code).then((res) => {
+          console.log(res);
+          //리코일에 값 저장
+
+          setLogining(false);
+          navigate("/");
+        });
+      } catch {
+        setLogining(false);
+        Swal.fire({
+          toast: true,
+          position: "center",
+          showConfirmButton: true,
+          title: `로그인 실패`,
+        });
+      }
+    }
+  }, []);
   return (
     <div className="w-full h-full">
       {/* 캐치프레이즈1 */}
@@ -20,13 +65,20 @@ const Login = () => {
         <span>블록체인 기반 모임 서비스</span>
       </div>
       {/* 카카오 로그인 */}
-      <div className="flex justify-center items-center my-20">
-        <img
-          className="max-w-full"
-          src={process.env.PUBLIC_URL + `/img/kakao_login.png`}
-          alt="로고"
-        />
-      </div>
+      {islogining ? (
+        <span>로그인 중입니다...</span>
+      ) : (
+        <a
+          href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${PRIVATE_KAKAO_KEY}&redirect_uri=${kakaoRedirect}login`}
+          className="flex justify-center items-center my-20"
+        >
+          <img
+            className="max-w-full"
+            src={process.env.PUBLIC_URL + `/img/kakao_login.png`}
+            alt="로고"
+          />
+        </a>
+      )}
     </div>
   );
 };

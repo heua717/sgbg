@@ -12,7 +12,7 @@ import Search from "./pages/search/Search";
 import SearchResult from "./pages/search/SearchResult";
 import Wallet from "./pages/Wallet";
 import CreateRoomMap from "./pages/room/CreateRoomMap";
-
+import NotFound from "./pages/Error/NotFound";
 
 function Router() {
   return (
@@ -27,16 +27,16 @@ function Router() {
       <Route path="/meeting/create" element={<CreateRoom />} />
 
       {/* 방 create -- 카테고리 */}
-      <Route path="/meeting/create/category" element={<CreateRoomCategory/>} />
+      <Route path="/meeting/create/category" element={<CreateRoomCategory />} />
 
       {/* 방 create -- 지도 */}
-      <Route path="/meeting/create/location" element={<CreateRoomMap/>} />
+      <Route path="/meeting/create/location" element={<CreateRoomMap />} />
 
       {/* 방 create -- 상세정보 */}
-      <Route path="/meeting/create/more" element={<CreateRoomMore/>} />
+      <Route path="/meeting/create/more" element={<CreateRoomMore />} />
 
       {/* 방 read -- 추후 id 추가*/}
-      <Route path="/meeting" element={<ReadRoom/>} />
+      <Route path="/meeting" element={<ReadRoom />} />
 
       {/* 마아페이지(프로필) */}
       <Route path="/profile/:user_id" element={<Profile />} />
@@ -47,7 +47,6 @@ function Router() {
       {/* 지갑 페이지 */}
       <Route path="/wallet" element={<Wallet />} />
 
-
       {/* 모임 완료 후 개인 평가 */}
       <Route path="/eval/:meeting_id" element={<UserReview />} />
 
@@ -57,7 +56,8 @@ function Router() {
       {/* 검색 결과 페이지 */}
       <Route path="/search/result" element={<SearchResult />} />
 
-
+      {/* Not Found */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
