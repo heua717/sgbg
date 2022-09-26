@@ -1,11 +1,11 @@
 #자바 버전
-FROM openjdk:15-jdk-alpine
+FROM openjdk:15-jdk
 
 #포트번호 설정
 EXPOSE 8080
 
 #가져올 파일 jar또는 war
-ARG JAR_FILE=backend/build/libs/*.jar
+ARG JAR_FILE=build/libs/*.jar
 
 #war파일 복사
 COPY ${JAR_FILE} app.jar
