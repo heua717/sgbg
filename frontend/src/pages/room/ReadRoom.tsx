@@ -5,14 +5,14 @@ import RoomTabs from "../../components/tabs/RoomTabs";
 
 const ReadRoom = () => {
   return (<div>
-    <div className="mx-6">
+    <div>
       <Logo/>
 
-      <div>
+      <div className="mx-3">
         <MeetingCard/>
       </div>
 
-      <div className="grid grid-cols-1 mt-3">
+      <div className="grid grid-cols-1 mt-3 mx-3">
         <button type="button" className="text-center font-bold bg-yellow-100 rounded py-1">참여하기</button>
       </div>
     </div>

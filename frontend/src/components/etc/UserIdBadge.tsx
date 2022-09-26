@@ -4,8 +4,9 @@ const UserIdBadge = () => {
   return (
     <div>
       {/* 유저 뱃지, 아이디 */}
-      <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
-        <div className="w-[35px] h-[35px] mr-2">
+      <div 
+      className="flex flex-row justify-start items-center border-b border-gray-300 pb-1">
+        <div className="w-[35px] h-[35px] mr-4">
           <img
             className="w-full h-full"
             src={

@@ -12,7 +12,7 @@ const ProfileHistory = () => {
     {
       roomId: 1,
       category: {
-        name: "방탈출",
+        name: "방탈출"
       },
       host: {
         userId: "namm",
@@ -29,12 +29,12 @@ const ProfileHistory = () => {
         best: 5,
         good: 3,
         wordt: 2,
-      },
+      }
     },
     {
       roomId: 2,
       category: {
-        name: "방탈출",
+        name: "방탈출"
       },
       host: {
         userId: "namm",
@@ -51,12 +51,12 @@ const ProfileHistory = () => {
         best: 5,
         good: 3,
         wordt: 2,
-      },
+      }
     },
     {
       roomId: 3,
       category: {
-        name: "방탈출",
+        name: "방탈출"
       },
       host: {
         userId: "namm",
@@ -73,12 +73,12 @@ const ProfileHistory = () => {
         best: 5,
         good: 3,
         wordt: 2,
-      },
+      }
     },
     {
       roomId: 4,
       category: {
-        name: "방탈출",
+        name: "방탈출"
       },
       host: {
         userId: "namm",
@@ -95,12 +95,12 @@ const ProfileHistory = () => {
         best: 5,
         good: 3,
         wordt: 2,
-      },
+      }
     },
     {
       roomId: 5,
       category: {
-        name: "방탈출",
+        name: "방탈출"
       },
       host: {
         userId: "namm",
@@ -117,8 +117,8 @@ const ProfileHistory = () => {
         best: 5,
         good: 3,
         wordt: 2,
-      },
-    },
+      }
+    }
   ];
   return (
     <div className="w-full h-full">
@@ -129,10 +129,10 @@ const ProfileHistory = () => {
         <ProfileCard user={user} />
       </div>
       {/* 완료 모임 내역 카드 */}
-      <div className="w-per90 h-per75 m-auto grid grid-cols-1 gap-1">
-        {list.map(() => (
-          <FinishedMeetingCard />
-        ))}
+      <div className="w-per90 h-per75 mx-auto grid grid-cols-1 gap-1">
+        {
+          list.map(() => <FinishedMeetingCard/>)
+        }
       </div>
     </div>
   );
