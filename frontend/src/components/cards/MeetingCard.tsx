@@ -1,7 +1,7 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const MeetingCard = (props:any) => {
+const MeetingCard = (props:any): JSX.Element => {
   const getStateBadgeColor = () => {
     return 'bg-yellow-100';
   }

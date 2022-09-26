@@ -57,7 +57,6 @@ function Router() {
       {/* 검색 결과 페이지 */}
       <Route path="/search/result" element={<SearchResult />} />
 
-
     </Routes>
   );
 }
