@@ -3,7 +3,7 @@ FROM openjdk:15-jdk-alpine as builder
 
 WORKDIR /app
 
-COPY ./workspace/SGBG/backend .
+COPY ./SGBG/backend .
 
 RUN chmod +x gradlew
 RUN gradlew bootJAR
