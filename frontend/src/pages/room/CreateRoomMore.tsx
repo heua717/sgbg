@@ -1,8 +1,47 @@
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { roomMore } from "../../store/room";
+import { inputRoomInfo } from "../../store/room";
 import MeetingCard from "../../components/cards/MeetingCard"
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
+import { useEffect, useState } from "react";
+
 
 const CreateRoomMore = () => {
+  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo)
+
+  // created 될 때
+  useEffect(() => {
+    console.log(room.dueDate);
+    
+  })
+
+  // recoil에 작성한 모임 정보 저장하기 0927 임지민
+  const [isValidated, setIsValidated] = useState(false)
+  const onChangeValidation = () => {
+    if (room.cost && room.minAttituteNum ){
+      setIsValidated((isValidated:boolean) => isValidated = true)
+      
+    } else {
+      setIsValidated((isValidated:boolean) => isValidated = false)
+      // console.log('else로 빠짐');
+      // console.log(room.title.trim());
+    }
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+
+    setRoom({
+      ...room,
+      [name]: value
+    });
+    onChangeValidation();
+  };
+
+  // 날짜 출력 잘되나 테스트 0927 임지민
+  
+
   return (
     // markup 0915 임지민
     <div className="mt-8 mx-6">
@@ -29,7 +68,7 @@ const CreateRoomMore = () => {
             </div>
           </Link>
         </div>
-        <MeetingCard />
+        <MeetingCard room={room} />
       </div>
 
     <div className="my-8">
@@ -44,43 +83,57 @@ const CreateRoomMore = () => {
       {/* 모집 마감일 */}
       <div className="flex justify-between">
         <label htmlFor="dueDate" className="flex mr-2">모집 마감일 </label>
-        <input type="date" id="dueDate" className="flex" />
+        <input type="date" id="dueDate" name="dueDate" className="flex" onChange={onChange} />
       </div>
       <hr className="my-5" />
 
       {/* 예약 날짜 */}
       <div className="flex justify-between">
         <label htmlFor="bookingDate" className="flex mr-2">예약 날짜 </label>
-        <input type="date" id="bookingDate" className="flex" />
+        <input type="date" id="bookingDate" name="bookingDate" className="flex" onChange={onChange} />
       </div>
+      <p>{}</p>
       <hr className="my-5" />
       
         {/* <div className="grid col-start-3 col-end- "> */}
       {/* 금액 */}
       <div className="grid grid-cols-6">
-        <label htmlFor="meetingPrice" className="mr-2 col-span-1 gap-1">금액 </label>
-        <input type="number" id="meetingPrice" 
+        <label htmlFor="cost" className="mr-2 col-span-1 gap-1">금액 </label>
+        <input type="number" id="cost" name="cost" 
           className="col-start-4 col-end-6"
-          placeholder="0"/>
+          placeholder="0" onChange={onChange}/>
         <p className="text-center">원</p>
       </div>
+      <p>{room.cost}</p>
       <hr className="my-5" />
       
       {/* 최소 태도 점수 */}
       <div className="grid grid-cols-6">
-        <label htmlFor="attituteScore" className="mr-2 col-span-3 gap-1">최소 태도 점수</label>
-        <input type="number" id="attituteScore" 
+        <label htmlFor="minAttituteNum" className="mr-2 col-span-3 gap-1">최소 태도 점수</label>
+        <input type="number" id="minAttituteNum" name="minAttituteNum"
         className="col-start-4 col-end-6"
-        placeholder="50"/>
+        placeholder="50" onChange={onChange}/>
         <p className="text-center">점</p>
       </div>
+      <p>{room.minAttituteNum}</p>
     </div>
 
 
-    <div className="grid grid-cols-1 mt-3">
-      <button type="button"
-        className="text-center font-bold bg-gray-200 rounded py-1">모임 만들기</button>
-    </div>
+    {isValidated && (
+      <Link to="/meeting/create/more">
+        {/* <p>{}</p> */}
+        <div className="grid grid-cols-1 mt-3">
+          {/* 모든 칸이 추가된 경우 0927 임지민 */}
+            <button type="button"
+            className="text-center text-white font-semibold bg-blue-200 rounded py-1">모임 만들기</button>
+        </div>
+      </Link>)}
+      {/* 한 칸이라도 빈 경우 0927 임지민 */}
+      {!isValidated && (
+        <div className="grid grid-cols-1 mt-3">
+          <button type="button"
+          className="text-center bg-gray-200 rounded py-1">모임 만들기</button>
+        </div> )}
 
   </div>);
 };

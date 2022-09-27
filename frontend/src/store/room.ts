@@ -9,7 +9,16 @@ export interface room {
   explanation: string;
 }
 
-export const inputRoomInfo = atom<room>({
+export interface roomMore extends room {
+  dueDate: Date;
+  bookingDate: Date;
+  cost: number;
+  minAttituteNum: number;
+}
+
+const today = new Date();
+
+export const inputRoomInfo = atom<roomMore>({
   key: 'inputRoomInfo',
   default: {
     title: '',
@@ -17,7 +26,11 @@ export const inputRoomInfo = atom<room>({
     minPerson: 0,
     maxPerson: 0,
     location: '',
-    explanation: ''
+    explanation: '',
+    dueDate: today,
+    bookingDate: today,
+    cost: 0,
+    minAttituteNum: 50
   },
 })
 

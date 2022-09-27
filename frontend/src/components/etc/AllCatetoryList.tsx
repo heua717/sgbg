@@ -1,11 +1,11 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { room } from '../../store/room';
+import { roomMore } from '../../store/room';
 import { inputRoomInfo } from '../../store/room';
 import { useNavigate } from 'react-router-dom';
 
 const AllCatetoryList = () => {
-  const [room, setRoom] = useRecoilState<room>(inputRoomInfo)
+  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo)
   const navigate = useNavigate();
 
   const OnClick = (e: React.MouseEvent<HTMLElement>) => {

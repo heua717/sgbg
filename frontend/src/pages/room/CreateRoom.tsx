@@ -1,5 +1,5 @@
 import { inputRoomInfo } from "../../store/room";
-import { room } from "../../store/room";
+import { roomMore } from "../../store/room";
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
@@ -8,24 +8,22 @@ import React, { useState } from "react";
 
 
 const CreateRoom = (): JSX.Element => {
+  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo)
   // 유효성 검사 0927 임지민
-  const [isValidated, setIsValidated] = useState(false);
-    
+  const [isValidated, setIsValidated] = useState(false)
+
   const onChangeValidation = () => {
-    if (
-      room.title.trim() &&
-      room.category.trim() &&
-      room.minPerson &&
-      room.maxPerson &&
-      room.explanation
-    ){
-      setIsValidated(true)
+    if (room.title.trim() && room.category.trim() && room.minPerson !== 0 && room.maxPerson !== 0 && room.explanation.trim() ){
+      setIsValidated((isValidated:boolean) => isValidated = true)
+      
+    } else {
+      setIsValidated((isValidated:boolean) => isValidated = false)
+      console.log('else로 빠짐');
+      console.log(room.title.trim());
     }
   }
 
   // recoil에 작성한 모임 정보 저장하기 0927 임지민
-  const [room, setRoom] = useRecoilState<room>(inputRoomInfo)
-
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
 
@@ -127,13 +125,21 @@ const CreateRoom = (): JSX.Element => {
         {/* <p>{room.explanation}</p> */}
       </div>
       
+      {isValidated && (
       <Link to="/meeting/create/more">
         {/* <p>{}</p> */}
         <div className="grid grid-cols-1 mt-3">
+          {/* 모든 칸이 추가된 경우 0927 임지민 */}
+            <button type="button"
+            className="text-center text-white font-semibold bg-blue-200 rounded py-1">다음으로</button>
+        </div>
+      </Link>)}
+      {/* 한 칸이라도 빈 경우 0927 임지민 */}
+      {!isValidated && (
+        <div className="grid grid-cols-1 mt-3">
           <button type="button"
           className="text-center bg-gray-200 rounded py-1">다음으로</button>
-        </div>
-      </Link>
+        </div> )}
     </form>
 
   </div>
