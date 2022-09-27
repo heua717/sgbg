@@ -3,8 +3,8 @@ FROM openjdk:15-jdk-alpine as builder
 
 WORKDIR /home/ubuntu/jenkins/workspace/SGBG/backend/
 RUN ls
-RUN chmod +x gradlew
-RUN gradlew bootJAR
+RUN chmod +x ./gradlew
+RUN ./gradlew bootJAR
 
 
 
