@@ -1,7 +1,7 @@
 #자바 버전
 FROM openjdk:15-jdk-alpine as builder
 
-WORKDIR ./backend
+WORKDIR ./SGBG/backend
 RUN ls
 RUN chmod +x ./backend/gradlew
 RUN ./backend/gradlew bootJAR
