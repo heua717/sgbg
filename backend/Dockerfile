@@ -12,10 +12,10 @@ RUN ./gradlew bootJAR
 
 FROM openjdk:15-jdk-alpine
 #가져올 파일 jar또는 war
-ARG JAR_FILE=build/libs/*.jar
+
 
 #war파일 복사
-COPY --from=builder ${JAR_FILE} app.jar
+COPY --from=builder ./build/libs/*.jar ./app.jar
 
 #포트번호 설정
 EXPOSE 8080
