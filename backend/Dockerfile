@@ -1,7 +1,7 @@
 #자바 버전
 FROM openjdk:15-jdk-alpine as builder
 
-WORKDIR .jenkins/SGBG/backend
+WORKDIR ./jenkins/SGBG/backend
 RUN ls
 RUN chmod +x gradlew
 RUN gradlew bootJAR
