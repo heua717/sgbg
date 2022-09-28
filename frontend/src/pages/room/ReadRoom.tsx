@@ -12,7 +12,7 @@ const ReadRoom = () => {
         <MeetingCard/>
       </div>
 
-      <div className="grid grid-cols-1 mt-3 mx-3">
+      <div className=" mt-3 mx-3">
         <button type="button" className="text-center font-bold bg-yellow-100 rounded py-1">참여하기</button>
       </div>
     </div>

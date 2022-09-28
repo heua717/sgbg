@@ -9,3 +9,10 @@ export const mapApi = axios.create({
   baseURL: mapURL,
   headers : { 'Authorization': `KakaoAK ${KAKAO_REST_API_KEY}` }
 })
+
+export const corsApi = axios.create({
+  baseURL: defaultURL,
+  headers: {
+    'Access-Control-Allow-Origin' : defaultURL,
+  }
+})
