@@ -1,7 +1,8 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRecoilState } from "recoil";
-import { inputRoomInfo, roomMore } from "../../store/room";
+import { inputRoomInfo } from "../../store/room";
+import { roomMore } from "../../util/room";
 
 
 const MeetingCard = (props:any): JSX.Element => {

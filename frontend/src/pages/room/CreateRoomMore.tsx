@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { roomMore } from "../../store/room";
+import { roomMore } from "../../util/room";
 import { inputRoomInfo } from "../../store/room";
 import MeetingCard from "../../components/cards/MeetingCard"
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
