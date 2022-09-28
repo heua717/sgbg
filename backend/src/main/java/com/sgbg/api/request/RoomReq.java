@@ -1,68 +1,62 @@
 package com.sgbg.api.request;
 
 import com.sgbg.domain.Room;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@ApiModel("RoomRequest")
 @Setter
 @Getter
 @NoArgsConstructor
 public class RoomReq {
 
-    @ApiModelProperty(name = "Room Title")
-    private String title;
-
-    @ApiModelProperty(name = "Host Id")
+    @Schema(name = "방장 아이디")
     private Long hostId;
 
-    @ApiModelProperty(name = "Host Name")
+    @Schema(name = "방장 닉네임")
     private String hostName;
 
-    @ApiModelProperty(name = "Parent Category")
+    @Schema(name = "대분류 카테고리", example = "이색놀거리")
     private String parentCategory;
 
-    @ApiModelProperty(name = "Child Category")
+    @Schema(name = "소분류 카테고리", example = "보드게임")
     private String childCategory;
 
-    @ApiModelProperty(name = "Max User")
+    @Schema(name = "방 제목", example = "보드게임 고수만")
+    private String title;
+
+    @Schema(name = "최대 참여 유저", example = "10")
     private Long maxUser;
 
-    @ApiModelProperty(name = "Min User")
+    @Schema(name = "최소 참여 유저", example = "2")
     private Long minUser;
 
-    @ApiModelProperty(name = "Price")
+    @Schema(name = "모임 참여 비용", example = "50000")
     private Long price;
 
-    @ApiModelProperty(name = "Location")
+    @Schema(name = "모임 장소", example = "서울시 멀티캠퍼스")
     private String location;
 
-    @ApiModelProperty(name = "Reservation Date")
+    @Schema(name = "모임 날짜", example = "2022-12-25T20:00:00")
     private LocalDateTime reservationDate;
 
-    @ApiModelProperty(name = "End Date")
+    @Schema(name = "모집 마감 날짜", example = "2022-12-20T20:00:00")
     private LocalDateTime endDate;
 
-    @ApiModelProperty(name = "Min Member Score")
+    @Schema(name = "참여 가능 온도", example = "35.4")
     private Double minMemberScore;
 
-    @ApiModelProperty(name = "Image URL")
-    private String imageUrl;
-
-    @ApiModelProperty(name = "description")
+    @Schema(name = "방 정보(설명)", example = "모여서 인생 걸고 보드게임 하실분 모집합니다. 할리갈리 선출입니다.")
     private String description;
 
     public static RoomReq createRoomReq(String title, String parentCategory,
                    String hostName, String childCategory, Long maxUser,
                    Long minUser, Long price, String location,
                    LocalDateTime reservationDate, LocalDateTime endDate,
-                   Double minMemberScore, String imageUrl, String description) {
+                   Double minMemberScore, String description) {
         RoomReq roomReq = new RoomReq();
         roomReq.setTitle(title);
         roomReq.setParentCategory(parentCategory);
@@ -74,7 +68,6 @@ public class RoomReq {
         roomReq.setReservationDate(reservationDate);
         roomReq.setEndDate(endDate);
         roomReq.setMinMemberScore(minMemberScore);
-        roomReq.setImageUrl(imageUrl);
         roomReq.setDescription(description);
 
         return roomReq;
