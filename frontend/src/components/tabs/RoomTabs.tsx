@@ -4,28 +4,6 @@ import ParticipantListTab from "./ParticipantListTab";
 import CommunityTab from "./CommunityTab";
 
 const RoomTabs = () => {
-    /* const user = [
-      {
-        participantScore: 99,
-        userId: "host",
-      },
-      {
-        participantScore: 23,
-        userId: "user1",
-      },
-      {
-        participantScore: 72,
-        userId: "user2",
-      },
-      {
-        participantScore: 52,
-        userId: "user3",
-      },
-      {
-        participantScore: 46,
-        userId: "user4",
-      },
-  ]; */
     const data = [
         {
           id: 0,

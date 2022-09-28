@@ -1,6 +1,7 @@
-import React from 'react';
-
-const RoomInfoTabs = () => {
+type RoomInfoTabsProps = {
+  
+}
+const RoomInfoTabs = ({ }: RoomInfoTabsProps) => {
   return (
     <div>
       <h3 className='text-sm font-semibold'>[이색 놀거리] 블루 하와이안 만들기</h3>
