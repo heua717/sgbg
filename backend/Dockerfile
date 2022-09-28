@@ -1,0 +1,20 @@
+#자바 버전
+FROM openjdk:15-jdk-alpine as builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN chmod +x ./gradlew
+RUN ./gradlew bootJAR
+
+
+FROM openjdk:15-jdk-alpine 
+#war파일 복사
+COPY --from=builder app/build/libs/*.jar ./app.jar
+
+#포트번호 설정
+EXPOSE 8080
+
+#ENTRYPOINT 명령을 지정, app.war 실행
+ENTRYPOINT ["java","-jar","/app.jar"]
