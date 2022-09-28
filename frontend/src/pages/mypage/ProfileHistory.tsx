@@ -1,6 +1,9 @@
+import { useState } from "react";
+import BtnProfileInfo from "../../components/buttons/BtnProfileInfo";
 import FinishedMeetingCard from "../../components/cards/FinishedMeetingCard";
-import ProfileCard from "../../components/cards/ProfileCard";
 import Logo from "../../components/etc/Logo";
+import FinishedMeetingListHost from "../../components/lists/FinishedMeetingListHost";
+import FinishedMeetingListParticipant from "../../components/lists/FinishedMeetingListParticipant";
 
 const ProfileHistory = () => {
   const user = {
@@ -8,131 +11,47 @@ const ProfileHistory = () => {
     hostScore: 30,
     userId: "namm",
   };
-  let list = [
+
+  const list = [1, 2, 3, 4, 5, 6, 7];
+
+  const data = [
     {
-      roomId: 1,
-      category: {
-        name: "방탈출"
-      },
-      host: {
-        userId: "namm",
-        name: "namju",
-      },
-      title: "싱글벙글 방탈출",
-      price: 20000,
-      location: "서울시 강남구",
-      reservationDate: "2022.09.10",
-      endDate: "2022.09.30",
-      successRate: 90,
-      userCount: 10,
-      eval: {
-        best: 5,
-        good: 3,
-        wordt: 2,
-      }
+      id: 0,
+      component: <FinishedMeetingListParticipant/>
     },
     {
-      roomId: 2,
-      category: {
-        name: "방탈출"
-      },
-      host: {
-        userId: "namm",
-        name: "namju",
-      },
-      title: "싱글벙글 방탈출",
-      price: 20000,
-      location: "서울시 강남구",
-      reservationDate: "2022.09.10",
-      endDate: "2022.09.30",
-      successRate: 90,
-      userCount: 10,
-      eval: {
-        best: 5,
-        good: 3,
-        wordt: 2,
-      }
+      id: 1,
+      component: <FinishedMeetingListHost />
     },
-    {
-      roomId: 3,
-      category: {
-        name: "방탈출"
-      },
-      host: {
-        userId: "namm",
-        name: "namju",
-      },
-      title: "싱글벙글 방탈출",
-      price: 20000,
-      location: "서울시 강남구",
-      reservationDate: "2022.09.10",
-      endDate: "2022.09.30",
-      successRate: 90,
-      userCount: 10,
-      eval: {
-        best: 5,
-        good: 3,
-        wordt: 2,
-      }
-    },
-    {
-      roomId: 4,
-      category: {
-        name: "방탈출"
-      },
-      host: {
-        userId: "namm",
-        name: "namju",
-      },
-      title: "싱글벙글 방탈출",
-      price: 20000,
-      location: "서울시 강남구",
-      reservationDate: "2022.09.10",
-      endDate: "2022.09.30",
-      successRate: 90,
-      userCount: 10,
-      eval: {
-        best: 5,
-        good: 3,
-        wordt: 2,
-      }
-    },
-    {
-      roomId: 5,
-      category: {
-        name: "방탈출"
-      },
-      host: {
-        userId: "namm",
-        name: "namju",
-      },
-      title: "싱글벙글 방탈출",
-      price: 20000,
-      location: "서울시 강남구",
-      reservationDate: "2022.09.10",
-      endDate: "2022.09.30",
-      successRate: 90,
-      userCount: 10,
-      eval: {
-        best: 5,
-        good: 3,
-        wordt: 2,
-      }
-    }
   ];
+  const [index, setIndex] = useState<number>(0);
   return (
     <div className="w-full h-full">
       {/* 로고 */}
       <Logo />
       {/* 유저 프로필(아이디, 매너온도, 모임 성공률) */}
-      <div className="h-per25">
-        <ProfileCard user={user} />
+      <div className="h-per25 flex flex-col px-2 mx-2 mb-1">
+        <span className="border-b border-gray-200 pb-2 font-bold text-lg leading-tight">
+          {user.userId}님의 완료한 모임 이력
+        </span>
+        <ul className="grid grid-cols-2 gap-2">
+          <li
+            onClick={() => setIndex(0)}>
+            <BtnProfileInfo type={"Participant"} user={user} active={ index === 0} />
+          </li>
+          <li
+            onClick={() => setIndex(1)}>
+            <BtnProfileInfo type={"Host"} user={user} active={ index === 1} />
+          </li>
+      </ul>
       </div>
       {/* 완료 모임 내역 카드 */}
-      <div className="w-per90 h-per75 mx-auto grid grid-cols-1 gap-1">
-        {
-          list.map(() => <FinishedMeetingCard/>)
-        }
+      <div className="w-full max-h-[70vh] overflow-scroll">
+        {data
+          .filter((item) => index === item.id)
+          .map((item) => (
+            <div className="mx-3">{item.component}</div>
+          ))}
       </div>
     </div>
   );
