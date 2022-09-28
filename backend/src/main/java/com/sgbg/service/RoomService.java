@@ -59,4 +59,16 @@ public class RoomService {
         return roomRes;
 
     }
+
+    public List<RoomRes> getRoomList(String parentCategory, Pageable pageable) {
+        List<Room> roomList = roomRepository.findAllBy(pageable);
+        List<RoomRes> roomResList = new ArrayList<>();
+        for(Room room : roomList){
+            if(room.getParentCategory()==parentCategory){
+                roomResList.add(RoomRes.getRoomRes(room));
+            }
+        }
+
+        return roomResList;
+    }
 }
