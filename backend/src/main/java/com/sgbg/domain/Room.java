@@ -60,7 +60,7 @@ public class Room {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "Min Member Score")
+    @Column(name = "min_member_score")
     private Double minMemberScore;
 
     @Column(name = "description")

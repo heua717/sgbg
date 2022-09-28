@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,9 +15,9 @@ import java.util.List;
 @ApiModel("RoomResponse")
 @Setter
 @NoArgsConstructor
+@Getter
+@ToString
 public class RoomRes extends BaseResponseBody{
-    @ApiModelProperty(name = "Room List")
-    private List<RoomRes> roomList;
 
     @ApiModelProperty(name = "Room Id")
     private Long roomId;
@@ -66,6 +67,7 @@ public class RoomRes extends BaseResponseBody{
 
     public static RoomRes getRoomRes(Room room){
         RoomRes roomRes = new RoomRes();
+        roomRes.setRoomId(room.getRoomId());
         roomRes.setTitle(room.getTitle());
         roomRes.setHostName(room.getHostName());
         roomRes.setParentCategory(room.getParentCategory());
@@ -90,12 +92,14 @@ public class RoomRes extends BaseResponseBody{
         return roomRes;
     }
 
-    public static RoomRes roomListResEntity(Integer status, String Message, List<RoomRes> roomListRes){
-        RoomRes roomRes = new RoomRes();
-        roomRes.setStatusCode(status);
-        roomRes.setMessage(Message);
-        roomRes.setRoomList(roomListRes);
-        return roomRes;
+    public static List<RoomRes> roomListResEntity(Integer status, String Message, List<RoomRes> roomListRes){
+
+        for(int i = 0 ; i<roomListRes.size(); i++){
+            roomListRes.get(i).setStatusCode(status);
+            roomListRes.get(i).setMessage(Message);
+
+        }
+        return roomListRes;
     }
 
 
