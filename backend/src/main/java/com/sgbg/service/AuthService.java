@@ -19,11 +19,9 @@ public class AuthService implements IAuthService {
     @Autowired
     AuthRepository authRepository;
 
-    public boolean isUser(String kakaoId) {
+    public Auth isUser(String kakaoId) {
         Long kakaoNumber = Long.valueOf(kakaoId);
-        Auth findByKakaoNumber = authRepository.findByKakaoNumber(kakaoNumber).orElse(null);
-
-        return findByKakaoNumber != null;
+        return authRepository.findByKakaoNumber(kakaoNumber).orElse(null);
     }
 
     public void createAuth(User user, String kakaoId) {

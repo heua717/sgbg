@@ -20,7 +20,7 @@ public class Auth {
 
     private Long kakaoNumber; // 카카오 고유 회원 번호
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

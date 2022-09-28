@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 public class BaseResponseBody {
 
-    @Schema(name = "응답 코드", example = "2000")
+    @Schema(description = "응답 코드", example = "2000")
     Integer statusCode = null;
 
-    @Schema(name = "응답 메시지", example = "Success")
+    @Schema(description = "응답 메시지", example = "Success")
     String message = null;
 
     public BaseResponseBody() {

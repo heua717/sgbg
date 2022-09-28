@@ -1,7 +1,9 @@
 package com.sgbg.api.controller;
 
 import com.sgbg.api.response.BaseResponseBody;
+import com.sgbg.api.response.UserRes;
 import com.sgbg.common.util.CookieUtil;
+import com.sgbg.domain.Auth;
 import com.sgbg.domain.User;
 import com.sgbg.service.AuthService;
 import com.sgbg.service.KakaoService;
@@ -41,14 +43,18 @@ public class AuthController {
     CookieUtil cookieUtil;
 
     @Operation(summary = "카카오 로그인 메서드")
-    @ApiResponses(
+    @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "로그인 성공",
-                    content = @Content(schema = @Schema(implementation = BaseResponseBody.class)))
-    )
+                    content = @Content(schema = @Schema(implementation = UserRes.class))),
+            @ApiResponse(responseCode = "2010", description = "회원가입 성공",
+                    content = @Content(schema = @Schema(implementation = UserRes.class)))
+    })
     @GetMapping("/login")
-    public ResponseEntity<? extends BaseResponseBody> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws
+    public ResponseEntity<? extends BaseResponseBody> kakaoLogin(
+            @RequestParam String code, HttpServletResponse response) throws IOException {
 
-            IOException {
+        User user = null;
+        Auth isUser = null;
         // 1. 인가 code로 Kakao Auth Server에서 token 받기
         try {
             Map<String, String> tokenInfo = kakaoService.getKakaoTokenInfo(code);
@@ -58,9 +64,12 @@ public class AuthController {
 
             // 3. 회원 가입이 안되어 있는 경우, 회원가입 시키기
             String kakaoId = userInfo.get("id");
-            System.out.println(kakaoId);
-            if (!authService.isUser(kakaoId)) {
-                User user = userService.createUser(userInfo);
+            isUser = authService.isUser(kakaoId);
+
+            if (isUser != null) {
+                user = isUser.getUser();
+            } else {
+                user = userService.createUser(userInfo);
                 authService.createAuth(user, kakaoId);
             }
 
@@ -81,7 +90,10 @@ public class AuthController {
             e.printStackTrace();
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2010, "Success"));
+        if (isUser == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2010, "Success", user));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2000, "Success", user));
     }
 
     @Operation(summary = "카카오 로그아웃 메서드")
