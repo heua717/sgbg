@@ -7,23 +7,25 @@ interface SingleBungleInterface {
     function enterRoom() external payable; // 입장하기
     function leaveRoom() external payable; // 퇴장하기
     function withdraw() external payable; // 방장이 출금하기
-    // 성공/실패 리뷰 저장
+    function isSuccess(bool _flag) external; // 성공/실패 여부 저장
 }
 
 contract SingleBungle is SingleBungleInterface {
-    // uint randNonce = 0;
-
     address private host; // 방장
     uint private memberLength; // 참여자 수
 
     uint private MINIMUM_AMOUNT; // 최소 모금액 결정 (0.01 ETH == 1e16)
-    uint private closeDate; // 모금 마감 기간
+    uint private recruitEndDate; // 모집 마감 기간
+    uint private surveyStartDate; // 성공/실패 여부 설문 시작 날짜
+    uint private surveyEndDate; // 성공/실패 여부 설문 마감 기간
 
-    mapping(address => uint) memberToMoney; // key-value 쌍의 hash table
+    // key-value 쌍의 hash table
+    mapping(address => uint) memberToMoney; // member address - money
+    mapping(address => bool) memberToSuccess; // member address - isSuccess
 
     constructor(address _host, uint _duration, uint _minimumAmount) {
         host = _host; // 방장 설정
-        closeDate = block.timestamp + _duration; // 모금 마감 기간
+        recruitEndDate = block.timestamp + _duration; // 모금 마감 기간
         MINIMUM_AMOUNT = _minimumAmount; // 1인당 최소 모금액 설정
     }
 
@@ -34,19 +36,19 @@ contract SingleBungle is SingleBungleInterface {
     }
 
     // 모금 기한 내의 모금인가
-    modifier onlyOpenDate() {
-        require(block.timestamp < closeDate, "ROOM CLOSED");
+    modifier onlyWithinRecruitPeriod() {
+        require(block.timestamp < recruitEndDate, "ROOM CLOSED");
         _;
     }
 
     // 입장하기: 참가자 추가 + 참가자 ETH 지불
     function enterRoom() external payable
     onlyPayableMember
-    onlyOpenDate {
+    onlyWithinRecruitPeriod {
         memberLength++; // add member
-        memberToMoney[msg.sender] = msg.value; // save who send eth
-        payable(address(this)).transfer(msg.value); // send eth from member to contract
-        // address(this).transfer(msg.value);
+        memberToMoney[msg.sender] = msg.value; // save who send wei
+        memberToSuccess[msg.sender] = true;
+        payable(address(this)).transfer(msg.value); // send wei from member to contract
     }
 
     // 해당 방 유저인 경우
@@ -58,7 +60,7 @@ contract SingleBungle is SingleBungleInterface {
     // 퇴장하기: 참가자 삭제 + 참가자가 송금했던 ETH 출금
     function leaveRoom() external payable
     onlyRoomMember
-    onlyOpenDate {
+    onlyWithinRecruitPeriod {
         memberLength--; // delete member
         payable(msg.sender).transfer(memberToMoney[msg.sender]); // send eth from contract to member
         delete memberToMoney[msg.sender]; // delete who send eth
@@ -72,7 +74,7 @@ contract SingleBungle is SingleBungleInterface {
 
     // 모집 마감되었을 경우
     modifier onlyAfterRoomCloses() {
-        require(block.timestamp > closeDate, "ROOM NOT CLOSED YET");
+        require(block.timestamp > recruitEndDate, "ROOM NOT CLOSED YET");
         _;
     }
 
@@ -89,16 +91,15 @@ contract SingleBungle is SingleBungleInterface {
         return address(this).balance;
     }
 
-    // function selectRandomFunder() public returns(address, uint) {
-    //     uint mod = members.length;
-    //     if(mod == 0) {
-    //         return (address(0), 0);
-    //     }
+    modifier onlyWithinSurveyPeriod() {
+        require((surveyStartDate <= block.timestamp) && (block.timestamp < surveyEndDate),"NOT A SURVEY PERIOD");
+        _;
+    }
 
-    //     uint random = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNonce))) % mod;
-    //     randNonce++;
-        
-    //     address randomFunderAddress = members[random];
-    //     return (randomFunderAddress, memberToMoney[randomFunderAddress]);
-    // }
+    function isSuccess(bool _flag) external
+    onlyWithinSurveyPeriod {
+        if(_flag == false) {
+            memberToSuccess[msg.sender] = _flag;
+        }
+    }
 }
