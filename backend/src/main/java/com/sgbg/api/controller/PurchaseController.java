@@ -1,13 +1,12 @@
 package com.sgbg.api.controller;
 
-import com.sgbg.service.interfaces.IEscrowContractService;
-import com.sgbg.service.interfaces.IPurchaseRecordContractService;
-import com.sgbg.service.interfaces.IPurchaseService;
+import com.sgbg.common.exception.EmptyListException;
 import com.sgbg.domain.Purchase;
 import com.sgbg.domain.PurchaseInfo;
 import com.sgbg.domain.Record;
-import com.sgbg.common.exception.EmptyListException;
-import io.swagger.annotations.ApiOperation;
+import com.sgbg.service.interfaces.IEscrowContractService;
+import com.sgbg.service.interfaces.IPurchaseRecordContractService;
+import com.sgbg.service.interfaces.IPurchaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,6 @@ public class PurchaseController {
      * @param purchase
      * @return
      */
-    @ApiOperation(value = "Register purchase info")
     @RequestMapping(value = "/purchases", method = RequestMethod.POST)
     public Purchase registerPurchase(@RequestBody Purchase purchase) {
         return this.purchaseService.create(purchase);
@@ -59,7 +57,6 @@ public class PurchaseController {
      * @param state purchase state
      * @return Item
      */
-    @ApiOperation(value = "update purchase state")
     @RequestMapping(value = "/purchases/{pid}/state/{state}", method = RequestMethod.PUT)
     public Purchase updateState(@PathVariable int pid, @PathVariable String state) {
         return this.purchaseService.updateState(pid, state);
@@ -70,7 +67,6 @@ public class PurchaseController {
      * @param pid purchase id*
      * @return Item
      */
-    @ApiOperation(value = "check if the purchase's buyer paid or not")
     @RequestMapping(value = "/purchases/{pid}/deposit", method = RequestMethod.PUT)
     public Purchase checkDeposit(@PathVariable int pid) {
         return this.escrowContractService.checkDeposit(pid);
@@ -80,7 +76,6 @@ public class PurchaseController {
      * 내가 판매한 거래 목록
      * @param id 판매자 id
      */
-    @ApiOperation(value = "Fetch purchase list by seller's id")
     @RequestMapping(value = "/purchases/seller/{id}", method = RequestMethod.GET)
     public List<PurchaseInfo> getSellerPurchases(@PathVariable int id){
         List<PurchaseInfo> list = this.purchaseService.getBySeller(id);
@@ -95,7 +90,6 @@ public class PurchaseController {
      * 내가 구매한 거래 목록
      * @param id 구매자의 id
      */
-    @ApiOperation(value = "Fetch purchase list by buyer's id")
     @RequestMapping(value = "/purchases/buyer/{id}", method = RequestMethod.GET)
     public List<PurchaseInfo> getBuyerPurchases(@PathVariable int id){
         List<PurchaseInfo> list = this.purchaseService.getByBuyer(id);
@@ -111,7 +105,6 @@ public class PurchaseController {
      * @param pid purchase id
      * @return List<Record> the list of the purchase records
      */
-	@ApiOperation(value = "Fetch record history of purchase_id")
 	@RequestMapping(value = "/purchases/history/{pid}", method = RequestMethod.GET)
 	public List<Record> getHistory(@PathVariable int pid){
         Purchase purchase = this.purchaseService.getByPurchaseId(pid);

@@ -1,9 +1,8 @@
 package com.sgbg.api.controller;
 
-import com.sgbg.service.interfaces.IEthereumService;
-import com.sgbg.domain.Address;
 import com.sgbg.common.exception.NotFoundException;
-import io.swagger.annotations.ApiOperation;
+import com.sgbg.domain.Address;
+import com.sgbg.service.interfaces.IEthereumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,6 @@ public class EthereumController {
      * @param addr
      * @return
      */
-    @ApiOperation(value = "Fetch an address info")
     @GetMapping("/address/{addr}")
     public Address getAddress(@PathVariable String addr)
     {

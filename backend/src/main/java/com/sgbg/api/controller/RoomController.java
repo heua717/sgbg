@@ -86,8 +86,11 @@ public class RoomController {
             @ApiResponse(responseCode = "2000", description = "대분류 별 방 목록 조회 성공",
                     content = @Content(schema = @Schema(implementation = RoomListRes.class)))
     )
-    @GetMapping("/{parentCategory")
+    @GetMapping("/category/{parentCategory}")
     public ResponseEntity<? extends RoomListRes> getRoomListCategory(@PathVariable String parentCategory, Pageable pageable){
+        System.out.println("-----");
+        System.out.println(parentCategory);
+        System.out.println("-----");
         List<RoomRes> roomResList = roomService.getRoomList(parentCategory, pageable);
         return ResponseEntity.status(200).body(RoomListRes.of(2000,"Success",roomResList));
     }

@@ -1,10 +1,9 @@
 package com.sgbg.api.controller;
 
-import com.sgbg.service.interfaces.IItemService;
-import com.sgbg.domain.Item;
 import com.sgbg.common.exception.EmptyListException;
 import com.sgbg.common.exception.NotFoundException;
-import io.swagger.annotations.ApiOperation;
+import com.sgbg.domain.Item;
+import com.sgbg.service.interfaces.IItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +33,11 @@ public class ItemController
 	 * @param item
 	 * @return Item
 	 */
-	@ApiOperation(value = "Register an item")
 	@RequestMapping(value = "/items", method = RequestMethod.POST)
 	public Item register(@RequestBody Item item) {
 		return itemService.register(item);
 	}
 
-	@ApiOperation(value = "Fetch all items")
 	@RequestMapping(value = "/items", method = RequestMethod.GET)
 	public List<Item> list() {
 		List<Item> list = itemService.list();
@@ -51,7 +48,6 @@ public class ItemController
 		return list;
 	}
 
-	@ApiOperation(value = "Fetch an item with id")
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.GET)
 	public Item get(@PathVariable int id) {
 		Item item = itemService.get(id);
@@ -62,7 +58,6 @@ public class ItemController
 		return item;
 	}
 
-	@ApiOperation(value = "Fetch an item with id")
 	@RequestMapping(value = "/items/of/{uid}", method = RequestMethod.GET)
 	public List<Item> getByUser(@PathVariable int uid) {
 		List<Item> items = itemService.getByUser(uid);
@@ -79,7 +74,6 @@ public class ItemController
 	 * @param id 아이템 id
 	 * @return Item
 	 */
-	@ApiOperation(value = "Delete an item with id")
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.DELETE)
 	public Item delete(@PathVariable int id) {
 		return  itemService.delete(id);

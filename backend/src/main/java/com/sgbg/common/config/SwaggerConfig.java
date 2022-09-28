@@ -1,45 +1,56 @@
+/*
 package com.sgbg.common.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import lombok.RequiredArgsConstructor;
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.Collections;
-import java.util.List;
 
+@OpenAPIDefinition(
+        info = @Info(title = "싱글벙글 API 명세서",
+                description = "블록체인 기반 단기 모임 서비스 API",
+                version = "v1")
+)
 @Configuration
-@EnableSwagger2
-public class SwaggerConfig extends WebMvcConfigurationSupport {
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ecommerce.api"))
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo());
-    }
+@EnableWebMvc
+public class SwaggerConfig {
 
-    private ApiInfo apiInfo() {
-        return new ApiInfo(
-                "BACKEND APIs",
-                "For API SERVER descriptions.",
-                "v1.0",
-                "Terms of service",
-                new Contact("", "", ""),
-                "License of API", "", Collections.emptyList());
-    }
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add( new PageableHandlerMethodArgumentResolver());
-    }
+    */
+/*    @Bean
+        public Docket api() {
+            return new Docket(DocumentationType.SWAGGER_2)
+                    .select()
+                    .apis(RequestHandlerSelectors.basePackage("com.sgbg.api"))
+                    .paths(PathSelectors.any())
+                    .build()
+                    .apiInfo(getApiInfo());
+        }
+
+        private ApiInfo getApiInfo() {
+            return new ApiInfoBuilder()
+                    .title("BACKEND APIs")
+                    .description("For API SERVER descriptions.")
+                    .termsOfServiceUrl("http://localhost:8080/")
+                    .version("1.0")
+                    .build();
+        }*//*
+
+
+ */
+/*    @Bean
+    public GroupedOpenApi sgbgOpenApi() {
+        String[] paths = {"/**"};
+
+        return GroupedOpenApi.builder()
+                .group("싱글벙글 API v1")
+                .pathsToMatch(paths)
+                .build();
+    }*//*
+
 }
+*/
+

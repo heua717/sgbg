@@ -4,12 +4,14 @@ import com.sgbg.domain.Room;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Getter
+@Setter
 public class RoomListRes extends BaseResponseBody {
 
     @Schema(name = "방 목록")
