@@ -1,10 +1,14 @@
-import { corsApi } from "./API";
+import { api } from "./API";
 import { roomMore} from "../store/room";
 
 
-const createRoom = (_params: roomMore) => {
+export const createRoom = (_params: roomMore) => {
   const url = 'room/create';
-  return corsApi.post(url, {params: _params});
+  return api.post(url, {params: _params});
 }
 
-export default createRoom
+export const readRoom = (_id:string) => {
+  const url = 'room/' + _id;
+  return api.get(url);
+}
+
