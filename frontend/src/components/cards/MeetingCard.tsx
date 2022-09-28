@@ -1,5 +1,8 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRecoilState } from "recoil";
+import { inputRoomInfo, roomMore } from "../../store/room";
+
 
 const MeetingCard = (props:any): JSX.Element => {
   const getStateBadgeColor = () => {
@@ -8,6 +11,13 @@ const MeetingCard = (props:any): JSX.Element => {
   const getMemberBadgeColor = () => {
     return 'bg-gray-100';
   }
+
+  const [ room ] = useRecoilState<roomMore>(inputRoomInfo)
+
+  // 모이는 날의 연/월/일만 카드에 띄우기 위한 작업(서버와 무관함) 0930 임지민
+  const splitedDateList = room.reservationDate.split('T')
+  const dateOnCard = splitedDateList[0].replaceAll('-', '.')
+
   return (
     // w-per100 h-per100 
     <div className="flex flex-row border rounded-lg p-2 my-2">
@@ -19,7 +29,9 @@ const MeetingCard = (props:any): JSX.Element => {
           src={process.env.PUBLIC_URL + `/img/이색놀거리_방탈출.png`}
           alt="소분류 카테고리 사진"></img>
 
-        <div className={`absolute bottom-0 right-0 rounded ${getMemberBadgeColor()} text-sm font-semibold px-2`}>{`${3}/${5}`}</div>
+        <div className={`absolute bottom-0 right-0 rounded ${getMemberBadgeColor()} text-sm font-semibold px-2`}>
+          {room.minUser? room.minUser : ''} / {room.maxUser? room.maxUser : ''}
+        </div>
       </div>
       {/* 모임 설명 */}
       <div className="w-per55 flex flex-col justify-between"> {/* 설명 부분 전체를 묶는 div */}
@@ -30,23 +42,23 @@ const MeetingCard = (props:any): JSX.Element => {
           <div className="flex justify-between">
             <span 
               className="text-xs text-blue-200 font-bold border border-blue-200 border-1 py-0.5 px-1.5 rounded-xl">
-              드로잉/사진/글
+              {room.category? room.category : ''}
             </span>
             <span className="text-xs pt-1">
               <FontAwesomeIcon icon={faMapMarkerAlt} className="text-xs mr-1" />        
-              서울시 강남구
+                {room.location.road_address? room.location.road_address : ''}
             </span>
           </div>
           <div className="text-sm font-semibold py-2">
             <span>
-              일몰 출사 같이 가요
+              {room.title? room.title : ''}
             </span>
           </div>
         </div>
         {/* 모임일자, 가격 */}
         <div className="flex justify-between">
-          <span className="text-sm">2022.09.15</span>
-          <span className="text-sm font-semibold">50,000원</span>
+          <span className="text-sm">{room.reservationDate? dateOnCard : '모이는 날'}</span>
+          <span className="text-sm font-semibold">{room.price? room.price : '0'}원</span>
         </div>
       </div>
     </div>
