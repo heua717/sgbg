@@ -12,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -23,7 +25,7 @@ public class RoomService {
     @Autowired
     UserRepository userRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional()
     public void createRoom(RoomReq roomReq) {
         Room room;
 //        User user = userRepository.findById(userId).orElse(null);
@@ -37,11 +39,15 @@ public class RoomService {
         roomRepository.save(room);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional()
     public List<RoomRes> getRoomList(Pageable pageable){
+        List<Room> roomList = roomRepository.findAllBy(pageable);
+        List<RoomRes> roomResList = new ArrayList<>();
+        for(Room room : roomList){
+            roomResList.add(RoomRes.getRoomRes(room));
+        }
 
-
-        return null;
+        return roomResList;
     }
 
     public RoomRes getRoom(Long roomId) {
@@ -52,5 +58,17 @@ public class RoomService {
         RoomRes roomRes = RoomRes.getRoomRes(room);
         return roomRes;
 
+    }
+
+    public List<RoomRes> getRoomList(String parentCategory, Pageable pageable) {
+        List<Room> roomList = roomRepository.findAllBy(pageable);
+        List<RoomRes> roomResList = new ArrayList<>();
+        for(Room room : roomList){
+            if(room.getParentCategory()==parentCategory){
+                roomResList.add(RoomRes.getRoomRes(room));
+            }
+        }
+
+        return roomResList;
     }
 }

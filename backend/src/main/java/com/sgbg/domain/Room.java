@@ -57,10 +57,7 @@ public class Room {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
-    @Column(name = "Min Member Score")
+    @Column(name = "min_member_score")
     private Double minMemberScore;
 
     @Column(name = "description")
@@ -70,8 +67,7 @@ public class Room {
     public Room(String parentCategory, String childCategory,
                 Long hostId, String hostName, String title, Long minUser, Long maxUser,
                 Long price, String location, LocalDateTime reservationDate,
-                LocalDateTime endDate, String imageUrl,
-                Double minMemberScore, String description) {
+                LocalDateTime endDate, Double minMemberScore, String description) {
 
         this.parentCategory = parentCategory;
         this.childCategory = childCategory;
@@ -84,7 +80,6 @@ public class Room {
         this.location = location;
         this.reservationDate = reservationDate;
         this.endDate = endDate;
-        this.imageUrl = imageUrl;
         this.minMemberScore = minMemberScore;
         this.description = description;
     }
