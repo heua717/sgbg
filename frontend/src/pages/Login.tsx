@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { auth } from "../store/auth";
 import { login } from "../api/auth";
-import { kakaoRedirect, PRIVATE_KAKAO_KEY } from "../api/config";
+import { kakaoRedirect, KAKAO_REST_API_KEY } from "../api/config";
 import Swal from "sweetalert2";
 
 const Login = () => {
@@ -75,7 +75,7 @@ const Login = () => {
         </div>
       ) : (
         <a
-          href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${PRIVATE_KAKAO_KEY}&redirect_uri=${kakaoRedirect}login`}
+          href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${kakaoRedirect}login`}
           className="flex justify-center items-center my-20"
         >
           <img
