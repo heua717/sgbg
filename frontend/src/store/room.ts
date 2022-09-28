@@ -5,7 +5,7 @@ export interface room {
   category: string;
   minPerson: number;
   maxPerson: number;
-  location: string;
+  location: object;
   explanation: string;
 }
 
@@ -25,7 +25,7 @@ export const inputRoomInfo = atom<roomMore>({
     category: '',
     minPerson: 0,
     maxPerson: 0,
-    location: '',
+    location: {},
     explanation: '',
     dueDate: today,
     bookingDate: today,

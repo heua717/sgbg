@@ -83,16 +83,16 @@ const CreateRoomMore = () => {
       {/* 모집 마감일 */}
       <div className="flex justify-between">
         <label htmlFor="dueDate" className="flex mr-2">모집 마감일 </label>
-        <input type="date" id="dueDate" name="dueDate" className="flex" onChange={onChange} />
+        <input type="datetime-local" id="dueDate" name="dueDate" className="flex" onChange={onChange} />
       </div>
       <hr className="my-5" />
 
       {/* 예약 날짜 */}
       <div className="flex justify-between">
         <label htmlFor="bookingDate" className="flex mr-2">예약 날짜 </label>
-        <input type="date" id="bookingDate" name="bookingDate" className="flex" onChange={onChange} />
+        <input type="datetime-local" id="bookingDate" name="bookingDate" className="flex" onChange={onChange} />
       </div>
-      <p>{}</p>
+      {/* <p>{room.bookingDate.toDateString()}</p> */}
       <hr className="my-5" />
       
         {/* <div className="grid col-start-3 col-end- "> */}
