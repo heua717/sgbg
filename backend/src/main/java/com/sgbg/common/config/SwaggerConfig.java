@@ -40,7 +40,7 @@ public class SwaggerConfig {
         }*//*
 
 
- */
+*/
 /*    @Bean
     public GroupedOpenApi sgbgOpenApi() {
         String[] paths = {"/**"};
@@ -53,4 +53,3 @@ public class SwaggerConfig {
 
 }
 */
-

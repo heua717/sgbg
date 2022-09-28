@@ -28,12 +28,12 @@ public class DataSourceConfig {
 //    public DataSource dataSource() {
 //        return DataSourceBuilder.create().build();
 //    }
-//
+
 //    @Bean
 //    public JdbcTemplate jdbcTemplate() {
 //        return new JdbcTemplate(dataSource());
 //    }
-//
+
 //    @Bean
 //    public TransactionAwareDataSourceProxy dataSourceProxy() {
 //        return new TransactionAwareDataSourceProxy(dataSource());
