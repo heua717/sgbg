@@ -9,7 +9,7 @@ const SearchResult = () => {
     <div className="w-full h-full flex flex-col">
       <div className="h-[13vh] flex flex-col">
         {/* 검색바 */}
-        <SearchBar />
+        <SearchBar handleKeyword={() => {}}/>
         {/* 세부 카테고리 바 */}
         <SubCategoriesBar />
         {/* 필터링 바 */}
