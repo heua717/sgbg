@@ -1,5 +1,5 @@
 import { api } from "./API";
-import { roomMore} from "../store/room";
+import { roomMore } from "../util/room";
 
 
 export const createRoom = (_params: roomMore) => {

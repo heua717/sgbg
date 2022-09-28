@@ -1,5 +1,5 @@
 import { inputRoomInfo } from "../../store/room";
-import { roomMore } from "../../store/room";
+import { roomMore } from "../../util/room";
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
