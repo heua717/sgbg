@@ -38,7 +38,7 @@ function Router() {
       <Route path="/meeting/create/more" element={<CreateRoomMore />} />
 
       {/* 방 read -- 추후 id 추가*/}
-      <Route path="/meeting" element={<ReadRoom />} />
+      <Route path="/meeting/:meeting_id" element={<ReadRoom />} />
 
       {/* 마아페이지(프로필) */}
       <Route path="/profile/:user_id" element={<Profile />} />

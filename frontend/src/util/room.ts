@@ -1,4 +1,4 @@
-type location = {
+export type location = {
   id: string;
   name: string;
   x: string;
