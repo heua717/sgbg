@@ -2,8 +2,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { searchMap } from "../../api/map";
+import { inputRoomInfo, roomMore } from "../../store/room";
 import SearchBar from "../../components/bars/SearchBar";
 import SearchMapCard from "../../components/cards/SearchMapCard";
+import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
+
 
 type SearchMapCardProps = {
   id: string;
@@ -25,15 +29,21 @@ type SelectedLocation = {
 };
 
 const CreateRoomMap = () => {
-  const [selected, setSelected] = useState<SelectedLocation>();
+  const [selected, setSelected] = useState<SelectedLocation>({id: '', name: '', x: '', y: '', road_address: ''});
   const [searchResults, setSearchResults] = useState<SearchMapCardProps[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const [keyword, setKeyword] = useState<string>("");
+  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo)
 
   useEffect(() => {
     handleSearch(keyword, page);
-  }, [keyword, page]);
+  }, [keyword, page])
+  const newaddr = selected.road_address.split(" ")
+  console.log(newaddr);
+  console.log(newaddr[0] + ' ' + newaddr[1]);
+  
+  ;
 
   const handleSearch = (keyword: string, page: number) => {
     searchMap(keyword, page)
@@ -50,6 +60,27 @@ const CreateRoomMap = () => {
     setSelected({ id, name, x, y, road_address });
   };
 
+  const navigate = useNavigate()
+
+  const onClick = () => {
+    // console.log(e.target);
+    const splitedRoadAddressList = selected.road_address.split(" ")
+    const shortRoadAddress = splitedRoadAddressList[0] + ' ' + splitedRoadAddressList[1]
+
+    setRoom({
+      ...room,
+      location: {
+        id: selected.id,
+        name: selected.name,
+        x: selected.x,
+        y: selected.y,
+        road_address: shortRoadAddress
+      }
+    })
+    navigate(-1)
+    
+  }
+
   return (
     <div className="flex flex-col p-2">
       <SearchBar handleKeyword={setKeyword} />
@@ -60,9 +91,10 @@ const CreateRoomMap = () => {
               <span className="font-semibold">{selected.name}</span>
             </span>
             <span className="font-light text-sm">{selected.road_address}</span>
-            <button className="w-full bg-blue-300 text-white rounded p-1">위치 선택하기</button>
+            <button className="w-full bg-blue-300 text-white rounded p-1" 
+            onClick={onClick}>위치 선택하기</button>
           </div>
-          
+          // (selected.id, selected.name, selected.x, selected.y)
       ) : (
         ""
       )}

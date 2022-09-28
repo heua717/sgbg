@@ -1,36 +1,49 @@
 import { atom } from "recoil";
 
+type location = {
+  id: string;
+  name: string;
+  x: string;
+  y: string;
+  road_address: string;
+}
+
 export interface room {
   title: string;
   category: string;
-  minPerson: number;
-  maxPerson: number;
-  location: object;
-  explanation: string;
+  minUser: number;
+  maxUser: number;
+  location: location;
+  description: string;
 }
 
 export interface roomMore extends room {
-  dueDate: Date;
-  bookingDate: Date;
-  cost: number;
-  minAttituteNum: number;
+  endDate: string;
+  reservationDate: string;
+  price: number;
+  minAttituteScore: number;
 }
 
-const today = new Date();
 
 export const inputRoomInfo = atom<roomMore>({
   key: 'inputRoomInfo',
   default: {
     title: '',
     category: '',
-    minPerson: 0,
-    maxPerson: 0,
-    location: {},
-    explanation: '',
-    dueDate: today,
-    bookingDate: today,
-    cost: 0,
-    minAttituteNum: 50
+    minUser: 0,
+    maxUser: 0,
+    location: {
+      id: '',
+      name: '',
+      x: '',
+      y: '',
+      road_address: '',
+    },
+    description: '',
+    endDate: '',
+    reservationDate: '',
+    price: 0,
+    minAttituteScore: 50
   },
 })
 

@@ -3,7 +3,7 @@ import { roomMore } from "../../store/room";
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 
 
@@ -13,15 +13,20 @@ const CreateRoom = (): JSX.Element => {
   const [isValidated, setIsValidated] = useState(false)
 
   const onChangeValidation = () => {
-    if (room.title.trim() && room.category.trim() && room.minPerson !== 0 && room.maxPerson !== 0 && room.explanation.trim() ){
+    if (room.title.trim() && room.category.trim() && room.location.name.trim() && room.minUser !== 0 && room.maxUser !== 0 && room.description.trim() ){
       setIsValidated((isValidated:boolean) => isValidated = true)
       
     } else {
       setIsValidated((isValidated:boolean) => isValidated = false)
-      console.log('else로 빠짐');
-      console.log(room.title.trim());
+      // console.log('else로 빠짐');
+      // console.log(room.title.trim());
     }
   }
+
+  // 상세 정보 작성란에서 기본 정보 작성란으로 돌아왔을 때도 다 채워져있으면 유효성 검사 통과하도록 처리 0930 임지민
+  useEffect(() => {
+    onChangeValidation();
+  })
 
   // recoil에 작성한 모임 정보 저장하기 0927 임지민
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -98,31 +103,36 @@ const CreateRoom = (): JSX.Element => {
         <p className="col-span-2">모집인원</p>
         {/* grid grid-cols-3 */}
         <div className="col-span-4 grid grid-cols-5">
-          <input type="number" id="minPerson" onChange={onChange} name="minPerson" value={room.minPerson}/>
-          <label htmlFor="minPerson" className="text-center">명</label>
+          <input type="number" id="minUser" onChange={onChange} name="minUser" value={room.minUser}/>
+          <label htmlFor="minUser" className="text-center">명</label>
           <span className="text-center">~</span>
-          <input type="number" id="maxPerson" onChange={onChange} name="maxPerson"value={room.maxPerson}/>
-          <label htmlFor="maxPerson" className="text-center">명 </label>
+          <input type="number" id="maxUser" onChange={onChange} name="maxUser"value={room.maxUser}/>
+          <label htmlFor="maxUser" className="text-center">명 </label>
         </div>
       </div>
-      {/* <p>{room.minPerson} ~ {room.maxPerson}</p> */}
+      {/* <p>{room.minUser} ~ {room.maxUser}</p> */}
       <hr className="my-5" />
 
       <Link to="/meeting/create/location">
         <div className="flex justify-between">
           <p className="flex">모임 위치</p>
-          <button className="flex mr-4">▷</button>
+          {room.location.name === '' && (
+            <button className="flex mr-4">&gt;</button>
+          )}
+          {room.location.name && (
+            <p className="mr-4 font-semibold">{room.location.name}</p>
+          )}
         </div>
       </Link>
       <hr className="my-5" />
 
       <div className="grid">
-        <label htmlFor="roomExplanation" className="mb-3">모임 설명</label>
-        <textarea name="explanation" id="roomExplanation" cols={30} rows={8}
+        <label htmlFor="roomdescription" className="mb-3">모임 설명</label>
+        <textarea name="description" id="roomdescription" cols={30} rows={8}
           style={{resize: "none"}}
           placeholder="모임에 대한 설명을 입력하세요"
-          onChange={onChangeText}>{room.explanation}</textarea>
-        {/* <p>{room.explanation}</p> */}
+          onChange={onChangeText}>{room.description}</textarea>
+        {/* <p>{room.description}</p> */}
       </div>
       
       {isValidated && (

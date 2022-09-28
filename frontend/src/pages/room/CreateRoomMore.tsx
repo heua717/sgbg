@@ -5,6 +5,7 @@ import { inputRoomInfo } from "../../store/room";
 import MeetingCard from "../../components/cards/MeetingCard"
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
 import { useEffect, useState } from "react";
+import createRoom from "../../api/room";
 
 
 const CreateRoomMore = () => {
@@ -12,14 +13,14 @@ const CreateRoomMore = () => {
 
   // created 될 때
   useEffect(() => {
-    console.log(room.dueDate);
+    // console.log(room.endDate);
     
   })
 
   // recoil에 작성한 모임 정보 저장하기 0927 임지민
   const [isValidated, setIsValidated] = useState(false)
   const onChangeValidation = () => {
-    if (room.cost && room.minAttituteNum ){
+    if (room.price && room.minAttituteScore ){
       setIsValidated((isValidated:boolean) => isValidated = true)
       
     } else {
@@ -37,9 +38,31 @@ const CreateRoomMore = () => {
       [name]: value
     });
     onChangeValidation();
+    // console.log(room.endDate.split('T'));
   };
 
-  // 날짜 출력 잘되나 테스트 0927 임지민
+  const onChangeDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+
+    // 초까지 붙여서 서버로 보내야 하기 때문에 뒤에 ':00" 붙임 0930 임지민
+    setRoom({
+      ...room,
+      [name]: value + ':00'
+    });
+    onChangeValidation();
+    // 초까지 정상적으로 잘 붙어 있는 것 확인 0930 임지민
+    // console.log('백에 보내는 날짜---------------');
+    // console.log(room.endDate, typeof(room.endDate));
+  };
+
+  // axios 보내기 0930 임지민
+  const onClicktoSubmit = () => {
+    // params로 recoil에 저장된 room을 보냄 0930 임지민
+    createRoom(room).then((res)=> {
+      console.log(res);
+      
+    })
+  }
   
 
   return (
@@ -82,40 +105,41 @@ const CreateRoomMore = () => {
 
       {/* 모집 마감일 */}
       <div className="flex justify-between">
-        <label htmlFor="dueDate" className="flex mr-2">모집 마감일 </label>
-        <input type="datetime-local" id="dueDate" name="dueDate" className="flex" onChange={onChange} />
+        <label htmlFor="endDate" className="flex mr-2">모집 마감일 </label>
+        <input type="datetime-local" id="endDate" name="endDate" className="flex" onChange={onChangeDate} />
       </div>
       <hr className="my-5" />
 
       {/* 예약 날짜 */}
       <div className="flex justify-between">
-        <label htmlFor="bookingDate" className="flex mr-2">예약 날짜 </label>
-        <input type="datetime-local" id="bookingDate" name="bookingDate" className="flex" onChange={onChange} />
+        <label htmlFor="reservationDate" className="flex mr-2">만나는 날 </label>
+        <input type="datetime-local" id="reservationDate" name="reservationDate" className="flex" onChange={onChangeDate} />
       </div>
-      {/* <p>{room.bookingDate.toDateString()}</p> */}
+      {/* <p>{room.reservationDate.toDateString()}</p> */}
       <hr className="my-5" />
       
         {/* <div className="grid col-start-3 col-end- "> */}
       {/* 금액 */}
       <div className="grid grid-cols-6">
-        <label htmlFor="cost" className="mr-2 col-span-1 gap-1">금액 </label>
-        <input type="number" id="cost" name="cost" 
+        <label htmlFor="price" className="mr-2 col-span-1 gap-1">금액 </label>
+        <input type="number" id="price" name="price" 
           className="col-start-4 col-end-6"
+          value={room.price ? room.price : 0}
           placeholder="0" onChange={onChange}/>
         <p className="text-center">원</p>
       </div>
-      <p>{room.cost}</p>
       <hr className="my-5" />
       
       {/* 최소 태도 점수 */}
       <div className="grid grid-cols-6">
-        <label htmlFor="minAttituteNum" className="mr-2 col-span-3 gap-1">최소 태도 점수</label>
-        <input type="number" id="minAttituteNum" name="minAttituteNum"
+        <label htmlFor="minAttituteScore" className="mr-2 col-span-3 gap-1">최소 태도 점수</label>
+        <input type="number" id="minAttituteScore" name="minAttituteScore"
         className="col-start-4 col-end-6"
+        value={room.minAttituteScore}
         placeholder="50" onChange={onChange}/>
         <p className="text-center">점</p>
       </div>
-      <p>{room.minAttituteNum}</p>
+      {/* <p>{room.minAttituteScore}</p> */}
     </div>
 
 
@@ -125,6 +149,7 @@ const CreateRoomMore = () => {
         <div className="grid grid-cols-1 mt-3">
           {/* 모든 칸이 추가된 경우 0927 임지민 */}
             <button type="button"
+            onClick = {onClicktoSubmit}
             className="text-center text-white font-semibold bg-blue-200 rounded py-1">모임 만들기</button>
         </div>
       </Link>)}
