@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { roomMore } from '../../store/room';
+import { roomMore } from '../../util/room';
 import { inputRoomInfo } from '../../store/room';
 import { useNavigate } from 'react-router-dom';
 
