@@ -1,10 +1,12 @@
 #자바 버전
 FROM openjdk:15-jdk-alpine as builder
 
+# 현재 내 위치는 workspace
+# workspace/SGBG/backend/src/main/resources/application.properties
 WORKDIR /app
 
 COPY ./SGBG/backend .
-COPY ./application.properties ./src/main/resources
+COPY application.properties ./src/main/resources/
 
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJAR
