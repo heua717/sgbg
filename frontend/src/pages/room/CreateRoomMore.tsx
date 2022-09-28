@@ -5,7 +5,7 @@ import { inputRoomInfo } from "../../store/room";
 import MeetingCard from "../../components/cards/MeetingCard"
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
 import { useEffect, useState } from "react";
-import createRoom from "../../api/room";
+import {createRoom} from "../../api/room";
 
 
 const CreateRoomMore = () => {
@@ -58,7 +58,7 @@ const CreateRoomMore = () => {
   // axios 보내기 0930 임지민
   const onClicktoSubmit = () => {
     // params로 recoil에 저장된 room을 보냄 0930 임지민
-    createRoom(room).then((res)=> {
+    createRoom(room).then((res:any)=> {
       console.log(res);
       
     })
