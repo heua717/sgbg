@@ -5,7 +5,8 @@ export const inputRoomInfo = atom<roomMore>({
   key: 'inputRoomInfo',
   default: {
     title: '',
-    category: '',
+    parentCategory: '',
+    childCategory: '',
     minUser: 0,
     maxUser: 0,
     location: {

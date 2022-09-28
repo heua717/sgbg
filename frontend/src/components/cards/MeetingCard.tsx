@@ -43,7 +43,7 @@ const MeetingCard = (props:any): JSX.Element => {
           <div className="flex justify-between">
             <span 
               className="text-xs text-blue-200 font-bold border border-blue-200 border-1 py-0.5 px-1.5 rounded-xl">
-              {room.category? room.category : ''}
+              {room.childCategory? room.childCategory : ''}
             </span>
             <span className="text-xs pt-1">
               <FontAwesomeIcon icon={faMapMarkerAlt} className="text-xs mr-1" />        
