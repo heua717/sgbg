@@ -3,8 +3,8 @@ FROM openjdk:15-jdk-alpine as builder
 
 WORKDIR /app
 
-COPY . .
-COPY ../../application.properties ./src/main/resources
+COPY ./backend .
+COPY ./application.properties ./src/main/resources
 
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJAR
