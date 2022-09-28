@@ -10,7 +10,7 @@ const MeetingCard = (props:any): JSX.Element => {
   }
   return (
     // w-per100 h-per100 
-    <div className="flex flex-row border rounded-lg p-2 my-2">
+    <div className="flex flex-row border rounded-lg p-2 mb-2">
       {/* 모임 이미지, 뱃지 */}
       <div className="w-per45 mr-5 relative">
         <div className={`absolute top-0 left-0 rounded ${getStateBadgeColor()} text-sm font-semibold px-2 py-1`}>{`마감 임박`}</div>
