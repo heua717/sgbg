@@ -1,9 +1,16 @@
+import { useEffect } from "react";
 import FilterBar from "../../components/bars/FilterBar";
 import SearchBar from "../../components/bars/SearchBar";
 import SubCategoriesBar from "../../components/bars/SubCategoriesBar";
 import MeetingCard from "../../components/cards/MeetingCard";
 
 const SearchResult = () => {
+  useEffect(() => {
+    const url = window.location.href.split('?')
+    const params = url[1].split("=")
+    console.log(params);
+    
+  })
   const list = [0, 0, 0, 0, 0, 0];
   return (
     <div className="w-full h-full flex flex-col">
