@@ -1,25 +1,40 @@
 package com.sgbg.api.response;
 
 
+import com.sgbg.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
-public class UserRes {
-    @Schema(name = "이름", example = "Bungle")
+@Getter
+@Setter
+public class UserRes extends BaseResponseBody {
+    @Schema(description = "이름", example = "Bungle")
     private String name;
 
-    @Schema(name = "이메일", example = "sgbg@sgbg.com")
+    @Schema(description = "이메일", example = "sgbg@sgbg.com")
     private String email;
 
-    @Schema(name = "방장 신뢰도 점수", example = "95")
+    @Schema(description = "방장 신뢰도 점수", example = "95")
     private int hostScore;
 
-    @Schema(name = "참가자 점수", example = "84")
+    @Schema(description = "참가자 점수", example = "84")
     private int memberScore;
 
-//    public static UserRes of(String name, String email, int hostScore, int memberScore) {
-//        this.name = name;
-//        this.email = email;
-//        this.hostScore = hostScore;
-//        this.memberScore = memberScore;
-//    }
+    public static UserRes createUser(User user) {
+        UserRes userRes = new UserRes();
+        userRes.setName(user.getName());
+        userRes.setEmail(user.getEmail());
+        userRes.setHostScore(user.getHostScore());
+        userRes.setMemberScore(user.getMemberScore());
+        return userRes;
+    }
+
+    public static UserRes of(Integer statusCode, String message, User user) {
+        UserRes userRes = createUser(user);
+        userRes.setStatusCode(statusCode);
+        userRes.setMessage(message);
+        return userRes;
+    }
+
 }

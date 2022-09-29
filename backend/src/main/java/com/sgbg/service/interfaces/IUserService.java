@@ -10,4 +10,5 @@ public interface IUserService {
 
     public User createUser(Map<String, String> userInfo);
 
+    public User findUserById(Long userId);
 }

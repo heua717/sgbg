@@ -1,11 +1,20 @@
 package com.sgbg.common.util;
 
+import com.sgbg.service.RedisService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class CookieUtil {
+
+    @Autowired
+    private RedisService redisService;
 
     // TODO: HTTPS 적용 후, secure 설정 변경
     
@@ -25,5 +34,19 @@ public class CookieUtil {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         return cookie;
+    }
+
+    public Map<String, String> getTokenInfo(HttpServletRequest request) {
+        Map<String, String> tokens = new HashMap<>();
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie c : cookies) {
+            if ("accessToken".equals(c.getName())) {
+                tokens.put("access_token", c.getValue());
+            } else if ("refreshToken".equals(c.getName())) {
+                tokens.put("refresh_token", c.getValue());
+            }
+        }
+        return tokens;
     }
 }
