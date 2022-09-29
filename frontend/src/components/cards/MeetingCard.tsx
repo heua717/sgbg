@@ -47,7 +47,7 @@ const MeetingCard = (props:any): JSX.Element => {
             </span>
             <span className="text-xs pt-1">
               <FontAwesomeIcon icon={faMapMarkerAlt} className="text-xs mr-1" />        
-                {room.location.road_address? room.location.road_address : ''}
+                {room.location.roadAddress? room.location.roadAddress : ''}
             </span>
           </div>
           <div className="text-sm font-semibold py-2">

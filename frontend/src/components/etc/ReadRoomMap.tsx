@@ -6,8 +6,8 @@ type ReadRoomMapProps = {
 };
 
 const ReadRoomMap = ({ _location }: ReadRoomMapProps) => {
-  const _lat = parseFloat(_location.x);
-  const _lng = parseFloat(_location.y);
+  const _lat = parseFloat(_location.latitude);
+  const _lng = parseFloat(_location.hardness);
   return (
     <Map // 지도를 표시할 Container
       center={{
@@ -40,7 +40,7 @@ const ReadRoomMap = ({ _location }: ReadRoomMapProps) => {
           >
             {_location.name}
           </a>
-          <div>{_location.road_address}</div>
+          <div>{_location.roadAddress}</div>
         </div>
       </MapMarker>
     </Map>

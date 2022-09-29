@@ -10,17 +10,17 @@ export const inputRoomInfo = atom<roomMore>({
     minUser: 0,
     maxUser: 0,
     location: {
-      id: '',
+      locationId: '',
       name: '',
-      x: '',
-      y: '',
-      road_address: '',
+      latitude: '',
+      hardness: '',
+      roadAddress: '',
     },
     description: '',
     endDate: '',
     reservationDate: '',
     price: 0,
-    minAttituteScore: 50
+    minMemberScore: 50
   },
 })
 

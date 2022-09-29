@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomMore } from "../../util/room";
 import { inputRoomInfo } from "../../store/room";
 import MeetingCard from "../../components/cards/MeetingCard"
@@ -10,6 +10,8 @@ import {createRoom} from "../../api/room";
 
 const CreateRoomMore = () => {
   const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo)
+  const [roomList, setRoomList] = useState([])
+  const resetRecoil = useResetRecoilState(inputRoomInfo)
 
   // created 될 때
   useEffect(() => {
@@ -20,7 +22,7 @@ const CreateRoomMore = () => {
   // recoil에 작성한 모임 정보 저장하기 0927 임지민
   const [isValidated, setIsValidated] = useState(false)
   const onChangeValidation = () => {
-    if (room.price && room.minAttituteScore ){
+    if (room.price && room.minMemberScore ){
       setIsValidated((isValidated:boolean) => isValidated = true)
       
     } else {
@@ -41,6 +43,17 @@ const CreateRoomMore = () => {
     // console.log(room.endDate.split('T'));
   };
 
+  const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    
+    setRoom({
+      ...room,
+      [name]: Number(value)
+    });
+    // console.log(name, typeof(value));
+    onChangeValidation();
+  };
+
   const onChangeDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
 
@@ -58,12 +71,19 @@ const CreateRoomMore = () => {
   // axios 보내기 0930 임지민
   const onClicktoSubmit = () => {
     // params로 recoil에 저장된 room을 보냄 0930 임지민
+    console.log(room);
+    
     createRoom(room).then((res:any)=> {
       console.log(res);
+      setRoomList(roomList.concat(res.data))
+      // recoil 초기화
+      resetRecoil();
+    }).catch((err)=> {
+      console.log(err);
+      console.log(err.config.data);
       
     })
   }
-  
 
   return (
     // markup 0915 임지민
@@ -125,21 +145,21 @@ const CreateRoomMore = () => {
         <input type="number" id="price" name="price" 
           className="col-start-4 col-end-6"
           value={room.price ? room.price : 0}
-          placeholder="0" onChange={onChange}/>
+          placeholder="0" onChange={onChangeNumber}/>
         <p className="text-center">원</p>
       </div>
       <hr className="my-5" />
       
       {/* 최소 태도 점수 */}
       <div className="grid grid-cols-6">
-        <label htmlFor="minAttituteScore" className="mr-2 col-span-3 gap-1">최소 태도 점수</label>
-        <input type="number" id="minAttituteScore" name="minAttituteScore"
+        <label htmlFor="minMemberScore" className="mr-2 col-span-3 gap-1">최소 태도 점수</label>
+        <input type="number" id="minMemberScore" name="minMemberScore"
         className="col-start-4 col-end-6"
-        value={room.minAttituteScore}
+        value={room.minMemberScore}
         placeholder="50" onChange={onChange}/>
         <p className="text-center">점</p>
       </div>
-      {/* <p>{room.minAttituteScore}</p> */}
+      {/* <p>{room.minMemberScore}</p> */}
     </div>
 
 
