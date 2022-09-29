@@ -31,11 +31,23 @@ const CreateRoom = (): JSX.Element => {
   // recoil에 작성한 모임 정보 저장하기 0927 임지민
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-
+    // console.log(name, typeof(value));
+    
     setRoom({
       ...room,
       [name]: value
     });
+    onChangeValidation();
+  };
+
+  const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    
+    setRoom({
+      ...room,
+      [name]: Number(value)
+    });
+    // console.log(name, typeof(value));
     onChangeValidation();
   };
 
@@ -103,10 +115,10 @@ const CreateRoom = (): JSX.Element => {
         <p className="col-span-2">모집인원</p>
         {/* grid grid-cols-3 */}
         <div className="col-span-4 grid grid-cols-5">
-          <input type="number" id="minUser" onChange={onChange} name="minUser" value={room.minUser}/>
+          <input type="number" id="minUser" onChange={onChangeNumber} name="minUser" value={room.minUser}/>
           <label htmlFor="minUser" className="text-center">명</label>
           <span className="text-center">~</span>
-          <input type="number" id="maxUser" onChange={onChange} name="maxUser"value={room.maxUser}/>
+          <input type="number" id="maxUser" onChange={onChangeNumber} name="maxUser"value={room.maxUser}/>
           <label htmlFor="maxUser" className="text-center">명 </label>
         </div>
       </div>

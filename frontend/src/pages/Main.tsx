@@ -11,6 +11,7 @@ import { getRoomList } from "../api/main";
 const Main = () => {
   // axios 통신 0929 임지민
   useEffect(()=> {
+
     getRoomList(1, 5, 'roomId,DESC').then((res) =>{
       console.log(res);
       // 
