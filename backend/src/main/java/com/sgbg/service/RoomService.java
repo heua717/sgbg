@@ -2,8 +2,10 @@ package com.sgbg.service;
 
 import com.sgbg.api.request.RoomReq;
 import com.sgbg.api.response.RoomRes;
+import com.sgbg.domain.Location;
 import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
+import com.sgbg.repository.LocationRepository;
 import com.sgbg.repository.RoomRepository;
 import com.sgbg.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +25,23 @@ public class RoomService {
     @Autowired
     RoomRepository roomRepository;
     @Autowired
+    LocationRepository locationRepository;
+    @Autowired
     UserRepository userRepository;
+
 
     @Transactional()
     public void createRoom(RoomReq roomReq) {
-        Room room;
+        Room room = roomReq.toEntity(roomReq);
+        Location location = roomReq.getLocation();
 //        User user = userRepository.findById(userId).orElse(null);
 //        if(user==null){
 //            throw NullPointerException;
 //        }
 //        room.builder().hostId(user.getUserId);
-        room = roomReq.toEntity(roomReq);
 //        room.builder().hostId(user.getUserId())
 //                        .hostName(user.getName()).build();
+        locationRepository.save(location);
         roomRepository.save(room);
     }
 
@@ -60,15 +66,28 @@ public class RoomService {
 
     }
 
-    public List<RoomRes> getRoomList(String parentCategory, Pageable pageable) {
-        List<Room> roomList = roomRepository.findAllBy(pageable);
+    public List<RoomRes> getParentRoomList(String parentCategory, Pageable pageable) {
+        List<Room> roomList = roomRepository.findAllByParentCategory(parentCategory, pageable);
         List<RoomRes> roomResList = new ArrayList<>();
         for(Room room : roomList){
-            if(room.getParentCategory()==parentCategory){
+            if(room.getParentCategory().equals(parentCategory)){
                 roomResList.add(RoomRes.getRoomRes(room));
             }
         }
 
         return roomResList;
+    }
+
+    public List<RoomRes> getChildRoomList(String childCategory, Pageable pageable) {
+        List<RoomRes> roomResList = new ArrayList<>();
+        List<Room> roomList = roomRepository.findAllByChildCategory(childCategory, pageable);
+        for(Room room : roomList){
+            if(room.getChildCategory().equals(childCategory)){
+                roomResList.add(RoomRes.getRoomRes(room));
+            }
+        }
+
+        return roomResList;
+
     }
 }
