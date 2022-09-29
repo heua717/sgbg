@@ -24,5 +24,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //                .excludePathPatterns(EXCLUDE_PATHS);
 //    }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowCredentials(true);
+    }
 }
 
