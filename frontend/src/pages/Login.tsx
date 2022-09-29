@@ -28,8 +28,8 @@ const Login = () => {
         setLogining(true);
         login(code).then((res) => {
           console.log(res);
-          //리코일에 값 저장
-
+          //리코일에 값 저장 -> 세션에 isLogined로 저장됨...
+          setUserAuth({ isLogined: true });
           setLogining(false);
           navigate("/");
         });
