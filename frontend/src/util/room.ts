@@ -1,9 +1,9 @@
 export type location = {
-  id: string;
+  locationId: string;
   name: string;
-  x: string;
-  y: string;
-  road_address: string;
+  latitude: string;
+  hardness: string;
+  roadAddress: string;
 };
 
 export interface room {
@@ -20,7 +20,7 @@ export interface roomMore extends room {
   endDate: string;
   reservationDate: string;
   price: number;
-  minAttituteScore: number;
+  minMemberScore: number;
 }
 
 export const formatDate = (date: string): string => {

@@ -1,9 +1,9 @@
 import { api } from "./API";
 import { roomMore } from "../util/room";
 
-export const createRoom = (_params: roomMore) => {
+export const createRoom = (data: roomMore) => {
   const url = "room/create";
-  return api.post(url, { params: _params });
+  return api.post(url, data);
 };
 
 export const readRoom = (_id: string) => {

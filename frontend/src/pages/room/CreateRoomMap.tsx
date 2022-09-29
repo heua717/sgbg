@@ -71,11 +71,11 @@ const CreateRoomMap = () => {
     setRoom({
       ...room,
       location: {
-        id: selected.id,
+        locationId: selected.id,
         name: selected.name,
-        x: selected.x,
-        y: selected.y,
-        road_address: shortRoadAddress
+        latitude: selected.x,
+        hardness: selected.y,
+        roadAddress: shortRoadAddress
       }
     })
     navigate(-1)
