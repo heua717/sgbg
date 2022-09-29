@@ -8,7 +8,7 @@ import ReadRoomMap from "../etc/ReadRoomMap";
 const RoomInfoTabs = () => {
   const navigator = useNavigate();
   const { meeting_id } = useParams<{ meeting_id: string }>();
-  const [roomInfo, setRoomInfo] = useState<roomMore>({
+  const [roomInfo, setRoomInfo] = useState<any>({
     title: "",
     parentCategory: "",
     childCategory: "",
