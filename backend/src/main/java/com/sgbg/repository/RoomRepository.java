@@ -10,6 +10,9 @@ import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<Room> findByRoomId(Long roomId);
+    List<Room> findAllByParentCategory(String parentCategory, Pageable pageable);
+
+    List<Room> findAllByChildCategory(String childCategory, Pageable pageable);
     List<Room> findAllBy(Pageable pageable);
 //    Optional<Room> findByUserId(Long userId);
 //    List<Room> findByUserId(Long userId);

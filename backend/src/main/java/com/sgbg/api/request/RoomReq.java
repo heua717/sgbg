@@ -1,5 +1,6 @@
 package com.sgbg.api.request;
 
+import com.sgbg.domain.Location;
 import com.sgbg.domain.Room;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class RoomReq {
     private Long price;
 
     @Schema(name = "모임 장소", example = "서울시 멀티캠퍼스")
-    private String location;
+    private Location location;
 
     @Schema(name = "모임 날짜", example = "2022-12-25T20:00:00")
     private LocalDateTime reservationDate;
@@ -54,7 +55,7 @@ public class RoomReq {
 
     public static RoomReq createRoomReq(String title, String parentCategory,
                    String hostName, String childCategory, Long maxUser,
-                   Long minUser, Long price, String location,
+                   Long minUser, Long price, Location location,
                    LocalDateTime reservationDate, LocalDateTime endDate,
                    Double minMemberScore, String description) {
         RoomReq roomReq = new RoomReq();

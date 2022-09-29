@@ -48,8 +48,9 @@ public class Room {
     @Column(name = "price")
     private Long price;
 
-    @Column(name = "location")
-    private String location;
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 
     @Column(name = "reservation_date")
     private LocalDateTime reservationDate;
@@ -66,7 +67,7 @@ public class Room {
     @Builder
     public Room(String parentCategory, String childCategory,
                 Long hostId, String hostName, String title, Long minUser, Long maxUser,
-                Long price, String location, LocalDateTime reservationDate,
+                Long price, Location location, LocalDateTime reservationDate,
                 LocalDateTime endDate, Double minMemberScore, String description) {
 
         this.parentCategory = parentCategory;
