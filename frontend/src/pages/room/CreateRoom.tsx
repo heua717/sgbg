@@ -13,7 +13,7 @@ const CreateRoom = (): JSX.Element => {
   const [isValidated, setIsValidated] = useState(false)
 
   const onChangeValidation = () => {
-    if (room.title.trim() && room.category.trim() && room.location.name.trim() && room.minUser !== 0 && room.maxUser !== 0 && room.description.trim() ){
+    if (room.title.trim() && room.childCategory.trim() && room.location.name.trim() && room.minUser !== 0 && room.maxUser !== 0 && room.description.trim() ){
       setIsValidated((isValidated:boolean) => isValidated = true)
       
     } else {
@@ -85,11 +85,11 @@ const CreateRoom = (): JSX.Element => {
       <div className="flex justify-between">
           <p className="flex">카테고리</p>
           {/* category 선택 유무에 따라 버튼 or 선택된 카테고리 띄우기 */}
-          {room.category==='' && (
+          {room.childCategory==='' && (
             <button className="flex mr-4">&gt;</button>
           )} 
-          {room.category && (
-            <p className="mr-4 font-semibold">{room.category}</p>
+          {room.childCategory && (
+            <p className="mr-4 font-semibold">{room.parentCategory} &gt; {room.childCategory}</p>
           )}
       </div>
     </Link>

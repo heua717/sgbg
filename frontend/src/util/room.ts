@@ -8,7 +8,8 @@ type location = {
 
 export interface room {
   title: string;
-  category: string;
+  parentCategory: string;
+  childCategory: string;
   minUser: number;
   maxUser: number;
   location: location;
