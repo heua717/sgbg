@@ -29,7 +29,6 @@ import java.util.Map;
 @Tag(name = "Auth API", description = "사용자 인증을 위한 로그인, 로그아웃 기능 제공")
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthController {
 
     @Autowired

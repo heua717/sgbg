@@ -4,6 +4,8 @@ import com.sgbg.api.request.RoomReq;
 import com.sgbg.api.response.BaseResponseBody;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.RoomRes;
+import com.sgbg.common.util.CookieUtil;
+import com.sgbg.service.RedisService;
 import com.sgbg.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -34,17 +36,21 @@ public class RoomController {
     @Autowired
     RoomService roomService;
 
-//    @Autowired
-//    AuthService authService;
+    @Autowired
+    RedisService redisService;
 
-//    @Autowired
-//    CookieUtil cookieUtil;
+    @Autowired
+    CookieUtil cookieUtil;
 
 
     @Operation(summary = "방 생성 메서드")
     @Parameters()
     @PostMapping("/create")
     public ResponseEntity createRoom(@RequestBody RoomReq roomReq ,HttpServletRequest request) {
+        Map<String, String> tokenInfo = cookieUtil.getTokenInfo(request);
+        String accessToken = tokenInfo.get("access_token");
+        Long userId = Long.parseLong(redisService.getUserIdByToken(accessToken, "access_token"));
+
         roomService.createRoom(roomReq);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(2010,"Accepted"));
