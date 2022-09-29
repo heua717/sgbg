@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-
+@ToString
 @NoArgsConstructor
 @Entity
 public class User {
