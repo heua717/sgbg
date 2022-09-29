@@ -6,7 +6,7 @@ import { roomMore } from "../../util/room";
 
 const RoomInfoTabs = () => {
   const { meeting_id } = useParams<{ meeting_id: string }>();
-  const [roomInfo, setRoomInfo] = useState<roomMore>({
+  const [roomInfo, setRoomInfo] = useState<any>({
     title: "",
     category: "",
     minUser: 0,

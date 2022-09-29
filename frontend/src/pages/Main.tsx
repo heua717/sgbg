@@ -13,6 +13,7 @@ const Main = () => {
   useEffect(()=> {
     getRoomList(1, 5, 'roomId,DESC').then((res) =>{
       console.log(res);
+      // 
     });
   })
 
