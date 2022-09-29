@@ -5,7 +5,8 @@ const MeetingListHost = () => {
   return (
     <div className="w-full">
       {list.map((index) => (
-        <MeetingCard key={index} />
+        // <MeetingCard key={index} />
+        <MeetingCard/>
       ))}
     </div>
   );
