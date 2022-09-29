@@ -18,7 +18,7 @@ public class UserService implements IUserService {
     public User createUser(Map<String, String> userInfo) {
         User user = User.builder()
                 .name(userInfo.get("name"))
-                .name(userInfo.get("email"))
+                .email(userInfo.get("email"))
                 .build();
 
         return userRepository.save(user);

@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,18 +29,23 @@ import java.util.Map;
 @Tag(name = "Auth API", description = "사용자 인증을 위한 로그인, 로그아웃 기능 제공")
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthController {
 
-    private final KakaoService kakaoService;
+    @Autowired
+    private KakaoService kakaoService;
 
-    private final AuthService authService;
+    @Autowired
+    private AuthService authService;
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final RedisService redisService;
+    @Autowired
+    private RedisService redisService;
 
-    private final CookieUtil cookieUtil;
+    @Autowired
+    private CookieUtil cookieUtil;
 
     @Operation(summary = "카카오 로그인 메서드")
     @ApiResponses({
@@ -110,7 +115,7 @@ public class AuthController {
         String accessToken = tokenInfo.get("access_token");
         String refreshToken = tokenInfo.get("refresh_token");
 
-        String id = kakaoService.logout(accessToken);
+        kakaoService.logout(accessToken);
 
         Cookie accessCookie = new Cookie("accessToken", null);
         accessCookie.setMaxAge(0);

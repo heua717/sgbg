@@ -105,9 +105,7 @@ public class KakaoService implements IKakaoService {
     }
 
     @Override
-    public String logout(String access_token) {
-        String id = null;
-
+    public void logout(String access_token) {
         try {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
@@ -126,12 +124,10 @@ public class KakaoService implements IKakaoService {
             );
 
             JSONObject jsonObject = new JSONObject(apiResponse.getBody());
-            id = jsonObject.getString("id");
+//            id = jsonObject.getLong("id");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return id;
     }
 
     // TODO: 갱신 요청

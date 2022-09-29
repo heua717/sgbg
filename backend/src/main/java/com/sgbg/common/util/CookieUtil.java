@@ -2,6 +2,7 @@ package com.sgbg.common.util;
 
 import com.sgbg.service.RedisService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
@@ -10,10 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor
 public class CookieUtil {
 
-    private final RedisService redisService;
+    @Autowired
+    private RedisService redisService;
 
     // TODO: HTTPS 적용 후, secure 설정 변경
     
