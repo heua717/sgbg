@@ -35,7 +35,9 @@ const RoomInfoTabs = () => {
         .then(({ data }) => {
           setRoomInfo({ ...data });
         })
-        .catch(() => {
+        .catch((e) => {
+          console.error(e);
+
           Swal.fire({
             position: "center",
             icon: "error",
