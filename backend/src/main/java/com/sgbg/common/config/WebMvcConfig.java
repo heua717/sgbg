@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.*;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-//    private AuthInterceptor authInterceptor;
+//    private final AuthInterceptor authInterceptor;
 
     private static final String[] EXCLUDE_PATHS = {
             "/auth/login",

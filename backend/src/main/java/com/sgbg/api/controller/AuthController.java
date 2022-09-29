@@ -32,15 +32,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-    KakaoService kakaoService;
+    private final KakaoService kakaoService;
 
-    AuthService authService;
+    private final AuthService authService;
 
-    UserService userService;
+    private final UserService userService;
 
-    RedisService redisService;
+    private final RedisService redisService;
 
-    CookieUtil cookieUtil;
+    private final CookieUtil cookieUtil;
 
     @Operation(summary = "카카오 로그인 메서드")
     @ApiResponses({

@@ -13,7 +13,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CookieUtil {
 
-    private RedisService redisService;
+    private final RedisService redisService;
 
     // TODO: HTTPS 적용 후, secure 설정 변경
     

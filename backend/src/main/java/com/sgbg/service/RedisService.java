@@ -12,11 +12,11 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 public class RedisService {
 
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public void saveToken(Long userId, String type, String token, Long expires) {
         String key = type + ":" + token;
-        redisTemplate.opsForValue().set(key, userId);
+        redisTemplate.opsForValue().set(key, Long.toString(userId));
         redisTemplate.expire(key, expires, TimeUnit.SECONDS);
     }
 
