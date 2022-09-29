@@ -58,7 +58,7 @@ function Router() {
       {/* 검색 페이지 */}
       <Route path="/search" element={<Search />} />
 
-      {/* 검색 결과 페이지 */}
+      {/* 검색 결과 페이지 (ex) /search/result?childCategory=  */} 
       <Route path="/search/result" element={<SearchResult />} />
 
       {/* Not Found */}
