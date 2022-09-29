@@ -17,9 +17,8 @@ import javax.persistence.*;
 public class Location {
 
     @Id
-    @GeneratedValue
     @Column(name = "location_id")
-    private Long locationId;
+    private String locationId;
 
     @Column(name = "name")
     private String name;
@@ -34,7 +33,7 @@ public class Location {
     private String roadAddress;
 
     @Builder
-    public Location(Long locationId, String name, String latitude, String hardness, String roadAddress) {
+    public Location(String locationId, String name, String latitude, String hardness, String roadAddress) {
         this.locationId = locationId;
         this.name = name;
         this.latitude = latitude;
