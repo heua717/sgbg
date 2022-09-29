@@ -1,14 +1,17 @@
-import { type } from "os";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import { readRoom } from "../../api/room";
-import { roomMore } from "../../util/room";
+import { formatDate, roomMore } from "../../util/room";
+import ReadRoomMap from "../etc/ReadRoomMap";
 
 const RoomInfoTabs = () => {
+  const navigator = useNavigate();
   const { meeting_id } = useParams<{ meeting_id: string }>();
   const [roomInfo, setRoomInfo] = useState<roomMore>({
     title: "",
-    category: "",
+    parentCategory: "",
+    childCategory: "",
     minUser: 0,
     maxUser: 0,
     location: {
@@ -29,15 +32,27 @@ const RoomInfoTabs = () => {
     //axios
     if (meeting_id) {
       readRoom(meeting_id)
-        .then(() => {})
-        .catch();
+        .then(({ data }) => {
+          setRoomInfo({ ...data });
+        })
+        .catch(() => {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "방 정보를 불러올 수 없습니다.",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigator(-1);
+          });
+        });
     }
   }, []);
 
   return (
     <div>
-      <h3 className="text-sm font-semibold">{`[${roomInfo.category}] ${roomInfo.title}`}</h3>
-      <hr className="mt-5 mb-2" />
+      <h3 className="text-sm font-semibold">{`[${roomInfo.parentCategory}] ${roomInfo.title}`}</h3>
+      <hr className="mt-2 mb-2" />
 
       <div className="text-sm grid grid-cols-10">
         <p className="col-span-4 font-bold">모집 인원</p>
@@ -52,13 +67,17 @@ const RoomInfoTabs = () => {
 
       <div className="text-sm grid grid-cols-10">
         <p className="col-span-4 font-bold">모집 마감일</p>
-        <p className="col-start-5 col-end-9">{roomInfo.endDate}</p>
+        <p className="col-start-5 col-end-10">
+          {roomInfo.endDate && formatDate(roomInfo.endDate)}
+        </p>
       </div>
       <hr className="my-2" />
 
       <div className="text-sm grid grid-cols-10">
-        <p className="col-span-4 font-bold">예약 날짜</p>
-        <p className="col-start-5 col-end-9">{roomInfo.reservationDate}</p>
+        <p className="col-span-4 font-bold">모이는 날</p>
+        <p className="col-start-5 col-end-10">
+          {roomInfo.reservationDate && formatDate(roomInfo.reservationDate)}
+        </p>
       </div>
       <hr className="my-2" />
 
@@ -77,17 +96,9 @@ const RoomInfoTabs = () => {
       <div className="text-sm">
         <p className="font-bold">모임 위치</p>
         <div className="mt-2">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem, provident ducimus ad alias
-          atque odio ipsam harum possimus, quam ullam veritatis aliquid quo maiores aliquam non
-          adipisci, voluptatum sed facilis. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Minus, dicta nesciunt et ipsam ea molestiae qui unde fugiat impedit totam. Laboriosam,
-          odit amet impedit hic non illo repellendus minus debitis! Lorem ipsum dolor sit amet,
-          consectetur adipisicing elit. Officiis, nostrum repudiandae. Accusamus, unde incidunt
-          laborum ea sapiente quasi neque. Veniam explicabo id expedita ratione eaque, est autem
-          consectetur! Nulla, fugit.
+          <ReadRoomMap _location={roomInfo.location} />
         </div>
       </div>
-      <hr className="my-2" />
     </div>
   );
 };
