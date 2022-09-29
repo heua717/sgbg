@@ -8,6 +8,6 @@ public interface IKakaoService {
 
     public Map<String, String> getKakaoUserInfo(String access_token);
 
-    public String logout(String access_token);
+    public void logout(String access_token);
 
 }
