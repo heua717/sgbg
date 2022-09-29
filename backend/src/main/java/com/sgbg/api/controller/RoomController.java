@@ -49,7 +49,7 @@ public class RoomController {
     public ResponseEntity createRoom(@RequestBody RoomReq roomReq ,HttpServletRequest request) {
         Map<String, String> tokenInfo = cookieUtil.getTokenInfo(request);
         String accessToken = tokenInfo.get("access_token");
-        Long userId = Long.parseLong(redisService.getUserIdByToken(accessToken, "access_token"));mhjjhvkjls
+        Long userId = Long.parseLong(redisService.getUserIdByToken(accessToken, "access_token"));
 
         roomService.createRoom(roomReq);
 
