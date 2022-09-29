@@ -7,6 +7,7 @@ import com.sgbg.domain.Auth;
 import com.sgbg.domain.User;
 import com.sgbg.service.AuthService;
 import com.sgbg.service.KakaoService;
+import com.sgbg.service.RedisService;
 import com.sgbg.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,6 +37,8 @@ public class AuthController {
     AuthService authService;
 
     UserService userService;
+
+    RedisService redisService;
 
     CookieUtil cookieUtil;
 
@@ -71,7 +74,11 @@ public class AuthController {
             }
 
             // 4. Redis에 token 과 user 정보 저장
-
+            redisService.saveToken(
+                    user.getId(), "access_token", tokenInfo.get("access_token"), Long.valueOf(tokenInfo.get("expires_in")));
+            redisService.saveToken(
+                    user.getId(), "refresh_token", tokenInfo.get("refresh_token"), Long.valueOf(tokenInfo.get("refresh_token_expires_in"))
+            );
 
             // 5. Cookie에 token 저장
             String accessToken = tokenInfo.get("access_token");
@@ -99,23 +106,9 @@ public class AuthController {
     )
     @GetMapping("/logout")
     public ResponseEntity<? extends BaseResponseBody> logout(HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = null;
-        String refreshToken = null;
-        String bearer = request.getHeader("Authorization");
-
-//        if (bearer != null && !"".equals(bearer)) {
-//            accessToken = bearer.split(" ")[1];
-//        }
-
-        Cookie[] cookies = request.getCookies();
-
-        for (Cookie c : cookies) {
-            if ("accessToken".equals(c.getName())) {
-                accessToken = c.getValue();
-            } else if ("refreshToken".equals(c.getName())) {
-                refreshToken = c.getValue();
-            }
-        }
+        Map<String, String> tokenInfo = cookieUtil.getTokenInfo(request);
+        String accessToken = tokenInfo.get("access_token");
+        String refreshToken = tokenInfo.get("refresh_token");
 
         String id = kakaoService.logout(accessToken);
 
@@ -129,7 +122,9 @@ public class AuthController {
         refreshCookie.setPath("/");
         response.addCookie(refreshCookie);
 
-        // TODO: Redis Session 만료
+        // Redis Token 삭제
+        redisService.deleteToken("access_token", accessToken);
+        redisService.deleteToken("refresh_token", refreshToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2000, "Success"));
     }

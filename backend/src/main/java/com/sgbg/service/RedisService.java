@@ -15,26 +15,26 @@ public class RedisService {
     private RedisTemplate<String, Object> redisTemplate;
 
     public void saveToken(Long userId, String type, String token, Long expires) {
-        String key = userId + ":" + type;
-        redisTemplate.opsForValue().set(key, token);
+        String key = type + ":" + token;
+        redisTemplate.opsForValue().set(key, userId);
         redisTemplate.expire(key, expires, TimeUnit.SECONDS);
     }
 
-    public String getToken(Long userId, String type) {
-        String key = userId + ":" + type;
+    public String getUserIdByToken(String type, String token) {
+        String key = type + ":" + token;
         return (String) redisTemplate.opsForValue().get(key);
     }
 
     public void updateToken(Long userId, String type, String token, Long expires) {
-        if (getToken(userId, type) != null) {
-            deleteToken(userId, type);
+        if (getUserIdByToken(type, token) != null) {
+            deleteToken(type, token);
         }
         saveToken(userId, type, token, expires);
     }
 
-    public void deleteToken(Long userId, String type) {
-        String key = userId + ":" + type;
-        if (getToken(userId, type) != null) {
+    public void deleteToken(String type, String token) {
+        String key = type + ":" + token;
+        if (getUserIdByToken(type, token) != null) {
             redisTemplate.delete(key);
         }
     }
