@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -61,7 +62,6 @@ public class KakaoService implements IKakaoService {
             tokenInfo.put("expires_in", String.valueOf(jsonObject.get("expires_in")));
             tokenInfo.put("refresh_token_expires_in", String.valueOf(jsonObject.get("refresh_token_expires_in")));
 //            String token_type = jsonObject.getString("token_type");
-
         } catch (Exception e) {
             e.printStackTrace();
         }

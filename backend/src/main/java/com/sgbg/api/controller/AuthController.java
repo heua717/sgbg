@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,18 +28,15 @@ import java.util.Map;
 @Tag(name = "Auth API", description = "사용자 인증을 위한 로그인, 로그아웃 기능 제공")
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
     KakaoService kakaoService;
 
-    @Autowired
     AuthService authService;
 
-    @Autowired
     UserService userService;
 
-    @Autowired
     CookieUtil cookieUtil;
 
     @Operation(summary = "카카오 로그인 메서드")
@@ -73,9 +70,8 @@ public class AuthController {
                 authService.createAuth(user, kakaoId);
             }
 
-            // TODO: 4. Redis Session에 token 과 user 정보 저장
+            // 4. Redis에 token 과 user 정보 저장
 
-            // - refresh token의 expire 시간을 session 만료 시간으로 설정
 
             // 5. Cookie에 token 저장
             String accessToken = tokenInfo.get("access_token");
