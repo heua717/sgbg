@@ -27,7 +27,7 @@ import java.util.Map;
 
 @Tag(name = "Room API", description = "방 생성, 카테고리별 방 목록 조회, 방 상세정보 조회 기능 제공")
 @RestController
-@RequestMapping("/api/room")
+@RequestMapping("/room")
 @RequiredArgsConstructor
 public class RoomController {
 
@@ -45,7 +45,6 @@ public class RoomController {
     @Parameters()
     @PostMapping("/create")
     public ResponseEntity createRoom(@RequestBody RoomReq roomReq ,HttpServletRequest request) {
-        System.out.println("000000");
         roomService.createRoom(roomReq);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(2010,"Accepted"));
@@ -83,15 +82,23 @@ public class RoomController {
 
     @Operation(summary = "대분류 별 방 목록 조회")
     @ApiResponses(
-            @ApiResponse(responseCode = "2000", description = "대분류 별 방 목록 조회 성공",
+            @ApiResponse(responseCode = "2000", description = "대분류 방 목록 조회 성공",
                     content = @Content(schema = @Schema(implementation = RoomListRes.class)))
     )
-    @GetMapping("/category/{parentCategory}")
-    public ResponseEntity<? extends RoomListRes> getRoomListCategory(@PathVariable String parentCategory, Pageable pageable){
-        System.out.println("-----");
-        System.out.println(parentCategory);
-        System.out.println("-----");
-        List<RoomRes> roomResList = roomService.getRoomList(parentCategory, pageable);
+    @GetMapping("/parentcategory/{parentCategory}")
+    public ResponseEntity<? extends RoomListRes> getParentCategoryList(@PathVariable String parentCategory, Pageable pageable){
+        List<RoomRes> roomResList = roomService.getParentRoomList(parentCategory, pageable);
+        return ResponseEntity.status(200).body(RoomListRes.of(2000,"Success",roomResList));
+    }
+
+    @Operation(summary = "소분류 별 방 목록 조회")
+    @ApiResponses(
+            @ApiResponse(responseCode = "2000", description = "소분류 방 목록 조회 성공",
+            content = @Content(schema = @Schema(implementation = RoomListRes.class)))
+    )
+    @GetMapping("/childcategory/{childCategory}")
+    public ResponseEntity<? extends RoomListRes> getChildCategoryList(@PathVariable String childCategory, Pageable pageable){
+        List<RoomRes> roomResList = roomService.getChildRoomList(childCategory, pageable);
         return ResponseEntity.status(200).body(RoomListRes.of(2000,"Success",roomResList));
     }
 
