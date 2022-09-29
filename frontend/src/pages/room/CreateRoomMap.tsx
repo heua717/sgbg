@@ -2,7 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { searchMap } from "../../api/map";
-import { inputRoomInfo, roomMore } from "../../store/room";
+import { inputRoomInfo } from "../../store/room";
+import { roomMore } from "../../util/room";
 import SearchBar from "../../components/bars/SearchBar";
 import SearchMapCard from "../../components/cards/SearchMapCard";
 import { useRecoilState } from "recoil";
@@ -70,11 +71,11 @@ const CreateRoomMap = () => {
     setRoom({
       ...room,
       location: {
-        id: selected.id,
+        locationId: selected.id,
         name: selected.name,
-        x: selected.x,
-        y: selected.y,
-        road_address: shortRoadAddress
+        latitude: selected.x,
+        hardness: selected.y,
+        roadAddress: shortRoadAddress
       }
     })
     navigate(-1)

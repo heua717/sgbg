@@ -38,7 +38,7 @@ function Router() {
       <Route path="/meeting/create/more" element={<CreateRoomMore />} />
 
       {/* 방 read -- 추후 id 추가*/}
-      <Route path="/meeting" element={<ReadRoom />} />
+      <Route path="/meeting/:meeting_id" element={<ReadRoom />} />
 
       {/* 마아페이지(프로필) */}
       <Route path="/profile/:user_id" element={<Profile />} />
@@ -58,7 +58,7 @@ function Router() {
       {/* 검색 페이지 */}
       <Route path="/search" element={<Search />} />
 
-      {/* 검색 결과 페이지 */}
+      {/* 검색 결과 페이지 (ex) /search/result?childCategory=  */} 
       <Route path="/search/result" element={<SearchResult />} />
 
       {/* Not Found */}

@@ -1,5 +1,5 @@
 import { inputRoomInfo } from "../../store/room";
-import { roomMore } from "../../store/room";
+import { roomMore } from "../../util/room";
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
@@ -13,7 +13,7 @@ const CreateRoom = (): JSX.Element => {
   const [isValidated, setIsValidated] = useState(false)
 
   const onChangeValidation = () => {
-    if (room.title.trim() && room.category.trim() && room.location.name.trim() && room.minUser !== 0 && room.maxUser !== 0 && room.description.trim() ){
+    if (room.title.trim() && room.childCategory.trim() && room.location.name.trim() && room.minUser !== 0 && room.maxUser !== 0 && room.description.trim() ){
       setIsValidated((isValidated:boolean) => isValidated = true)
       
     } else {
@@ -31,11 +31,23 @@ const CreateRoom = (): JSX.Element => {
   // recoil에 작성한 모임 정보 저장하기 0927 임지민
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-
+    // console.log(name, typeof(value));
+    
     setRoom({
       ...room,
       [name]: value
     });
+    onChangeValidation();
+  };
+
+  const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    
+    setRoom({
+      ...room,
+      [name]: Number(value)
+    });
+    // console.log(name, typeof(value));
     onChangeValidation();
   };
 
@@ -85,11 +97,11 @@ const CreateRoom = (): JSX.Element => {
       <div className="flex justify-between">
           <p className="flex">카테고리</p>
           {/* category 선택 유무에 따라 버튼 or 선택된 카테고리 띄우기 */}
-          {room.category==='' && (
+          {room.childCategory==='' && (
             <button className="flex mr-4">&gt;</button>
           )} 
-          {room.category && (
-            <p className="mr-4 font-semibold">{room.category}</p>
+          {room.childCategory && (
+            <p className="mr-4 font-semibold">{room.parentCategory} &gt; {room.childCategory}</p>
           )}
       </div>
     </Link>
@@ -103,10 +115,10 @@ const CreateRoom = (): JSX.Element => {
         <p className="col-span-2">모집인원</p>
         {/* grid grid-cols-3 */}
         <div className="col-span-4 grid grid-cols-5">
-          <input type="number" id="minUser" onChange={onChange} name="minUser" value={room.minUser}/>
+          <input type="number" id="minUser" onChange={onChangeNumber} name="minUser" value={room.minUser}/>
           <label htmlFor="minUser" className="text-center">명</label>
           <span className="text-center">~</span>
-          <input type="number" id="maxUser" onChange={onChange} name="maxUser"value={room.maxUser}/>
+          <input type="number" id="maxUser" onChange={onChangeNumber} name="maxUser"value={room.maxUser}/>
           <label htmlFor="maxUser" className="text-center">명 </label>
         </div>
       </div>
