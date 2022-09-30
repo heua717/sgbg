@@ -33,14 +33,14 @@ const Main = () => {
 
   // create될 때 스크롤 이벤트 추가
   useEffect(()=> {  
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement
     const handleScroll = () => {
-      const { scrollTop, clientHeight, scrollHeight } = document.documentElement
-      if ( clientHeight + scrollTop >= scrollHeight) {
+      if ( (scrollTop + Math.ceil(clientHeight)) >= scrollHeight) {
         console.log('바닥이다'); // 여기가 안먹음
-        
         setFetching(true)
       }
     }
+    
     setFetching(true)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)

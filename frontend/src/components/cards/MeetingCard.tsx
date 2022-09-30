@@ -18,7 +18,7 @@ const MeetingCard = (props:any): JSX.Element => {
   // const [room] = useRecoilState<roomMore>(inputRoomInfo)
 
   useEffect(() => {
-    console.log(props.room);
+    // console.log(props.room);
     
   })
 
