@@ -4,7 +4,8 @@ import Logo from "../../components/etc/Logo";
 import MyPageTab from "../../components/tabs/MyPageTab";
 import { auth } from "../../store/auth";
 import { useRecoilState } from "recoil";
-import { useEffect } from "react";
+import { logout } from "../../api/auth";
+import Swal from "sweetalert2";
 
 const Profile = () => {
   const user = {
@@ -17,9 +18,29 @@ const Profile = () => {
   const navigator = useNavigate();
 
   const handleLogout = () => {
-    //recoil 초기화
-    setUserAuth({ isLogined: false, userId: "" });
-    navigator("/");
+    logout().then(({ statusCode }: any) => {
+      if (statusCode === 2000) {
+        setUserAuth({ isLogined: false, userId: "" });
+        navigator("/");
+      } else {
+        Swal.fire({
+          toast: true,
+          position: "center",
+          icon: "error",
+          showConfirmButton: true,
+          title: `로그아웃 실패`,
+        });
+      }
+    }).catch(() => {
+      Swal.fire({
+        toast: true,
+        position: "center",
+        icon: "error",
+        showConfirmButton: true,
+        title: `로그아웃 실패.`,
+      });
+    })
+
   }
 
   return (
