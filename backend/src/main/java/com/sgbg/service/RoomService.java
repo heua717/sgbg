@@ -46,8 +46,8 @@ public class RoomService {
     }
 
     @Transactional()
-    public List<RoomRes> getRoomList(Pageable pageable){
-        List<Room> roomList = roomRepository.findAllBy(pageable);
+    public List<RoomRes> getRoomList(){
+        List<Room> roomList = roomRepository.findAll();
         List<RoomRes> roomResList = new ArrayList<>();
         for(Room room : roomList){
             roomResList.add(RoomRes.getRoomRes(room));
@@ -66,8 +66,8 @@ public class RoomService {
 
     }
 
-    public List<RoomRes> getParentRoomList(String parentCategory, Pageable pageable) {
-        List<Room> roomList = roomRepository.findAllByParentCategory(parentCategory, pageable);
+    public List<RoomRes> getParentRoomList(String parentCategory) {
+        List<Room> roomList = roomRepository.findAllByParentCategory(parentCategory);
         List<RoomRes> roomResList = new ArrayList<>();
         for(Room room : roomList){
             if(room.getParentCategory().equals(parentCategory)){
@@ -78,9 +78,9 @@ public class RoomService {
         return roomResList;
     }
 
-    public List<RoomRes> getChildRoomList(String childCategory, Pageable pageable) {
+    public List<RoomRes> getChildRoomList(String childCategory) {
         List<RoomRes> roomResList = new ArrayList<>();
-        List<Room> roomList = roomRepository.findAllByChildCategory(childCategory, pageable);
+        List<Room> roomList = roomRepository.findAllByChildCategory(childCategory);
         for(Room room : roomList){
             if(room.getChildCategory().equals(childCategory)){
                 roomResList.add(RoomRes.getRoomRes(room));
