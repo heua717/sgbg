@@ -29,9 +29,8 @@ const Login = () => {
     if (code) {
       try {
         setLogining(true);
-        login(code).then((res) => {
-          console.log(res);
-          setUserAuth({ isLogined: true });
+        login(code).then(({data}) => {
+          setUserAuth({ isLogined: true, email: data.email });
           setLogining(false);
           navigate("/");
         });
