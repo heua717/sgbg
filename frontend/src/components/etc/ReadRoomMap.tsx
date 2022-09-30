@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { location } from "../../util/room";
 
@@ -6,14 +7,17 @@ type ReadRoomMapProps = {
 };
 
 const ReadRoomMap = ({ _location }: ReadRoomMapProps) => {
-  const _lat = parseFloat(_location.latitude);
-  const _lng = parseFloat(_location.hardness);
+  const [lat, setLat] = useState(parseFloat(_location.latitude));
+  const [lng, setLng] = useState(parseFloat(_location.hardness));
+
+  console.log(lat);
+  console.log(lng);
   return (
     <Map // 지도를 표시할 Container
       center={{
         // 지도의 중심좌표
-        lat: _lat,
-        lng: _lng,
+        lat: lat,
+        lng: lng,
       }}
       style={{
         // 지도의 크기
@@ -25,8 +29,8 @@ const ReadRoomMap = ({ _location }: ReadRoomMapProps) => {
       <MapMarker // 인포윈도우를 생성하고 지도에 표시합니다
         position={{
           // 인포윈도우가 표시될 위치입니다
-          lat: _lat,
-          lng: _lng,
+          lat: lat,
+          lng: lng,
         }}
       >
         {/* MapMarker의 자식을 넣어줌으로 해당 자식이 InfoWindow로 만들어지게 합니다 */}
