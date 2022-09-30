@@ -1,6 +1,6 @@
 package com.sgbg.repository.interfaces;
 
-import com.sgbg.domain.Wallet;
+import com.sgbg.blockchain.domain.Wallet;
 
 import java.math.BigDecimal;
 import java.util.List;

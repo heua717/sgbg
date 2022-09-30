@@ -3,7 +3,7 @@ package com.sgbg.service;
 import com.sgbg.service.interfaces.IEscrowContractService;
 import com.sgbg.service.interfaces.IPurchaseService;
 import com.sgbg.domain.Purchase;
-import com.sgbg.blockchain.EscrowContract;
+import com.sgbg.blockchain.wrapper.EscrowContract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

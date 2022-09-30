@@ -1,4 +1,4 @@
-package com.sgbg.blockchain;
+package com.sgbg.blockchain.wrapper;
 
 import lombok.Data;
 import java.math.BigInteger;
