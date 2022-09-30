@@ -18,12 +18,14 @@ const sessionStorageEffect =
 
 type Auth = {
   isLogined: boolean;
+  email: string;
 };
 
 export const auth = atom<Auth>({
   key: "auth",
   default: {
     isLogined: false,
+    email: "",
   },
-  effects: [sessionStorageEffect("isLogined")],
+  effects: [sessionStorageEffect("isLogined"), sessionStorageEffect("email")],
 });
