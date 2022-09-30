@@ -9,6 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserRes extends BaseResponseBody {
+
+    @Schema(description = "회원 번호", example = "1234567")
+    private String kakaoId;
+
     @Schema(description = "이름", example = "Bungle")
     private String name;
 
@@ -30,8 +34,9 @@ public class UserRes extends BaseResponseBody {
         return userRes;
     }
 
-    public static UserRes of(Integer statusCode, String message, User user) {
+    public static UserRes of(Integer statusCode, String message, String kakaoId, User user) {
         UserRes userRes = createUser(user);
+        userRes.setKakaoId(kakaoId);
         userRes.setStatusCode(statusCode);
         userRes.setMessage(message);
         return userRes;

@@ -59,6 +59,8 @@ public class AuthController {
 
         User user = null;
         Auth isUser = null;
+        String kakaoId = null;
+
         // 1. 인가 code로 Kakao Auth Server에서 token 받기
         try {
             Map<String, String> tokenInfo = kakaoService.getKakaoTokenInfo(code);
@@ -67,7 +69,7 @@ public class AuthController {
             Map<String, String> userInfo = kakaoService.getKakaoUserInfo(tokenInfo.get("access_token"));
 
             // 3. 회원 가입이 안되어 있는 경우, 회원가입 시키기
-            String kakaoId = userInfo.get("id");
+            kakaoId = userInfo.get("id");
             isUser = authService.isUser(kakaoId);
 
             if (isUser != null) {
@@ -98,9 +100,9 @@ public class AuthController {
         }
 
         if (isUser == null) {
-            return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2010, "Success", user));
+            return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2010, "Success", kakaoId, user));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2000, "Success", user));
+        return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2000, "Success", kakaoId, user));
     }
 
     @Operation(summary = "카카오 로그아웃 메서드")
