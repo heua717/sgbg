@@ -12,12 +12,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-
 @Setter
 @NoArgsConstructor
 @Getter
 @ToString
-public class RoomRes extends BaseResponseBody{
+public class RoomRes extends BaseResponseBody {
 
     @Schema(name = "roomId")
     private Long roomId;
@@ -62,7 +61,7 @@ public class RoomRes extends BaseResponseBody{
     private String description;
 
 
-    public static RoomRes getRoomRes(Room room){
+    public static RoomRes getRoomRes(Room room) {
         RoomRes roomRes = new RoomRes();
         roomRes.setRoomId(room.getRoomId());
         roomRes.setTitle(room.getTitle());
@@ -80,23 +79,21 @@ public class RoomRes extends BaseResponseBody{
         return roomRes;
     }
 
-
-    public static RoomRes roomResEntity(Integer status, String Message, RoomRes roomRes){
+    public static RoomRes roomResEntity(Integer status, String Message, RoomRes roomRes) {
         roomRes.setStatusCode(status);
         roomRes.setMessage(Message);
 
         return roomRes;
     }
 
-    public static List<RoomRes> roomListResEntity(Integer status, String Message, List<RoomRes> roomListRes){
-
-        for(int i = 0 ; i<roomListRes.size(); i++){
-            roomListRes.get(i).setStatusCode(status);
-            roomListRes.get(i).setMessage(Message);
-
-        }
-        return roomListRes;
-    }
-
+//    public static List<RoomRes> roomListResEntity(Integer status, String Message, List<RoomRes> roomListRes) {
+//
+//        for (int i = 0; i < roomListRes.size(); i++) {
+//            roomListRes.get(i).setStatusCode(status);
+//            roomListRes.get(i).setMessage(Message);
+//        }
+//
+//        return roomListRes;
+//    }
 
 }
