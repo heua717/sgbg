@@ -4,7 +4,10 @@ import { useRecoilState } from "recoil";
 import { auth } from "../store/auth";
 import { login } from "../api/auth";
 import { kakaoRedirect, KAKAO_REST_API_KEY } from "../api/config";
+import axios from "axios";
 import Swal from "sweetalert2";
+
+axios.defaults.withCredentials = true;
 
 const Login = () => {
   const [islogining, setLogining] = useState<boolean>(false);
@@ -28,8 +31,7 @@ const Login = () => {
         setLogining(true);
         login(code).then((res) => {
           console.log(res);
-          //리코일에 값 저장
-
+          setUserAuth({ isLogined: true });
           setLogining(false);
           navigate("/");
         });
@@ -75,7 +77,7 @@ const Login = () => {
         </div>
       ) : (
         <a
-          href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${kakaoRedirect}login`}
+          href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${kakaoRedirect}`}
           className="flex justify-center items-center my-20"
         >
           <img
