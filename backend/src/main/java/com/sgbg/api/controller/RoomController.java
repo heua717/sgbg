@@ -15,17 +15,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Tag(name = "Room API", description = "방 생성, 카테고리별 방 목록 조회, 방 상세정보 조회 기능 제공")
 @RestController
@@ -47,9 +42,9 @@ public class RoomController {
     @Parameters()
     @PostMapping("/create")
     public ResponseEntity createRoom(@RequestBody RoomReq roomReq ,HttpServletRequest request) {
-        Map<String, String> tokenInfo = cookieUtil.getTokenInfo(request);
-        String accessToken = tokenInfo.get("access_token");
-        Long userId = Long.parseLong(redisService.getUserIdByToken(accessToken, "access_token"));
+//        Map<String, String> tokenInfo = cookieUtil.getTokenInfo(request);
+//        String accessToken = tokenInfo.get("access_token");
+//        Long userId = Long.parseLong(redisService.getUserIdByToken(accessToken, "access_token"));
 
         roomService.createRoom(roomReq);
 
@@ -63,8 +58,8 @@ public class RoomController {
             content = @Content(schema = @Schema(implementation = RoomListRes.class)))
     )
     @GetMapping("")
-    public ResponseEntity<? extends RoomListRes> getRoomList(Pageable pageable){
-        List<RoomRes> roomResList = roomService.getRoomList(pageable);
+    public ResponseEntity<? extends RoomListRes> getRoomList(){
+        List<RoomRes> roomResList = roomService.getRoomList();
         return ResponseEntity.status(200).body(RoomListRes.of(2000,"Success",roomResList));
     }
 
@@ -92,8 +87,8 @@ public class RoomController {
                     content = @Content(schema = @Schema(implementation = RoomListRes.class)))
     )
     @GetMapping("/parentcategory/{parentCategory}")
-    public ResponseEntity<? extends RoomListRes> getParentCategoryList(@PathVariable String parentCategory, Pageable pageable){
-        List<RoomRes> roomResList = roomService.getParentRoomList(parentCategory, pageable);
+    public ResponseEntity<? extends RoomListRes> getParentCategoryList(@PathVariable String parentCategory){
+        List<RoomRes> roomResList = roomService.getParentRoomList(parentCategory);
         return ResponseEntity.status(200).body(RoomListRes.of(2000,"Success",roomResList));
     }
 
@@ -103,8 +98,8 @@ public class RoomController {
             content = @Content(schema = @Schema(implementation = RoomListRes.class)))
     )
     @GetMapping("/childcategory/{childCategory}")
-    public ResponseEntity<? extends RoomListRes> getChildCategoryList(@PathVariable String childCategory, Pageable pageable){
-        List<RoomRes> roomResList = roomService.getChildRoomList(childCategory, pageable);
+    public ResponseEntity<? extends RoomListRes> getChildCategoryList(@PathVariable String childCategory){
+        List<RoomRes> roomResList = roomService.getChildRoomList(childCategory);
         return ResponseEntity.status(200).body(RoomListRes.of(2000,"Success",roomResList));
     }
 
