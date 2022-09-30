@@ -18,8 +18,9 @@ const Profile = () => {
   const navigator = useNavigate();
 
   const handleLogout = () => {
-    logout().then(({ statusCode }: any) => {
-      if (statusCode === 2000) {
+    logout().then((res:any) => {
+      console.log(res);
+      if (res.statusCode === 2000) {
         setUserAuth({ isLogined: false, userId: "" });
         navigator("/");
       } else {
