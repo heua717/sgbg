@@ -14,26 +14,44 @@ import { roomMore } from "../util/room";
 const Main = () => {
   // axios 통신 0929 임지민
   const [mainRoomList, setMainRoomList] = useState<roomMore[]>([])
-  const [ isFetching, setFetching ] = useState(false)
+// 인피니트 스크롤 0930 임지민
+  // 필요한 변수 설정
   const [ page, setPage ] = useState(1)
+  const [ isFetching, setFetching ] = useState(false)
+  const [ hasNextPage, setNextPage ] = useState(true)
 
-  const fetchMainRoomList = async () => {
-    setFetching(true)
-
-    await getRoomList(page, 5, 'roomId, DESC')
-    .then((res) => {
-      console.log(res.data.roomListRes);
-      // setMainRoomList(mainRoomList.concat(res.data.))
-      
-    })
-  }
-  
-
-  // 화면에 띄우기 위한 임시 리스트
-  useEffect(()=>{
-    console.log(isFetching);
+  // 인피니트 스크롤 메인 함수
+  const fetchMainRoomList = useCallback(async () => {
+    const {data} = await getRoomList(page, 5, 'roomId,DESC')
     
-  })
+    setMainRoomList(mainRoomList.concat(data.roomListRes))
+    setPage(page+1)
+    setNextPage(true)
+    // setFetching(false) // 이 부분 주석을 풀면 첫페이지도 렌더링이 안됨
+
+  }, [page])
+
+  // create될 때 스크롤 이벤트 추가
+  useEffect(()=> {  
+    const handleScroll = () => {
+      const { scrollTop, clientHeight, scrollHeight } = document.documentElement
+      if ( clientHeight + scrollTop >= scrollHeight) {
+        console.log('바닥이다'); // 여기가 안먹음
+        
+        setFetching(true)
+      }
+    }
+    setFetching(true)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    if (isFetching && hasNextPage) {fetchMainRoomList()}
+    else if(!hasNextPage) setFetching(false)
+  }, [isFetching] )
+
+  
   return (
     <div>
       {/* 로고 */}
