@@ -1,10 +1,11 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect } from "react";
+import { formatDate } from "../../util/room";
 import { useRecoilState } from "recoil";
-import { inputRoomInfo } from "../../store/room";
 import { roomMore } from "../../util/room";
-import { useState } from "react";
+import { inputRoomInfo } from "../../store/room";
+// import { useState } from "react";
 
 
 const MeetingCard = (props:any): JSX.Element => {
@@ -14,11 +15,14 @@ const MeetingCard = (props:any): JSX.Element => {
   const getMemberBadgeColor = () => {
     return 'bg-gray-100';
   }
-  const [room] = useRecoilState<roomMore>(inputRoomInfo)
+  // const [room] = useRecoilState<roomMore>(inputRoomInfo)
 
-  // 모이는 날의 연/월/일만 카드에 띄우기 위한 작업(서버와 무관함) 0930 임지민
-  const splitedDateList = props.room.reservationDate.split('T')
-  const dateOnCard = splitedDateList[0].replaceAll('-', '.')
+  useEffect(() => {
+    console.log(props.room);
+    
+  })
+
+
 
   return (
     // w-per100 h-per100 
@@ -59,7 +63,7 @@ const MeetingCard = (props:any): JSX.Element => {
         </div>
         {/* 모임일자, 가격 */}
         <div className="flex justify-between">
-          <span className="text-sm">{props.room.reservationDate? dateOnCard : '모이는 날'}</span>
+          <span className="text-sm">{props.room.reservationDate? formatDate(props.room.reservationDate) : '모이는 날'}</span>
           <span className="text-sm font-semibold">{props.room.price? props.room.price : '0'}원</span>
         </div>
       </div>
