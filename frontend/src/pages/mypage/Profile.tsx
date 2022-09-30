@@ -15,21 +15,12 @@ const Profile = () => {
   const { user_id } = useParams<{ user_id: string }>();
   const [userAuth, setUserAuth] = useRecoilState(auth);
   const navigator = useNavigate();
+
   const handleLogout = () => {
     //recoil 초기화
-    setUserAuth({ isLogined: false, email: "" });
+    setUserAuth({ isLogined: false, userId: "" });
     navigator("/");
   }
-
-  useEffect(() => {
-    const decodedId = user_id && decodeURI(user_id);
-    if (decodedId) {
-      // 마이페이지 정보 불러오기
-      console.log(decodedId);
-    } else {
-      navigator("/");
-    }
-  })
 
   return (
     <div className="w-full h-full">
@@ -41,7 +32,7 @@ const Profile = () => {
         <div className="flex flex-col border-b border-gray-200 pb-2">
           <div className="flex flex-row justify-between items-end">
             <span className="font-bold text-xl leading-tight">jimin</span>
-            {userAuth.isLogined && user_id && userAuth.email === decodeURI(user_id) ? (
+            {userAuth.isLogined && user_id && userAuth.userId === user_id ? (
               <button className="bg-slate-400 rounded p-1" onClick={handleLogout}>로그아웃</button>
             ) : (
               ""
