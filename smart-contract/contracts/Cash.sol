@@ -2,24 +2,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0;
 
-interface IERC20 {
-    function balanceOf(address _owner) external view returns (uint256 balance);
-    function transfer(address _to, uint256 _value)  external returns (bool success);
-    function transferFrom(address _from, address _to, uint256 _value) external returns (bool success);
-    function approve(address _spender, uint256 _value) external returns (bool success);
-    function allowance(address _owner, address _spender) external view returns (uint256 remaining);
+import "./IERC20.sol";
 
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-}
-
-// TODO: Decide to add Ownable or not
 contract Cash is IERC20 {
     uint256 constant private MAX_UINT256 = 2**256 - 1;
+
     mapping (address => uint256) public balances;
     mapping (address => mapping (address => uint256)) public allowed;
-    address private creator;
-    uint256 private totalSupply;
+
+    address private creator; // owner
+    uint256 private totalSupply; // total token supply
 
     string public name = "SgbgToken"; // Name for display purposes
     string public symbol = "SBTKN"; // Symbol for display purposes
@@ -32,12 +24,15 @@ contract Cash is IERC20 {
     }
 
     /**
-     * @notice mint
+     * @notice mint: create `_amount` of token and alloc to `_receiver`
      * @param _receiver the receiver's address
      * @param _amount the amount of tokens
      */
     function mint(address _receiver, uint256 _amount) external {
-        
+        require(_receiver != address(0), "mint to zero address");
+        totalSupply += _amount;
+        balances[msg.sender] += _amount;
+        emit Transfer(address(0), msg.sender, _amount);
     }
 
     /**
