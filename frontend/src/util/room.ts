@@ -17,6 +17,7 @@ export interface room {
 }
 
 export interface roomMore extends room {
+  roomId?: number;
   endDate: string;
   reservationDate: string;
   price: number;
