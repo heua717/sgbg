@@ -111,7 +111,7 @@ const CreateRoomMore = () => {
             </div>
           </Link>
         </div>
-        <MeetingCard room={room} />
+        <MeetingCard name="createRoom" room={room} />
       </div>
 
     <div className="my-8">
