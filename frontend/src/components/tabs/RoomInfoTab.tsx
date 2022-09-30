@@ -27,8 +27,8 @@ const RoomInfoTabs = () => {
     price: 0,
     minMemberScore: 0,
   });
-  const [lat, setLat] = useState<number>(0);
-  const [lng, setLng] = useState<number>(0);
+  const [lat, setLat] = useState<number>(-1);
+  const [lng, setLng] = useState<number>(-1);
   const [, updateState] = useState<number[]>();
 
   useEffect(() => {
@@ -106,7 +106,7 @@ const RoomInfoTabs = () => {
         <p className="font-bold">모임 위치</p>
         <div className="mt-2">
           <div>{typeof lat}</div>
-          {lng !== 0 ? (
+          {lat !== -1 ? (
             <Map // 지도를 표시할 Container
               center={{
                 // 지도의 중심좌표

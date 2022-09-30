@@ -4,7 +4,10 @@ import { useRecoilState } from "recoil";
 import { auth } from "../store/auth";
 import { login } from "../api/auth";
 import { kakaoRedirect, KAKAO_REST_API_KEY } from "../api/config";
+import axios from "axios";
 import Swal from "sweetalert2";
+
+axios.defaults.withCredentials = true;
 
 const Login = () => {
   const [islogining, setLogining] = useState<boolean>(false);
@@ -28,7 +31,6 @@ const Login = () => {
         setLogining(true);
         login(code).then((res) => {
           console.log(res);
-          //리코일에 값 저장 -> 세션에 isLogined로 저장됨...
           setUserAuth({ isLogined: true });
           setLogining(false);
           navigate("/");
