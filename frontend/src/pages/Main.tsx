@@ -27,27 +27,37 @@ const Main = () => {
     setMainRoomList(mainRoomList.concat(data.roomListRes))
     setPage(page+1)
     setNextPage(true)
+    console.log("page=", page);
+    
     // setFetching(false) // 이 부분 주석을 풀면 첫페이지도 렌더링이 안됨
 
   }, [page])
 
   // create될 때 스크롤 이벤트 추가
   useEffect(()=> {  
-    const { scrollTop, clientHeight, scrollHeight } = document.documentElement
+    const { scrollTop, offsetHeight } = document.documentElement
     const handleScroll = () => {
-      if ( (scrollTop + Math.ceil(clientHeight)) >= scrollHeight) {
-        console.log('바닥이다'); // 여기가 안먹음
+      if ( (window.innerHeight + Math.ceil(scrollTop)) >= offsetHeight + 100) {
+        console.log('바닥이다');
+        // 한번만 내려가도록 하기
+        // 여기서 1,2초 정도 딜레이시키기
+        console.log(isFetching, hasNextPage);
+        
         setFetching(true)
       }
     }
-    
+    console.log('created');
     setFetching(true)
+    console.log("setfetching");
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   useEffect(() => {
-    if (isFetching && hasNextPage) {fetchMainRoomList()}
+    if (isFetching && hasNextPage) {
+      console.log('fetchmainroomlist');
+      fetchMainRoomList()
+    }
     else if(!hasNextPage) setFetching(false)
   }, [isFetching] )
 
