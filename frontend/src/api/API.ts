@@ -7,6 +7,5 @@ export const api = axios.create({
 
 export const mapApi = axios.create({
   baseURL: mapURL,
-  headers : { 'Authorization': `KakaoAK ${KAKAO_REST_API_KEY}` }
-})
-
+  headers: { Authorization: `KakaoAK ${KAKAO_REST_API_KEY}` },
+});
