@@ -61,6 +61,27 @@ public class WalletService implements IWalletService {
     }
 
     @Override
+    public void charge (long userId, long money) throws Exception {
+
+        Wallet wallet = walletRepository.findByOwnerId(userId).orElse(null);
+        if(wallet == null){
+            // custom excpetion
+            return;
+        }
+        String privateKey = wallet.getPrivateKey();
+        String publicKey = wallet.getPublicKey();
+        Credentials credentials = Credentials.create(privateKey, publicKey);
+        String address = credentials.getAddress();
+
+        // -------------- 스마트 컨트랙트 함수 ---------------
+        // 지갑 address와 money를 통해 우리가 만든 토큰을 충전한다.
+        // -----------------------------------------------
+
+
+
+    }
+
+    @Override
     public Wallet enterRoom (long userId, long roomId, long money) throws Exception {
 
         Room room = roomRepository.findByRoomId(roomId).orElse(null);

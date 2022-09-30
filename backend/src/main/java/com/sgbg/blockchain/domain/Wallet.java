@@ -18,6 +18,7 @@ public class Wallet {
 	private long id;
 
 	private long ownerId; // userId
+	private String passwork; // 유저의 비밀번호
 	private String publicKey;
 	private String privateKey;
 	private String address;
