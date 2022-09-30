@@ -20,7 +20,7 @@ const Navbar = () => {
         <FontAwesomeIcon icon={faWallet} className="text-blue-600 text-3xl" />
       </Link>
       {userAuth.isLogined ? (
-        <Link to={`profile/${encodeURI(userAuth.email)}`}>
+        <Link to={`profile/${userAuth.userId}`}>
           <FontAwesomeIcon icon={faUser} className="text-blue-600 text-3xl" />
         </Link>
       ) : (
