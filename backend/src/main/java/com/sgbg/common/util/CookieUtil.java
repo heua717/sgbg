@@ -49,4 +49,12 @@ public class CookieUtil {
         }
         return tokens;
     }
+
+    public Long getUserIdByToken(HttpServletRequest request) {
+        Map<String, String> tokenInfo = getTokenInfo(request);
+        String accessToken = tokenInfo.get("access_token");
+        String userId = redisService.getUserIdByToken("access_token", accessToken);
+
+        return Long.parseLong(userId);
+    }
 }
