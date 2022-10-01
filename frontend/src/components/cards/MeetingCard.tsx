@@ -15,7 +15,7 @@ const MeetingCard = (props:any): JSX.Element => {
   const getMemberBadgeColor = () => {
     return 'bg-gray-100';
   }
-  // const [room] = useRecoilState<roomMore>(inputRoomInfo)
+
 
   useEffect(() => {
     console.log(props.room);
