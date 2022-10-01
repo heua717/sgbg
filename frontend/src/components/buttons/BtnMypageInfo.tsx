@@ -19,30 +19,29 @@ type BtnMypageInfoProps = {
 const BtnMypageInfo = ({ type, user }: BtnMypageInfoProps) => {
   useEffect(() => {
     console.log(user);
-    
   })
   return (
-    <div className={`flex flex-col justify-center items-center p-2`}>
-      <span className="flex flex-row">
-        {type === "Participant" ? (
-          <img
-            className="w-6 mr-1"
-            src={
-              process.env.PUBLIC_URL +
-              `/img/userBadge${getParticipantBadge(user.memberScore)}.png`
-            }
-            alt="참여자 뱃지"
-          />
-        ) : (
-          <span className="text-lg mr-1">{getHostBadge(user.hostScore)}</span>
-        )}
-        <span>
-          {type === "Participant"
-            ? getParticipantNickname(user.memberScore)
-            : getHostNickname(user.hostScore)}
-        </span>
-      </span>
-      <span>{type === "Participant" ? user.memberScore : user.hostScore}%</span>
+    // <div className={`flex flex-col justify-center items-center p-2`}>
+    //   <span className="flex flex-row">
+    //     {type === "Participant" ? (
+    //       <img
+    //         className="w-6 mr-1"
+    //         src={
+    //           process.env.PUBLIC_URL +
+    //           `/img/userBadge${getParticipantBadge(user.memberScore)}.png`
+    //         }
+    //         alt="참여자 뱃지"
+    //       />
+    //     ) : (
+    //       <span className="text-lg mr-1">{getHostBadge(user.hostScore)}</span>
+    //     )}
+    //     <span>
+    //       {type === "Participant"
+    //         ? getParticipantNickname(user.memberScore)
+    //         : getHostNickname(user.hostScore)}
+    //     </span>
+    //   </span>
+    //   <span>{type === "Participant" ? user.memberScore : user.hostScore}%</span>
     </div>
   );
 };
