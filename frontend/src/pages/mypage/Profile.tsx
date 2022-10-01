@@ -17,7 +17,12 @@ type User = {
 };
 
 const Profile = () => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User>({
+    name: "",
+    email: "",
+    hostScore: 0,
+    memberScore: 0
+  });
   const { user_id } = useParams<{ user_id: string }>();
   const [userAuth, setUserAuth] = useRecoilState(auth);
   const navigator = useNavigate();
@@ -82,13 +87,13 @@ const Profile = () => {
               </button>
             }
           </div>
-          <Link className="font-light text-xs mt-2" to={`/profile/history/${user?.name}`}>
+          <Link className="font-light text-xs mt-2" to={`/profile/history/${user.name}`}>
             {" "}
             {"> 완료한 모임 이력 보기"}
           </Link>
         </div>
 
-        {/* <ProfileCard user={user} /> */}
+        <ProfileCard user={user} />
       </div>
       {/* 참여한 모임 탭 */}
       <MyPageTab />
