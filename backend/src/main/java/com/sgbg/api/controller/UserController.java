@@ -1,11 +1,11 @@
 package com.sgbg.api.controller;
 
 import com.sgbg.api.response.RoomListRes;
-import com.sgbg.api.response.RoomRes;
 import com.sgbg.api.response.UserRes;
 import com.sgbg.common.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.Auth;
+import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
 import com.sgbg.service.interfaces.IAuthService;
 import com.sgbg.service.interfaces.IUserService;
@@ -64,4 +64,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2000, "Success", kakaoId, user));
     }
 
+    @GetMapping("/room")
+    @Operation(summary = "내가 참여한 방 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "참여한 방 목록 조회 성공",
+                    content = @Content(schema = @Schema(implementation = RoomListRes.class))),
+            @ApiResponse(responseCode = "500", description = "")
+    })
+    public ResponseEntity<? extends RoomListRes> getRooms(
+            @RequestParam(value = "host") String host,
+            HttpServletRequest request) {
+        Long userId = cookieUtil.getUserIdByToken(request);
+        List<Room> rooms = userService.getMyRooms(userId, Boolean.parseBoolean(host));
+
+        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.of(2000, "Success", rooms));
+    }
 }
