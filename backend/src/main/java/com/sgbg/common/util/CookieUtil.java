@@ -1,7 +1,7 @@
 package com.sgbg.common.util;
 
+import com.sgbg.common.exception.NotFoundException;
 import com.sgbg.service.RedisService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -55,6 +55,9 @@ public class CookieUtil {
         String accessToken = tokenInfo.get("access_token");
         String userId = redisService.getUserIdByToken("access_token", accessToken);
 
+        if(userId == null) {
+            throw new NotFoundException("로그인 된 사용자가 아닙니다.");
+        }
         return Long.parseLong(userId);
     }
 }

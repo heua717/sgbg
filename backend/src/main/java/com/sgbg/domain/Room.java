@@ -1,14 +1,18 @@
 package com.sgbg.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Room")
@@ -16,6 +20,7 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @Getter
 @NoArgsConstructor
+@ToString
 public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -63,6 +68,10 @@ public class Room {
 
     @Column(name = "description")
     private String description;
+
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "myRooms", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<User> members = new ArrayList<>();
 
     @Builder
     public Room(String parentCategory, String childCategory,
