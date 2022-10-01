@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-
 public class RoomService {
 
     @Autowired
@@ -34,6 +33,8 @@ public class RoomService {
     public void createRoom(RoomReq roomReq) {
         Room room = roomReq.toEntity(roomReq);
         Location location = roomReq.getLocation();
+
+        // TODO: 방장(만든 사람)도 member로 추가
 //        User user = userRepository.findById(userId).orElse(null);
 //        if(user==null){
 //            throw NullPointerException;
@@ -46,48 +47,34 @@ public class RoomService {
     }
 
     @Transactional()
-    public List<RoomRes> getRoomList(){
-        List<Room> roomList = roomRepository.findAll();
-        List<RoomRes> roomResList = new ArrayList<>();
-        for(Room room : roomList){
-            roomResList.add(RoomRes.getRoomRes(room));
-        }
-
-        return roomResList;
+    public List<Room> getRoomList(){
+        return roomRepository.findAll();
     }
 
-    public RoomRes getRoom(Long roomId) {
-        Room room = roomRepository.findByRoomId(roomId).orElse(null);
+    public Room getRoom(Long roomId) {
+        return roomRepository.findByRoomId(roomId).orElse(null);
 //        if(room==null){
 //            throw NullPointerException("not find room");
 //        }
-        RoomRes roomRes = RoomRes.getRoomRes(room);
-        return roomRes;
-
     }
 
-    public List<RoomRes> getParentRoomList(String parentCategory) {
-        List<Room> roomList = roomRepository.findAllByParentCategory(parentCategory);
-        List<RoomRes> roomResList = new ArrayList<>();
-        for(Room room : roomList){
-            if(room.getParentCategory().equals(parentCategory)){
-                roomResList.add(RoomRes.getRoomRes(room));
-            }
-        }
-
-        return roomResList;
+    public List<Room> getParentRoomList(String parentCategory) {
+//        List<RoomRes> roomResList = new ArrayList<>();
+//        for(Room room : roomList){
+//            if(room.getParentCategory().equals(parentCategory)){
+//                roomResList.add(RoomRes.getRoomRes(room));
+//            }
+//        }
+        return roomRepository.findAllByParentCategory(parentCategory);
     }
 
-    public List<RoomRes> getChildRoomList(String childCategory) {
-        List<RoomRes> roomResList = new ArrayList<>();
-        List<Room> roomList = roomRepository.findAllByChildCategory(childCategory);
-        for(Room room : roomList){
-            if(room.getChildCategory().equals(childCategory)){
-                roomResList.add(RoomRes.getRoomRes(room));
-            }
-        }
-
-        return roomResList;
-
+    public List<Room> getChildRoomList(String childCategory) {
+//        List<RoomRes> roomResList = new ArrayList<>();
+//        for(Room room : roomList){
+//            if(room.getChildCategory().equals(childCategory)){
+//                roomResList.add(RoomRes.getRoomRes(room));
+//            }
+//        }
+        return roomRepository.findAllByChildCategory(childCategory);
     }
 }

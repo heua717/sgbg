@@ -1,5 +1,6 @@
 package com.sgbg.service.interfaces;
 
+import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,4 +12,5 @@ public interface IUserService {
     public User createUser(Map<String, String> userInfo);
 
     public User findUserById(Long userId);
+    List<Room> getMyRooms(Long userId, Boolean isHost);
 }
