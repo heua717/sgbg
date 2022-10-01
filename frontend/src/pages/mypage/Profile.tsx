@@ -6,42 +6,60 @@ import { auth } from "../../store/auth";
 import { useRecoilState } from "recoil";
 import { logout } from "../../api/auth";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
+import { getMypage } from "../../api/profile";
+
+type User = {};
 
 const Profile = () => {
-  const user = {
+  const _user = {
     participantScore: 75,
     hostScore: 30,
     userId: "namm",
   };
+  const [user, setUser] = useState<User>({});
   const { user_id } = useParams<{ user_id: string }>();
   const [userAuth, setUserAuth] = useRecoilState(auth);
   const navigator = useNavigate();
 
+  useEffect(() => {
+    if (userAuth.userId !== user_id) {
+      navigator("/");
+      return;
+    }
+    getMypage(user_id)
+      .then(({data}) => {
+        console.log(data);
+      })
+      .catch(() => {});
+  }, []);
+
   const handleLogout = () => {
-    logout().then(({ data }) => {
-      if (data.statusCode === 2000) {
-        setUserAuth({ isLogined: false, userId: "" });
-        navigator("/");
-      } else {
+    logout()
+      .then(({ data }) => {
+        if (data.statusCode === 2000) {
+          setUserAuth({ isLogined: false, userId: "" });
+          navigator("/");
+        } else {
+          Swal.fire({
+            toast: true,
+            position: "center",
+            icon: "error",
+            showConfirmButton: true,
+            title: `로그아웃 실패`,
+          });
+        }
+      })
+      .catch(() => {
         Swal.fire({
           toast: true,
           position: "center",
           icon: "error",
           showConfirmButton: true,
-          title: `로그아웃 실패`,
+          title: `로그아웃 실패.`,
         });
-      }
-    }).catch(() => {
-      Swal.fire({
-        toast: true,
-        position: "center",
-        icon: "error",
-        showConfirmButton: true,
-        title: `로그아웃 실패.`,
       });
-    })
-
-  }
+  };
 
   return (
     <div className="w-full h-full">
@@ -52,14 +70,14 @@ const Profile = () => {
         {/* 유저 뱃지, 아이디, 완료 이력 보기 */}
         <div className="flex flex-col border-b border-gray-200 pb-2">
           <div className="flex flex-row justify-between items-end">
-            <span className="font-bold text-xl leading-tight">jimin</span>
-            {userAuth.isLogined && user_id && userAuth.userId === user_id ? (
-              <button className="bg-slate-400 rounded p-1" onClick={handleLogout}>로그아웃</button>
-            ) : (
-              ""
-            )}
+            <span className="font-bold text-xl leading-tight">{}</span>
+            {
+              <button className="bg-slate-400 rounded p-1" onClick={handleLogout}>
+                로그아웃
+              </button>
+            }
           </div>
-          <Link className="font-light text-xs mt-2" to={`/profile/history/${user.userId}`}>
+          <Link className="font-light text-xs mt-2" to={`/profile/history/${_user.userId}`}>
             {" "}
             {"> 완료한 모임 이력 보기"}
           </Link>
