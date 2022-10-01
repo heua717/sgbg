@@ -29,7 +29,6 @@ const Profile = () => {
     }
     getMypage(user_id)
       .then(({data}) => {
-        console.log(data);
         setUser({...data.user});
       })
       .catch(() => {});
@@ -84,7 +83,7 @@ const Profile = () => {
           </Link>
         </div>
 
-        {/* <ProfileCard user={user} /> */}
+        <ProfileCard user={user} />
       </div>
       {/* 참여한 모임 탭 */}
       <MyPageTab />
