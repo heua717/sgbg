@@ -29,7 +29,7 @@ const Login = () => {
     if (code) {
       try {
         setLogining(true);
-        login(code).then(({data}) => {
+        login(code).then(({ data }) => {
           setUserAuth({ isLogined: true, userId: data.kakaoId });
           setLogining(false);
           navigate("/");

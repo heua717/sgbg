@@ -8,9 +8,10 @@ import {
 type BtnMypageInfoProps = {
   type: "Participant" | "Host";
   user: {
-    participantScore: number;
+    email: string,
+    memberScore: number;
     hostScore: number;
-    userId: string;
+    name: string;
   };
 };
 
@@ -23,7 +24,7 @@ const BtnMypageInfo = ({ type, user }: BtnMypageInfoProps) => {
             className="w-6 mr-1"
             src={
               process.env.PUBLIC_URL +
-              `/img/userBadge${getParticipantBadge(user.participantScore)}.png`
+              `/img/userBadge${getParticipantBadge(user.memberScore)}.png`
             }
             alt="참여자 뱃지"
           />
@@ -32,11 +33,11 @@ const BtnMypageInfo = ({ type, user }: BtnMypageInfoProps) => {
         )}
         <span>
           {type === "Participant"
-            ? getParticipantNickname(user.participantScore)
+            ? getParticipantNickname(user.memberScore)
             : getHostNickname(user.hostScore)}
         </span>
       </span>
-      <span>{type === "Participant" ? user.participantScore : user.hostScore}%</span>
+      <span>{type === "Participant" ? user.memberScore : user.hostScore}%</span>
     </div>
   );
 };
