@@ -2,26 +2,31 @@ package com.sgbg.api.response;
 
 import com.sgbg.domain.Room;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Getter
 @Setter
 public class RoomListRes extends BaseResponseBody {
 
-    @Schema(name = "방 목록")
-    private List<RoomRes> roomListRes = new ArrayList<>();
+    @Schema(name = "roomListInfo", description = "방 목록 정보")
+    private List<BaseRoomRes> roomListInfo = new ArrayList<>();
 
-    public static RoomListRes of(Integer statusCode, String message, List<RoomRes> roomList){
+    public static RoomListRes of(Integer statusCode, String message, List<Room> roomList) {
         RoomListRes roomListRes = new RoomListRes();
         roomListRes.setStatusCode(statusCode);
         roomListRes.setMessage(message);
-        roomListRes.setRoomListRes(roomList);
+        roomListRes.setRoomListInfo(roomList);
         return roomListRes;
     }
+
+    public void setRoomListInfo(List<Room> roomList) {
+        for (Room room : roomList) {
+            this.roomListInfo.add(BaseRoomRes.of(room));
+        }
+    }
+
 }
