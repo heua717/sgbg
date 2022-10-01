@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,11 +38,11 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
-    public String createComment(CommentReq commentReq) throws Exception {
+    public String createComment(CommentReq commentReq, Long userId) throws Exception {
 
         Comment comment = new Comment();
         // 임의로 저장한 값 -> token 이용해서 useId 가져오기
-        comment.setUserId(1L);
+        comment.setUserId(userId);
         Room room = roomRepository.findById(commentReq.getRoomId()).orElseThrow();
         comment.setRoom(room);
         comment.setContent(commentReq.getContent());
