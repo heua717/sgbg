@@ -9,15 +9,16 @@ import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { getMypage } from "../../api/profile";
 
-type User = {};
+type User = {
+  kakaoId: string,
+  name: string,
+  email: string,
+  hostScore: number,
+  memberScore: number
+};
 
 const Profile = () => {
-  const _user = {
-    participantScore: 75,
-    hostScore: 30,
-    userId: "namm",
-  };
-  const [user, setUser] = useState<User>({});
+  const [user, setUser] = useState<User>();
   const { user_id } = useParams<{ user_id: string }>();
   const [userAuth, setUserAuth] = useRecoilState(auth);
   const navigator = useNavigate();
@@ -30,6 +31,7 @@ const Profile = () => {
     getMypage(user_id)
       .then(({data}) => {
         console.log(data);
+        setUser({...data.user});
       })
       .catch(() => {});
   }, []);
@@ -77,7 +79,7 @@ const Profile = () => {
               </button>
             }
           </div>
-          <Link className="font-light text-xs mt-2" to={`/profile/history/${_user.userId}`}>
+          <Link className="font-light text-xs mt-2" to={`/profile/history/${user?.name}`}>
             {" "}
             {"> 완료한 모임 이력 보기"}
           </Link>
