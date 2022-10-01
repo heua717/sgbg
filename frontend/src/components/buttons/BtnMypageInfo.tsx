@@ -22,7 +22,7 @@ const BtnMypageInfo = ({ type, user }: BtnMypageInfoProps) => {
   })
   return (
     <div className={`flex flex-col justify-center items-center p-2`}>
-      {/* <span className="flex flex-row">
+      <span className="flex flex-row">
         {type === "Participant" ? (
           <img
             className="w-6 mr-1"
@@ -41,7 +41,7 @@ const BtnMypageInfo = ({ type, user }: BtnMypageInfoProps) => {
             : getHostNickname(user.hostScore)}
         </span>
       </span>
-      <span>{type === "Participant" ? user.memberScore : user.hostScore}%</span> */}
+      <span>{type === "Participant" ? user.memberScore : user.hostScore}%</span>
     </div>
   );
 };
