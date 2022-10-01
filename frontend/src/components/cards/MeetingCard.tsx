@@ -17,13 +17,6 @@ const MeetingCard = (props:any): JSX.Element => {
   }
 
 
-  useEffect(() => {
-    console.log(props.room);
-    
-  })
-
-
-
   return (
     // w-per100 h-per100 
     <div className="flex flex-row border rounded-lg p-2 mb-2">

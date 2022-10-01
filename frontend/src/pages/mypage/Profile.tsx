@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { getMypage } from "../../api/profile";
 
 type User = {
-  kakaoId: string,
   name: string,
   email: string,
   hostScore: number,
@@ -72,7 +71,7 @@ const Profile = () => {
         {/* 유저 뱃지, 아이디, 완료 이력 보기 */}
         <div className="flex flex-col border-b border-gray-200 pb-2">
           <div className="flex flex-row justify-between items-end">
-            <span className="font-bold text-xl leading-tight">{}</span>
+            <span className="font-bold text-xl leading-tight">{user?.name ? user?.name : ""}</span>
             {
               <button className="bg-slate-400 rounded p-1" onClick={handleLogout}>
                 로그아웃
