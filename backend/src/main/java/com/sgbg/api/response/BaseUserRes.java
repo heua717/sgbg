@@ -12,9 +12,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class BaseUserRes {
-    @Schema(description = "회원 번호", example = "1234567")
-    private String kakaoId;
-
     @Schema(description = "이름", example = "Bungle")
     private String name;
 
