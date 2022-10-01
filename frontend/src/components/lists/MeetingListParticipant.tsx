@@ -38,13 +38,11 @@ const MeetingListParticipant = () => {
   const [roomList, setRoomList] = useState<room[]>([]);
   useEffect(() => {
     getMyPageParticipantList()
-        .then(({ data }) => {
-          console.log(data);
-          
+      .then(({ data }) => {
         setRoomList([...data.roomListInfo]);
       })
       .catch();
-  });
+  }, []);
   return (
     <div className="w-full">
       {roomList.map((room) => (
