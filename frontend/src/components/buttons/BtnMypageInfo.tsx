@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   getParticipantNickname,
   getHostNickname,
@@ -16,6 +17,10 @@ type BtnMypageInfoProps = {
 };
 
 const BtnMypageInfo = ({ type, user }: BtnMypageInfoProps) => {
+  useEffect(() => {
+    console.log(user);
+    
+  })
   return (
     <div className={`flex flex-col justify-center items-center p-2`}>
       <span className="flex flex-row">
