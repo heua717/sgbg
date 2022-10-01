@@ -8,9 +8,10 @@ import {
 type BtnMypageInfoProps = {
   type: "Participant" | "Host";
   user: {
+    email: string,
     memberScore: number;
     hostScore: number;
-    userId: string;
+    name: string;
   };
 };
 
