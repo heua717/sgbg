@@ -18,7 +18,7 @@ public class Wallet {
 	private long id;
 
 	private long ownerId; // userId
-	private String passwork; // 유저의 비밀번호
+	private String password; // 유저의 비밀번호
 	private String publicKey;
 	private String privateKey;
 	private String address;
@@ -28,8 +28,9 @@ public class Wallet {
 //	private BigDecimal balance = BigDecimal.valueOf(0);
 
 	@Builder
-	public Wallet(Long ownerId, String publicKey, String privateKey, String address) {
+	public Wallet(long ownerId, String password, String publicKey, String privateKey, String address) {
 		this.ownerId = ownerId;
+		this.password = password;
 		this.publicKey = publicKey;
 		this.privateKey = privateKey;
 		this.address = address;

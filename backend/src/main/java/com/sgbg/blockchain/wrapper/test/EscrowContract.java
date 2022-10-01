@@ -1,4 +1,4 @@
-package com.sgbg.blockchain.wrapper;
+package com.sgbg.blockchain.wrapper.test;
 
 /**
  * TODO Sub PJT Ⅲ 과제 3
