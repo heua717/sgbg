@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BtnProfileInfo from "../../components/buttons/BtnProfileInfo";
 import FinishedMeetingCard from "../../components/cards/FinishedMeetingCard";
 import Logo from "../../components/etc/Logo";
@@ -11,6 +11,10 @@ const ProfileHistory = () => {
     hostScore: 30,
     userId: "namm",
   };
+
+  useEffect(() => {
+    
+  });
 
   const list = [1, 2, 3, 4, 5, 6, 7];
 
