@@ -17,7 +17,8 @@ export interface room {
 }
 
 export interface roomMore extends room {
-  roomId?: number;
+  roomId?: any;
+  members? : object;
   endDate: string;
   reservationDate: string;
   price: number;
@@ -28,5 +29,5 @@ export const formatDate = (date: string): string => {
   let tmp = date.split("T");
   let newDate = tmp[0].split("-");
   let newTime = tmp[1].split(":");
-  return `[${newDate[0]}.${newDate[1]}.${newDate[2]}]  ${newTime[0]}시 ${newTime[1]}분`;
+  return `${newDate[0]}.${newDate[1]}.${newDate[2]}  ${newTime[0]}시 ${newTime[1]}분`;
 };

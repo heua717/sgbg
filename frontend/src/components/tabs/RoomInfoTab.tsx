@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { readRoom } from "../../api/room";
 import { formatDate, roomMore } from "../../util/room";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
-const RoomInfoTabs = () => {
-  const navigator = useNavigate();
+const RoomInfoTabs = (room:any) => {
+  // const navigator = useNavigate();
   const { meeting_id } = useParams<{ meeting_id: string }>();
   const [roomInfo, setRoomInfo] = useState<roomMore>({
     title: "",
@@ -33,10 +33,12 @@ const RoomInfoTabs = () => {
 
   useEffect(() => {
     //axios
+    // console.log(meeting_id); // ok
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
-          setRoomInfo({ ...data });
+          // console.log(data);
+          setRoomInfo({ ...data.roomInfo });
         })
         .catch((e) => {
           Swal.fire({
@@ -53,6 +55,7 @@ const RoomInfoTabs = () => {
   }, []);
 
   useEffect(() => {
+    // console.log(roomInfo);
     setLat(parseFloat(roomInfo.location.latitude));
     setLng(parseFloat(roomInfo.location.hardness));
     updateState([1]);

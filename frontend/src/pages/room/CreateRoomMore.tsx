@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomMore } from "../../util/room";
 import { inputRoomInfo } from "../../store/room";
@@ -69,13 +69,16 @@ const CreateRoomMore = () => {
   };
 
   // axios 보내기 0930 임지민
+  const navigate = useNavigate()
   const onClicktoSubmit = () => {
     // params로 recoil에 저장된 room을 보냄 0930 임지민
     console.log(room);
     
-    createRoom(room).then((res:any)=> {
-      console.log(res);
-      setRoomList(roomList.concat(res.data))
+    createRoom(room).then(({data})=> {
+      // console.log(res);
+      setRoomList(roomList.concat(data))
+      // 상세 페이지로 리다이렉트
+      navigate('/')
       // recoil 초기화
       resetRecoil();
     }).catch((err)=> {
