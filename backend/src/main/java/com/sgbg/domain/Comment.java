@@ -2,19 +2,22 @@ package com.sgbg.domain;
 
 
 
-import lombok.Builder;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Table(name = "comment")
 public class Comment {
 
