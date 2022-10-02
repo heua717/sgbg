@@ -1,37 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentMedical } from '@fortawesome/free-solid-svg-icons'
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getParticipantBadge } from "../../util/profile";
-import { createComment, readComment } from "../../api/community";
+import { createComment, readComment, deleteComment, updateComment } from "../../api/community";
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { auth } from "../../store/auth";
+import Swal from "sweetalert2";
 
-const CommunityTab = () => {
-  const comments = [
-    {
-      userId: "host",
-      participantScore: 88,
-      comment: "안녕하세요~~ 블루 하와이안 만들기 모임장입니다!! 참여자 분들은 내일 2시까지 삼성역 5번 출구에서 만나요~",
-      createdDate: "1시간 전"
-    },
-    {
-      userId: "user1",
-      participantScore: 43,
-      comment: "제 온도가 가장 낮으니 가장 먼저 도착하도록 하겠습니다. 열어분 걱정 마세요",
-      createdDate: "1시간 전"
-    },
-    {
-      userId: "user1",
-      participantScore: 43,
-      comment: "제 온도가 가장 낮으니 가장 먼저 도착하도록 하겠습니다. 열어분 걱정 마세요",
-      createdDate: "1시간 전"
-    },
-    {
-      userId: "user1",
-      participantScore: 43,
-      comment: "제 온도가 가장 낮으니 가장 먼저 도착하도록 하겠습니다. 열어분 걱정 마세요",
-      createdDate: "1시간 전"
-    },
-  ];
+
+const CommunityTab = (props: any) => {
+
+  const navigate = useNavigate()
+  let {meeting_id} = useParams()
 
   const [commentList, setCommentList] = useState([{
     content: '',
@@ -42,12 +23,14 @@ const CommunityTab = () => {
     }])
 
   const [ comment, setComment ] = useState('')
+  const [userAuth] = useRecoilState(auth);
+
+
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const {value} = e.target
     setComment(value)
   };
 
-  let {meeting_id} = useParams()
 
   const onClickSubmit = (e: React.MouseEvent) => {
     // 버튼을 누르면 usestate content에 작성한 내용이 저장됨
@@ -62,66 +45,112 @@ const CommunityTab = () => {
     }).then((res)=>{
       console.log(res);
       // 다 되면 현재 페에지 리다이렉트
+      readCommentList();
     })    
   }
 
-  // 컴포넌트 create될 때 axios
-  useEffect(()=>{
-    // console.log('hello community');
-    
+  const readCommentList = () => {
     readComment(Number(meeting_id))
     .then(({data})=> {
       console.log(data);
+      // 저장해주고
       setCommentList(commentList.concat(data))
+      // navigate(0)
     })
+    console.log(commentList.length);
+    
+  }
+  // 컴포넌트 create될 때 axios
+  useEffect(()=>{
+    // 만약 로그인이 안되어 있거나, 이 모임의 참여자가 아니면 리다이렉트 시키기
+    console.log(userAuth);
+    /* if (userAuth.isLogined === false){
+      Swal.fire({
+        title: '모임에 참여한 사용자만 접근 가능합니다.',
+        icon: 'error',
+        timer: 5000,
+      }).then(()=>{
+        navigate(0);
+      })
+    } else { */
+      readCommentList();
+    // }
+    
+    // 전체 커뮤니티 글 읽어오기
   }, [])
 
+  // 삭제하기
+  const onClickDelete = (commentId: number):any => {
+    deleteComment(commentId)
+    .then(({data})=> {
+      console.log(data);
+    })
+  }
+
+  // const onClickUpdate = (commentId: number): any => {
+
+  // }
 
   return (
     <div>
-      <div className="grid grid-cols-12">
-        <textarea 
-            name="community" 
-            id="community" 
-            onChange={onChange}
-            style={{resize: "none", border: "5px solid #5280C0"}}
-            className="rounded-l col-start-1 col-end-12"
-            placeholder="글을 작성해주세요"
-            cols={40} 
-            rows={3}></textarea> 
-        <button type="submit" onClick={onClickSubmit}
-          className="bg-blue-200 rounded-r text-white text-lg border-none">
-          <FontAwesomeIcon icon={faCommentMedical}/>
-        </button>
-      </div>
-      {/* 작성된 게시글 */}
-      <div className="h-[75vh]">
-        {commentList.map(comment=>
-          <div className="my-5 border rounded p-2">
-            <Link to={`/profile/${comment.username}`}>
-            <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
-              <div className="w-[25px] h-[25px] mr-2">
-                <img
-                  className="w-full h-full"
-                  src={
-                    process.env.PUBLIC_URL + `/img/userBadge` + getParticipantBadge(comment.userScore) + ".png"
-                  }
-                  alt="사용자 뱃지"
-                />
-              </div>
-              <span className="font-semibold leading-tightl">{comment.username}</span>
-            </div>
-            </Link>
+        <div>
+          <div className="grid grid-cols-12">
+            <textarea 
+                name="community" 
+                id="community" 
+                onChange={onChange}
+                style={{resize: "none", border: "5px solid #5280C0"}}
+                className="rounded-l col-start-1 col-end-12"
+                placeholder="글을 작성해주세요"
+                cols={40} 
+                rows={3}></textarea> 
+            <button type="submit" onClick={onClickSubmit}
+              className="bg-blue-200 rounded-r text-white text-lg border-none">
+              <FontAwesomeIcon icon={faCommentMedical}/>
+            </button>
+          </div>
+          {/* 작성된 게시글 */}
+        {commentList.length > 1 && (
+          <div className="h-[75vh]">
+            {commentList.map(comment=>
+              <div className="my-5 border rounded p-2">
+                <div className="justify-between">
+                  <Link to={`/profile/${comment.username}`}>
+                    <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
+                      <div className="w-[25px] h-[25px] mr-2">
+                        <img
+                          className="w-full h-full"
+                          src={
+                            process.env.PUBLIC_URL + `/img/userBadge` + getParticipantBadge(comment.userScore) + ".png"
+                          }
+                          alt="사용자 뱃지"
+                        />
+                      </div>
+                      <span className="font-semibold leading-tightl">{comment.username}</span>
+                    </div>
+                  </Link>
+                  {userAuth.userId === comment.username && (
+                    <div>
+                      {/* <button onClick={onClickUpdate(comment.commentId)}>수정하기</button> */}
+                      <button onClick={onClickDelete(comment.commentId)}>삭제하기</button>
+                    </div>
+                  )}
+                </div>
 
-            <div className="rounded p-2">
-              <p>{comment.content}</p>
-            </div>
-            <div className="font-semibold text-xs text-right mt-2 mr-2">
-              <p>{comment.createdAt}</p>
-            </div>
+                <div className="rounded p-2">
+                  <p>{comment.content}</p>
+                </div>
+                <div className="font-semibold text-xs text-right mt-2 mr-2">
+                  <p>{comment.createdAt}</p>
+                </div>
+              </div>
+            )}
           </div>
         )}
-      </div>
+        </div>
+      {commentList.length === 1 && (
+        <p className="mt-5 text-lg text-center font-semibold">아직 작성된 글이 없습니다!</p>
+      )}
     </div>
   );
 };
