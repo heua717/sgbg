@@ -1,6 +1,7 @@
 package com.sgbg.api.response;
 
 import com.sgbg.domain.Location;
+import com.sgbg.domain.Participation;
 import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -65,7 +66,7 @@ public class BaseRoomRes {
 
     public static BaseRoomRes of(Room room) {
         BaseRoomRes baseRoomRes = new BaseRoomRes();
-        baseRoomRes.setRoomId(room.getRoomId());
+        baseRoomRes.setRoomId(room.getId());
         baseRoomRes.setTitle(room.getTitle());
         baseRoomRes.setHostName(room.getHostName());
         baseRoomRes.setParentCategory(room.getParentCategory());
@@ -82,9 +83,9 @@ public class BaseRoomRes {
         return baseRoomRes;
     }
 
-    public void setMembers(List<User> members) {
-        for(User member: members) {
-            this.members.add(BaseUserRes.of(member));
+    public void setMembers(List<Participation> members) {
+        for(Participation member: members) {
+            this.members.add(BaseUserRes.of(member.getUser()));
         }
     }
 }

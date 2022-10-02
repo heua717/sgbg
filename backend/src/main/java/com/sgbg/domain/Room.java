@@ -25,7 +25,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "room_id")
-    private Long roomId;
+    private Long id;
 
     @Column(name = "parent_category")
     private String parentCategory;
@@ -69,9 +69,14 @@ public class Room {
     @Column(name = "description")
     private String description;
 
-    @JsonManagedReference
-    @ManyToMany(mappedBy = "myRooms", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<User> members = new ArrayList<>();
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+    private List<Participation> members = new ArrayList<>();
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+    private List<HostEvaluation> hostEvaluations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+    private List<MemberEvaluation> memberEvaluations = new ArrayList<>();
 
     @Builder
     public Room(String parentCategory, String childCategory,

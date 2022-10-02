@@ -2,11 +2,13 @@ package com.sgbg.service;
 
 import com.sgbg.common.exception.NotFoundException;
 import com.sgbg.domain.Room;
+import com.sgbg.repository.ParticipationRepository;
 import com.sgbg.repository.UserRepository;
 import com.sgbg.service.interfaces.IUserService;
 import com.sgbg.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +20,11 @@ public class UserService implements IUserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ParticipationRepository participationRepository;
+
     @Override
+    @Transactional
     public User createUser(Map<String, String> userInfo) {
         User user = User.builder()
                 .name(userInfo.get("name"))
@@ -40,13 +46,15 @@ public class UserService implements IUserService {
             throw new NotFoundException("회원 정보를 찾을 수 없습니다.");
         }
 
+        List<Room> myRoomsByUserId = participationRepository.findMyRoomsByUserId(userId);
+
         if (isHost) { // host = true
-            return user.getMyRooms()
+            return myRoomsByUserId
                     .stream().filter(room -> room.getHostId().equals(userId))
                     .collect(Collectors.toList());
         }
-        return user.getMyRooms()
-                .stream().filter(room -> !room.getRoomId().equals(userId))
+        return myRoomsByUserId
+                .stream().filter(room -> !room.getHostId().equals(userId))
                 .collect(Collectors.toList());
     }
 }

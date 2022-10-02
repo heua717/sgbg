@@ -52,7 +52,7 @@ public class RoomService {
     }
 
     public Room getRoom(Long roomId) {
-        return roomRepository.findByRoomId(roomId).orElse(null);
+        return roomRepository.findById(roomId).orElse(null);
 //        if(room==null){
 //            throw NullPointerException("not find room");
 //        }
