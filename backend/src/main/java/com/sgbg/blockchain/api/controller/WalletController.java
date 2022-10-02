@@ -1,5 +1,6 @@
 package com.sgbg.blockchain.api.controller;
 
+import com.google.api.Http;
 import com.sgbg.blockchain.api.response.BaseResponseBody;
 import com.sgbg.blockchain.api.response.WalletHistoryListRes;
 import com.sgbg.blockchain.api.response.WalletHistoryRes;
@@ -34,9 +35,7 @@ public class WalletController {
     @GetMapping
     public ResponseEntity<? extends BaseResponseBody> checkWallet(HttpServletRequest request) {
 
-        // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-//        cookieUtil.getUserIdByToken(request);
-        long userId = 3L;
+        long userId = cookieUtil.getUserIdByToken(request);
 
         try {
             walletService.checkWallet(userId);
@@ -51,10 +50,9 @@ public class WalletController {
     }
 
     @PostMapping
-    public ResponseEntity<? extends BaseResponseBody> getWallet(@RequestParam String password) {
+    public ResponseEntity<? extends BaseResponseBody> getWallet(@RequestParam String password, HttpServletRequest request) {
 
-        // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = 1L;
+        long userId = cookieUtil.getUserIdByToken(request);
 
         try {
             Wallet wallet = walletService.getWallet(userId, password);
@@ -68,10 +66,10 @@ public class WalletController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestParam String password) {
+    public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestParam String password, HttpServletRequest request) {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = 3L;
+        long userId = cookieUtil.getUserIdByToken(request);
 
         Wallet wallet = null;
         try {
@@ -88,10 +86,10 @@ public class WalletController {
     }
 
     @PostMapping("/charge")
-    public ResponseEntity<? extends BaseResponseBody> charge(@RequestParam long money){
+    public ResponseEntity<? extends BaseResponseBody> charge(@RequestParam long money, HttpServletRequest request){
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = 2L;
+        long userId = cookieUtil.getUserIdByToken(request);
 
         try {
             Wallet wallet = walletService.charge(userId, money);
@@ -106,10 +104,10 @@ public class WalletController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<? extends BaseResponseBody> history(){
+    public ResponseEntity<? extends BaseResponseBody> history(HttpServletRequest request){
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = 1L;
+        long userId = cookieUtil.getUserIdByToken(request);
 
         try {
             List<WalletHistory> walletHistoryList = walletService.getHistoryList(userId);
