@@ -15,3 +15,13 @@ export const readComment = (roomId: number) =>{
   const url = `comment/${roomId}`
   return api.get(url)
 }
+
+export const deleteComment = (commentId: number) => {
+  const url = `/comment/${commentId}/delete`;
+  return api.post(url);
+};
+
+export const updateComment = (commentId: number) => {
+  const url = `/comment/${commentId}/update`;
+  return api.post(url);
+};
