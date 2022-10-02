@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RoomInfoTab from "./RoomInfoTab";
 import ParticipantListTab from "./ParticipantListTab";
 import CommunityTab from "./CommunityTab";
 
-const RoomTabs = () => {
+
+const RoomTabs = (props: any) => {
   const data = [
     {
       id: 0,
@@ -13,7 +14,7 @@ const RoomTabs = () => {
     {
       id: 1,
       title: "참여자 목록",
-      component: <ParticipantListTab />,
+      component: <ParticipantListTab room={props.room}/>,
     },
     {
       id: 2,
@@ -21,7 +22,10 @@ const RoomTabs = () => {
       component: <CommunityTab />,
     },
   ];
-
+  useEffect(()=> {
+    console.log('create room tabs=', props.room);
+    
+  })
   const [index, setIndex] = useState(0);
 
   return (

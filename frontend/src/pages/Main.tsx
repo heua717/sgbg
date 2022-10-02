@@ -14,26 +14,24 @@ import { roomMore } from "../util/room";
 const Main = () => {
   // axios 통신 0929 임지민
   const [mainRoomList, setMainRoomList] = useState<roomMore[]>([])
-  const [ isFetching, setFetching ] = useState(false)
-  const [ page, setPage ] = useState(1)
 
   const fetchMainRoomList = async () => {
-    setFetching(true)
+    // setFetching(true)
 
-    await getRoomList(page, 5, 'roomId, DESC')
-    .then((res) => {
-      console.log(res.data.roomListRes);
-      // setMainRoomList(mainRoomList.concat(res.data.))
-      
-    })
+    await getRoomList('roomId, DESC')
+    .then(({data}) => {
+      console.log(data.roomListInfo);
+      setMainRoomList(mainRoomList.concat(data.roomListInfo))
+    }, )
   }
   
 
   // 화면에 띄우기 위한 임시 리스트
   useEffect(()=>{
-    console.log(isFetching);
-    
-  })
+    // console.log(isFetching);
+    fetchMainRoomList()
+  }, [])
+
   return (
     <div>
       {/* 로고 */}
@@ -43,16 +41,14 @@ const Main = () => {
       {/* 필터바 */}
       <FilterBar />
       {/* 모임리스트 */}
-      {isFetching && (
-        <div className="w-per95 m-auto grid grid-cols-1 gap-1">
-          {mainRoomList.map((room:roomMore) => (
-            <Link to={`/meeting/${room.roomId}`}>
-              {/* <p>{room.title}</p> */}
-              <MeetingCard name="main" room={room}></MeetingCard>
-            </Link>
-          ))}
-        </div>
-      )}
+      <div className="w-per95 m-auto grid grid-cols-1 gap-1">
+        {mainRoomList.map((room:roomMore) => (
+          <Link to={`/meeting/${room.roomId}`} key={room.roomId}>
+            {/* <p>{room.title}</p> */}
+            <MeetingCard name="main" room={room}></MeetingCard>
+          </Link>
+        ))}
+      </div>
 
       {/* 모임버튼 */}
       <div>
