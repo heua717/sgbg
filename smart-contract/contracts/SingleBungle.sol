@@ -5,10 +5,10 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./IERC20.sol";
 
 interface SingleBungleInterface {
-    function enterRoom() external payable; // 입장하기
-    function leaveRoom() external payable; // 퇴장하기
-    function withdraw() external payable; // 방장이 출금하기
-    function isSuccess(bool _flag) external; // 성공/실패 여부 저장
+    function enterRoom(address _member, uint _value) external payable; // 입장하기
+    function leaveRoom(address _member, uint _value) external payable; // 퇴장하기
+    function withdraw(address _sender) external payable; // 방장이 출금하기
+    function isSuccess(address _member, bool _flag) external; // 성공/실패 여부 저장
 }
 
 contract SingleBungle is SingleBungleInterface {
@@ -52,35 +52,35 @@ contract SingleBungle is SingleBungleInterface {
     }
 
     // 입장하기: 참가자 추가 + 참가자 ETH 지불
-    function enterRoom() external payable
+    function enterRoom(address _member, uint _value) external payable
     onlyPayableMember
     onlyWithinRecruitPeriod {
         memberLength++; // add member
-        memberToMoney[msg.sender] = msg.value; // save who send wei
-        memberToSuccess[msg.sender] = true;
-        sgbgToken.transferFrom(msg.sender, address(this), msg.value); // send SBTKN from member to contract
+        memberToMoney[_member] = _value; // save who send wei
+        memberToSuccess[_member] = true;
+        sgbgToken.transferFrom(_member, address(this), _value); // send SBTKN from member to contract
         // payable(address(this)).transfer(msg.value); // send wei from member to contract
     }
 
     // 해당 방 유저인 경우
-    modifier onlyRoomMember() {
-        require(memberToMoney[msg.sender] > 0, "NOT A ROOM MEMBER");
+    modifier onlyRoomMember(address _member) {
+        require(memberToMoney[_member] > 0, "NOT A ROOM MEMBER");
         _;
     }
 
     // 퇴장하기: 참가자 삭제 + 참가자가 송금했던 ETH 출금
-    function leaveRoom() external payable
-    onlyRoomMember
+    function leaveRoom(address _member, uint _value) external payable
+    onlyRoomMember(_member)
     onlyWithinRecruitPeriod {
         memberLength--; // delete member
-        sgbgToken.transferFrom(address(this), msg.sender, memberToMoney[msg.sender]); // send SBTKN from contract to member
+        sgbgToken.transferFrom(address(this), _member, memberToMoney[_member]); // send SBTKN from contract to member
         // payable(msg.sender).transfer(memberToMoney[msg.sender]); // send eth from contract to member
-        delete memberToMoney[msg.sender]; // delete who send eth
+        delete memberToMoney[_member]; // delete who send eth
     }
 
     // 방장만 ETH 출금 가능
-    modifier onlyHost() {
-        require(msg.sender == host, "NOT HOST ADDRESS");
+    modifier onlyHost(address _sender) {
+        require(_sender == host, "NOT HOST ADDRESS");
         _;
     }
 
@@ -91,10 +91,10 @@ contract SingleBungle is SingleBungleInterface {
     }
 
     // 출금하기: 모집이 성공적으로 마감되었을 때, ETH 출금
-    function withdraw() public payable
-    onlyHost
+    function withdraw(address _sender) public payable
+    onlyHost(_sender)
     onlyAfterRoomCloses {
-        sgbgToken.transferFrom(address(this), msg.sender, address(this).balance); // send all SBTKN from contract to member
+        sgbgToken.transferFrom(address(this), _sender, address(this).balance); // send all SBTKN from contract to member
         // payable(msg.sender).transfer(address(this).balance); // send all eth from contract to member
     }
 
@@ -110,10 +110,10 @@ contract SingleBungle is SingleBungleInterface {
     }
 
     // 성공/실패 여부 저장: 실패 시, 성공 값 변경
-    function isSuccess(bool _flag) external
+    function isSuccess(address _member, bool _flag) external
     onlyWithinSurveyPeriod {
         if(_flag == false) {
-            memberToSuccess[msg.sender] = _flag;
+            memberToSuccess[_member] = _flag;
         }
     }
 }
