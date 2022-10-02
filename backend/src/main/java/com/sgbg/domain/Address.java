@@ -1,6 +1,6 @@
 package com.sgbg.domain;
 
-import com.sgbg.blockchain.EthereumTransaction;
+import com.sgbg.blockchain.wrapper.test.EthereumTransaction;
 
 import java.math.BigInteger;
 import java.util.List;

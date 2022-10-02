@@ -1,7 +1,7 @@
 package com.sgbg.service;
 
 import com.sgbg.service.interfaces.ICashContractService;
-import com.sgbg.blockchain.CashContract;
+import com.sgbg.blockchain.wrapper.test.CashContract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

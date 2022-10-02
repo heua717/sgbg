@@ -1,6 +1,6 @@
-package com.sgbg.domain.factory;
+package com.sgbg.blockchain.domain.factory;
 
-import com.sgbg.domain.Wallet;
+import com.sgbg.blockchain.domain.Wallet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,9 +14,8 @@ public class WalletFactory
 		wallet.setId(rs.getLong("id"));
 		wallet.setOwnerId(rs.getLong("owner_id"));
 		wallet.setAddress(rs.getString("address"));
-		wallet.setBalance(rs.getBigDecimal("balance"));
-		wallet.setReceivingCount(rs.getInt("receiving_count"));
-		wallet.setCash(rs.getInt("cash"));
+//		wallet.setBalance(rs.getBigDecimal("balance"));
+//		wallet.setCash(rs.getInt("cash"));
 
 		return wallet;
 	}
