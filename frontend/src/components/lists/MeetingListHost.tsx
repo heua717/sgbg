@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 const MeetingListHost = () => {
   const room:roomMore = {
+    "roomId": '',
     "title":"만든 모임",
     "parentCategory":"기타",
     "childCategory":"기타",

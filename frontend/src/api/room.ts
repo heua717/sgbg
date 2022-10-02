@@ -10,3 +10,8 @@ export const readRoom = (_id: string) => {
   const url = "room/" + _id;
   return api.get(url);
 };
+
+export const intoRoom = (id: any) => {
+  const url = "user/room/add";
+  return api.post(url, id)
+}
