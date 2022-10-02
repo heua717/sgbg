@@ -33,7 +33,13 @@ const CommunityTab = () => {
     },
   ];
 
-  const [commentList, setCommentList] = useState([])
+  const [commentList, setCommentList] = useState([{
+    content: '',
+    commentId: 0,
+    createdAt: '',
+    username: '',
+    userScore: 0,
+    }])
 
   const [ comment, setComment ] = useState('')
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -68,7 +74,7 @@ const CommunityTab = () => {
       console.log(data);
       setCommentList(commentList.concat(data))
     })
-  })
+  }, [])
 
 
   return (
@@ -90,28 +96,28 @@ const CommunityTab = () => {
       </div>
       {/* 작성된 게시글 */}
       <div className="h-[75vh]">
-        {comments.map(comment=>
+        {commentList.map(comment=>
           <div className="my-5 border rounded p-2">
-            <Link to={`/profile/${comment.userId}`}>
+            <Link to={`/profile/${comment.username}`}>
             <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
               <div className="w-[25px] h-[25px] mr-2">
                 <img
                   className="w-full h-full"
                   src={
-                    process.env.PUBLIC_URL + `/img/userBadge` + getParticipantBadge(comment.participantScore) + ".png"
+                    process.env.PUBLIC_URL + `/img/userBadge` + getParticipantBadge(comment.userScore) + ".png"
                   }
                   alt="사용자 뱃지"
                 />
               </div>
-              <span className="font-semibold leading-tightl">{comment.userId}</span>
+              <span className="font-semibold leading-tightl">{comment.username}</span>
             </div>
             </Link>
 
             <div className="rounded p-2">
-              <p>{comment.comment}</p>
+              <p>{comment.content}</p>
             </div>
             <div className="font-semibold text-xs text-right mt-2 mr-2">
-              <p>{comment.createdDate}</p>
+              <p>{comment.createdAt}</p>
             </div>
           </div>
         )}
