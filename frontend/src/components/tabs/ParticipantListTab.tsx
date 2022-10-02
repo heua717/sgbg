@@ -3,7 +3,7 @@ import {
   getProgressColor,
 } from "../../util/profile";
 import { Link } from "react-router-dom";
-import { roomMore } from "../../util/room";
+// import { roomMore } from "../../util/room";
 import { useEffect, useState } from "react";
 
 // host가 무조건 0번째에 오도록 하고, 나머지는 뒤에 concat하기

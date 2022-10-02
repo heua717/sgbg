@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import RoomInfoTab from "./RoomInfoTab";
 import ParticipantListTab from "./ParticipantListTab";
 import CommunityTab from "./CommunityTab";
-import { roomMore } from "../../util/room";
 
 
 const RoomTabs = (props: any) => {

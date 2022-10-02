@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 
 const ReadRoom = () => {
   const { meeting_id } = useParams<{ meeting_id: string }>();
-  const [userAuth, setUserAuth] = useRecoilState(auth);
+  const [userAuth ] = useRecoilState(auth);
 
   const [room, setRoom] = useState<roomMore>({
     roomId: 0,
@@ -50,7 +50,7 @@ const ReadRoom = () => {
     }
   }, []);
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const onClick = () => {
     // 참여자 늘리는 axios 요청 보내기

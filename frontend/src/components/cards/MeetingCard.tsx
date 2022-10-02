@@ -1,6 +1,5 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
 import { formatDate } from "../../util/room";
 // import { useEffect } from "react";
 // import { useRecoilState } from "recoil";
