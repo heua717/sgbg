@@ -7,7 +7,7 @@ import { api } from "./API";
 // }
 
 // 메인 페이지에서 모임 전체 
-export const getRoomList = (pageNum:number, pageSize:number, sort: string) => {
-  const url = `/room?page=${pageNum}&size=${pageSize}&sort=${sort}`;
+export const getRoomList = (sort: string) => {
+  const url = `/room?sort=${sort}`;
   return api.get(url);
 };
