@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,64 +21,40 @@ public class Transaction {
 
     private String hash;
 
-    private String nonce;
+    private String contractAddress;
 
     private String blockHash;
 
-    private String blockNumber;
+    private long blockNumber;
 
-    private String transactionIndex;
+    private long transactionIndex;
 
-    private String fromHash;
+    private String from;
 
-    private String toHash;
+    private String to;
 
-    private String value;
+    private long money;
 
-    private String gasPrice;
+    private long gas;
 
-    private String gas;
-
-    private String input;
-
-    private String creates;
-
-    private String publicKey;
-
-    private String raw;
-
-    private String r;
-
-    private String s;
-
-    private String v;
-
-    private String storedAt;
+    private LocalDateTime storedAt;
 
     private Boolean relatedToMoney;
     // 돈 관련 있는 것과 아닌 것으로 나누고 싶다고 누군가가 말했음
 
 
     @Builder
-    public Transaction(long id, String hash, String nonce, String blockHash, String blockNumber, String transactionIndex, String fromHash, String toHash, String value, String gasPrice, String gas, String input, String creates, String publicKey, String raw, String r, String s, String v, String storedAt, Boolean relatedToMoney) {
+    public Transaction(long id, String hash, String contractAddress, String blockHash, long blockNumber, long transactionIndex, String from, String to, long money, long gas, LocalDateTime storedAt, Boolean relatedToMoney) {
         this.id = id;
         this.hash = hash;
-        this.nonce = nonce;
+        this.contractAddress = contractAddress;
         this.blockHash = blockHash;
         this.blockNumber = blockNumber;
         this.transactionIndex = transactionIndex;
-        this.fromHash = fromHash;
-        this.toHash = toHash;
-        this.value = value;
-        this.gasPrice = gasPrice;
+        this.from = from;
+        this.to = to;
+        this.money = money;
         this.gas = gas;
-        this.input = input;
-        this.creates = creates;
-        this.publicKey = publicKey;
-        this.raw = raw;
-        this.r = r;
-        this.s = s;
-        this.v = v;
         this.storedAt = storedAt;
         this.relatedToMoney = relatedToMoney;
     }

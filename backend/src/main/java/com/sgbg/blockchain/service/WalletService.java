@@ -2,7 +2,9 @@ package com.sgbg.blockchain.service;
 
 import com.sgbg.blockchain.common.exception.NoWalletException;
 import com.sgbg.blockchain.common.exception.WrongPasswordException;
+import com.sgbg.blockchain.domain.Transaction;
 import com.sgbg.blockchain.domain.WalletHistory;
+import com.sgbg.blockchain.repository.TransactionRepository;
 import com.sgbg.blockchain.repository.WalletHistoryRepository;
 import com.sgbg.blockchain.repository.WalletRepository;
 import com.sgbg.blockchain.service.interfaces.IWalletService;
@@ -46,7 +48,9 @@ public class WalletService implements IWalletService {
 
     @Autowired
     WalletHistoryRepository walletHistoryRepository;
-    // 지갑이 사용되는 매 이벤트마다 walletHistory에 넣는다.
+
+    @Autowired
+    TransactionRepository transactionRepository;
 
     @Override
     public Wallet createWallet(long userId, String password) throws Exception{
@@ -117,7 +121,14 @@ public class WalletService implements IWalletService {
         System.out.println("receipt: "+ receipt.getTransactionHash());
 
         // TransactionReceipt를 가지고 Transaction 엔티티만들어서 저장한다.
-
+        Transaction transaction = Transaction.builder()
+                        .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+                        .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+                        .transactionIndex(receipt.getTransactionIndex().longValue())
+                        .from(receipt.getFrom()).to(receipt.getTo())
+                        .money(money).gas(receipt.getGasUsed().longValue())
+                        .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
+        transactionRepository.save(transaction);
         // -----------------------------------------------
 
         // 스마트 컨트랙트를 사용하여 돈을 충전했다면 db에도 반영시킨다.
@@ -173,6 +184,17 @@ public class WalletService implements IWalletService {
 
         // contract 로부터 transactionReceipt를 받아와서 transaction 저장
         TransactionReceipt receipt = contract.getTransactionReceipt().orElse(null);
+        if(receipt == null){
+            return null;
+        }
+        Transaction transaction = Transaction.builder()
+                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+                .transactionIndex(receipt.getTransactionIndex().longValue())
+                .from(receipt.getFrom()).to(receipt.getTo())
+                .gas(receipt.getGasUsed().longValue())
+                .storedAt(LocalDateTime.now()).relatedToMoney(false).build();
+        transactionRepository.save(transaction);
         //-----------------------------------------------------------
 
         return contract.getContractAddress(); // 방금 생성한 싱글벙글 스마트 컨트랙트 주소 반환
@@ -214,7 +236,14 @@ public class WalletService implements IWalletService {
         TransactionReceipt receipt = contract.enterRoom(userAddress, BigInteger.valueOf(money)).send();
 
         // transactionReceipt를 통해 엔티티 저장
-
+        Transaction transaction = Transaction.builder()
+                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+                .transactionIndex(receipt.getTransactionIndex().longValue())
+                .from(receipt.getFrom()).to(receipt.getTo())
+                .money(money).gas(receipt.getGasUsed().longValue())
+                .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
+        transactionRepository.save(transaction);
         // -------------- 스마트 컨트랙트 끝 --------------------
 
         // 스마트 컨트랙트에서 돈을 모았다가 모임이 성사되면 모인돈을 한번에 호스트에게 주는 방식
@@ -264,7 +293,14 @@ public class WalletService implements IWalletService {
         TransactionReceipt receipt = contract.leaveRoom(userAddress, BigInteger.valueOf(money)).send();
 
         // transaction 엔티티 저장
-
+        Transaction transaction = Transaction.builder()
+                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+                .transactionIndex(receipt.getTransactionIndex().longValue())
+                .from(receipt.getFrom()).to(receipt.getTo())
+                .money(-money).gas(receipt.getGasUsed().longValue())
+                .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
+        transactionRepository.save(transaction);
         // -------------- 스마트 컨트랙트 끝 --------------------
 
         WalletHistory userWalletHistory = WalletHistory.builder()
@@ -303,10 +339,19 @@ public class WalletService implements IWalletService {
 
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
         TransactionReceipt receipt = contract.withdraw(hostAddress).send();
-        // transaction 엔티티 저장
 
         BigInteger afterWithdraw = cashContract.balanceOf(hostAddress).send();
         long withdrawMoney = afterWithdraw.longValue() - beforeWithdraw.longValue();
+
+        // transaction 엔티티 저장
+        Transaction transaction = Transaction.builder()
+                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+                .transactionIndex(receipt.getTransactionIndex().longValue())
+                .from(receipt.getFrom()).to(receipt.getTo())
+                .money(withdrawMoney).gas(receipt.getGasUsed().longValue())
+                .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
+        transactionRepository.save(transaction);
 
         // 모임에서 모인 돈을 계산하여 hostWallet.setCash()를 해준다.
         hostWallet.setCash(afterWithdraw.longValue());
