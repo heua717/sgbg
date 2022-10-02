@@ -1,7 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentMedical } from '@fortawesome/free-solid-svg-icons'
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getParticipantBadge } from "../../util/profile";
+import { createComment } from "../../api/community";
+import React, { useState } from "react";
 
 const CommunityTab = () => {
   const comments = [
@@ -30,18 +32,47 @@ const CommunityTab = () => {
       createdDate: "1시간 전"
     },
   ];
+
+  const [ comment, setComment ] = useState('')
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const {value} = e.target
+    setComment(value)
+  };
+
+  let {meeting_id} = useParams()
+
+  const onClickSubmit = (e: React.MouseEvent) => {
+    // 버튼을 누르면 usestate content에 작성한 내용이 저장됨
+    // const value = e.target
+    // console.log(comment); // ok
+    
+    // 버튼을 누르면 axios 요청 with content and room_id
+    // console.log(meeting_id, comment); ok
+    createComment({
+      content: comment,
+      room_id: Number(meeting_id)
+    }).then((res)=>{
+      console.log(res);
+      // 다 되면 현재 페에지 리다이렉트
+    })    
+  }
+
+  // 컴포넌트 create될 때 axios
+
   return (
     <div>
       <div className="grid grid-cols-12">
         <textarea 
             name="community" 
             id="community" 
+            onChange={onChange}
             style={{resize: "none", border: "5px solid #5280C0"}}
             className="rounded-l col-start-1 col-end-12"
             placeholder="글을 작성해주세요"
             cols={40} 
             rows={3}></textarea> 
-        <button type="submit" className="bg-blue-200 rounded-r text-white text-lg border-none">
+        <button type="submit" onClick={onClickSubmit}
+          className="bg-blue-200 rounded-r text-white text-lg border-none">
           <FontAwesomeIcon icon={faCommentMedical}/>
         </button>
       </div>
