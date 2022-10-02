@@ -29,8 +29,10 @@ public class Transaction {
 
     private long transactionIndex;
 
+    @Column(name = "transaction_from")
     private String from;
 
+    @Column(name = "transaction_to")
     private String to;
 
     private long money;
