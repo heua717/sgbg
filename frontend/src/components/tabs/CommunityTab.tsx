@@ -50,7 +50,7 @@ const CommunityTab = () => {
     // console.log(meeting_id, comment); ok
     createComment({
       content: comment,
-      room_id: Number(meeting_id)
+      roomId: Number(meeting_id)
     }).then((res)=>{
       console.log(res);
       // 다 되면 현재 페에지 리다이렉트
