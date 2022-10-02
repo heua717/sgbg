@@ -22,8 +22,6 @@ type Wallet = {
   cash: number;
 };
 
-
-
 const Wallet = (): JSX.Element => {
   const navigator = useNavigate();
   const [walletHistories, setWalletHistoies] = useState<WalletHistory[]>([]);
@@ -32,11 +30,11 @@ const Wallet = (): JSX.Element => {
   useEffect(() => {
     if (!userAuth.isLogined) {
       Swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: '잘못된 접근입니다.',
+        position: "center",
+        icon: "warning",
+        title: "로그인이 필요합니다.",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
       navigator("/login");
       return;
@@ -72,11 +70,11 @@ const Wallet = (): JSX.Element => {
           })
           .catch((error) => {
             Swal.fire({
-              position: 'center',
-              icon: 'warning',
-              title: '잘못된 비밀번호입니다. &#x1F97A',
+              position: "center",
+              icon: "warning",
+              title: "잘못된 비밀번호입니다. &#x1F97A",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
             navigator("/");
           });
@@ -107,13 +105,20 @@ const Wallet = (): JSX.Element => {
             {walletHistories.map((history) => (
               <div className="flex justify-between border-b border-solid my-2 py-2">
                 <div className="flex flex-row justify-between">
-                  <p className="mr-5 text-sm">{history.date}</p>
-                  <p className="mr-5 text-sm">{history.roomName}</p>
+                  <p className="mr-5 text-sm">{history.date && history.date}</p>
+                  {history.roomId ? (
+                    <p className="mr-5 text-sm">{history.roomName && history.roomName}</p>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="flex flex-col">
-                  <p>{history.money} ETH</p>
+                  <p>{history.money && history.money} ETH</p>
                   <p className="text-xs">
-                    {history.totalMoneyBeforeTransaction + history.money} ETH
+                    {history.totalMoneyBeforeTransaction &&
+                      history.money &&
+                      history.totalMoneyBeforeTransaction + history.money}{" "}
+                    ETH
                   </p>
                 </div>
               </div>
