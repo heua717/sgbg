@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentMedical } from '@fortawesome/free-solid-svg-icons'
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getParticipantBadge } from "../../util/profile";
 import { createComment, readComment } from "../../api/community";
 import React, { useEffect, useState } from "react";
 
 const CommunityTab = () => {
-  const comments = [
+  /*const comments = [
     {
       userId: "host",
       participantScore: 88,
@@ -31,7 +31,9 @@ const CommunityTab = () => {
       comment: "제 온도가 가장 낮으니 가장 먼저 도착하도록 하겠습니다. 열어분 걱정 마세요",
       createdDate: "1시간 전"
     },
-  ];
+  ]; */
+
+  const navigate = useNavigate()
 
   const [commentList, setCommentList] = useState([{
     content: '',
@@ -71,57 +73,66 @@ const CommunityTab = () => {
     
     readComment(Number(meeting_id))
     .then(({data})=> {
-      console.log(data);
+      // console.log(data);
+      // 저장해주고
       setCommentList(commentList.concat(data))
+      navigate(0)
     })
   }, [])
 
 
   return (
     <div>
-      <div className="grid grid-cols-12">
-        <textarea 
-            name="community" 
-            id="community" 
-            onChange={onChange}
-            style={{resize: "none", border: "5px solid #5280C0"}}
-            className="rounded-l col-start-1 col-end-12"
-            placeholder="글을 작성해주세요"
-            cols={40} 
-            rows={3}></textarea> 
-        <button type="submit" onClick={onClickSubmit}
-          className="bg-blue-200 rounded-r text-white text-lg border-none">
-          <FontAwesomeIcon icon={faCommentMedical}/>
-        </button>
-      </div>
-      {/* 작성된 게시글 */}
-      <div className="h-[75vh]">
-        {commentList.map(comment=>
-          <div className="my-5 border rounded p-2">
-            <Link to={`/profile/${comment.username}`}>
-            <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
-              <div className="w-[25px] h-[25px] mr-2">
-                <img
-                  className="w-full h-full"
-                  src={
-                    process.env.PUBLIC_URL + `/img/userBadge` + getParticipantBadge(comment.userScore) + ".png"
-                  }
-                  alt="사용자 뱃지"
-                />
-              </div>
-              <span className="font-semibold leading-tightl">{comment.username}</span>
-            </div>
-            </Link>
-
-            <div className="rounded p-2">
-              <p>{comment.content}</p>
-            </div>
-            <div className="font-semibold text-xs text-right mt-2 mr-2">
-              <p>{comment.createdAt}</p>
-            </div>
+      {commentList.length && (
+        <div>
+          <div className="grid grid-cols-12">
+            <textarea 
+                name="community" 
+                id="community" 
+                onChange={onChange}
+                style={{resize: "none", border: "5px solid #5280C0"}}
+                className="rounded-l col-start-1 col-end-12"
+                placeholder="글을 작성해주세요"
+                cols={40} 
+                rows={3}></textarea> 
+            <button type="submit" onClick={onClickSubmit}
+              className="bg-blue-200 rounded-r text-white text-lg border-none">
+              <FontAwesomeIcon icon={faCommentMedical}/>
+            </button>
           </div>
-        )}
-      </div>
+          {/* 작성된 게시글 */}
+          <div className="h-[75vh]">
+            {commentList.map(comment=>
+              <div className="my-5 border rounded p-2">
+                <Link to={`/profile/${comment.username}`}>
+                <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
+                  <div className="w-[25px] h-[25px] mr-2">
+                    <img
+                      className="w-full h-full"
+                      src={
+                        process.env.PUBLIC_URL + `/img/userBadge` + getParticipantBadge(comment.userScore) + ".png"
+                      }
+                      alt="사용자 뱃지"
+                    />
+                  </div>
+                  <span className="font-semibold leading-tightl">{comment.username}</span>
+                </div>
+                </Link>
+
+                <div className="rounded p-2">
+                  <p>{comment.content}</p>
+                </div>
+                <div className="font-semibold text-xs text-right mt-2 mr-2">
+                  <p>{comment.createdAt}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      {!commentList.length && (
+        <p>아직 작성된 글이 없습니다!</p>
+      )}
     </div>
   );
 };
