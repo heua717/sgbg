@@ -54,7 +54,7 @@ const CommunityTab = (props: any) => {
     .then(({data})=> {
       console.log(data);
       // 저장해주고
-      setCommentList(commentList.concat(data))
+      setCommentList(commentList)
       // navigate(0)
     })
     console.log(commentList.length);
