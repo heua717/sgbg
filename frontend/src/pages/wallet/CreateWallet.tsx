@@ -1,4 +1,15 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import Swal from "sweetalert2";
+import { checkWallet, makeWallet } from "../../api/wallet";
+import Logo from "../../components/etc/Logo";
+import { auth } from "../../store/auth";
+
 const CreateWallet = () => {
+  const navigator = useNavigate();
+  const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8}/;
+  const userAuth = useRecoilValue(auth);
   const warning = [
     {
       order: 1,
@@ -16,15 +27,69 @@ const CreateWallet = () => {
       content: '을 만들어 두세요! 종이에 적어서 오프라인으로 관리하세요.'
     }
   ];
+
+  useEffect(() => {
+    if (!userAuth.isLogined) {
+      Swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: '로그인이 필요합니다.',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      navigator("/login");
+      return;
+    } else {
+      checkWallet().then(({data}) => {
+        if (!(data.statusCode === 2000)) {
+          Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: '이미 지갑이 존재합니다.',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          navigator("/wallet");
+          return;
+        }
+      })
+    }
+  },[]);
+
+  const handleCreateWallet = () => {
+    Swal.fire({
+      title: "사용할 지갑 비밀번호를 정해주세요.",
+      text:"영문,숫자를 합하여 8자가 되어야합니다.",
+      input: "password",
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: "제출",
+      showLoaderOnConfirm: true,
+      preConfirm: (pw) => {
+        if (pw.match(reg)) {
+          return makeWallet(pw)
+          .then(({ data }) => {
+            if (data.statusCode === 2000) {
+              Swal.showValidationMessage(`지갑 생성에 성공했습니다.`);
+              navigator("/wallet");
+            } else {
+              throw new Error(data.message);
+            }
+          }).catch((error) => {
+            Swal.showValidationMessage(`지갑 생성에 실패했습니다.`);
+          })
+        } else {
+          Swal.showValidationMessage(`비밀번호가 적절하지 않습니다.`);
+        }
+      },
+      allowOutsideClick: false,
+    });
+  }
   return (<div>
   {/* 로고 */}
-  <div className="w-per85 mx-auto">
-        <img
-          className="max-w-full"
-          src={process.env.PUBLIC_URL + `/img/sgbg-logo.png`}
-          alt="로고"
-        />
-  </div>
+  <Logo/>
   {/* 캐치프레이즈2 */}
   <div className="mb-10 mx-5 p-3 rounded-lg bg-red-50">
     <p className='text-xl mb-2'>
@@ -44,7 +109,8 @@ const CreateWallet = () => {
   {/* 지갑 생성하기 버튼 */}
   <div className="my-15 grid grid-cols-1 mx-5">
   <button 
-    className='bg-blue-200 rounded py-2 text-white font-semibold'>
+        className='bg-blue-200 rounded py-2 text-white font-semibold'
+      onClick={handleCreateWallet}>
       지갑 생성하기</button>
   </div>    
 
