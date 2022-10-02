@@ -6,7 +6,7 @@ import { createComment, readComment } from "../../api/community";
 import React, { useEffect, useState } from "react";
 
 const CommunityTab = () => {
-  /* const comments = [
+  const comments = [
     {
       userId: "host",
       participantScore: 88,
@@ -31,7 +31,7 @@ const CommunityTab = () => {
       comment: "제 온도가 가장 낮으니 가장 먼저 도착하도록 하겠습니다. 열어분 걱정 마세요",
       createdDate: "1시간 전"
     },
-  ]; */
+  ];
 
   const [commentList, setCommentList] = useState([])
 
