@@ -2,11 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentMedical } from '@fortawesome/free-solid-svg-icons'
 import { Link, useParams } from "react-router-dom";
 import { getParticipantBadge } from "../../util/profile";
-import { createComment } from "../../api/community";
-import React, { useState } from "react";
+import { createComment, readComment } from "../../api/community";
+import React, { useEffect, useState } from "react";
 
 const CommunityTab = () => {
-  const comments = [
+  /* const comments = [
     {
       userId: "host",
       participantScore: 88,
@@ -31,7 +31,9 @@ const CommunityTab = () => {
       comment: "제 온도가 가장 낮으니 가장 먼저 도착하도록 하겠습니다. 열어분 걱정 마세요",
       createdDate: "1시간 전"
     },
-  ];
+  ]; */
+
+  const [commentList, setCommentList] = useState([])
 
   const [ comment, setComment ] = useState('')
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -58,6 +60,16 @@ const CommunityTab = () => {
   }
 
   // 컴포넌트 create될 때 axios
+  useEffect(()=>{
+    // console.log('hello community');
+    
+    readComment(Number(meeting_id))
+    .then(({data})=> {
+      console.log(data);
+      setCommentList(commentList.concat(data))
+    })
+  })
+
 
   return (
     <div>
