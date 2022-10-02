@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Data
 public class CommentReq {
-    private Long commentId;
     private  String content;
     private Long roomId;
 }

@@ -1,10 +1,13 @@
 package com.sgbg.api.controller;
 
 import com.sgbg.api.response.BaseResponseBody;
+import com.sgbg.api.response.UserRes;
 import com.sgbg.common.util.CookieUtil;
+import com.sgbg.domain.Auth;
 import com.sgbg.domain.User;
 import com.sgbg.service.AuthService;
 import com.sgbg.service.KakaoService;
+import com.sgbg.service.RedisService;
 import com.sgbg.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,26 +32,35 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    KakaoService kakaoService;
+    private KakaoService kakaoService;
 
     @Autowired
-    AuthService authService;
+    private AuthService authService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    CookieUtil cookieUtil;
+    private RedisService redisService;
+
+    @Autowired
+    private CookieUtil cookieUtil;
 
     @Operation(summary = "카카오 로그인 메서드")
-    @ApiResponses(
+    @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "로그인 성공",
-                    content = @Content(schema = @Schema(implementation = BaseResponseBody.class)))
-    )
+                    content = @Content(schema = @Schema(implementation = UserRes.class))),
+            @ApiResponse(responseCode = "2010", description = "회원가입 성공",
+                    content = @Content(schema = @Schema(implementation = UserRes.class)))
+    })
     @GetMapping("/login")
-    public ResponseEntity<? extends BaseResponseBody> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws
+    public ResponseEntity<? extends BaseResponseBody> kakaoLogin(
+            @RequestParam String code, HttpServletResponse response) throws IOException {
 
-            IOException {
+        User user = null;
+        Auth isUser = null;
+        String kakaoId = null;
+
         // 1. 인가 code로 Kakao Auth Server에서 token 받기
         try {
             Map<String, String> tokenInfo = kakaoService.getKakaoTokenInfo(code);
@@ -57,16 +69,22 @@ public class AuthController {
             Map<String, String> userInfo = kakaoService.getKakaoUserInfo(tokenInfo.get("access_token"));
 
             // 3. 회원 가입이 안되어 있는 경우, 회원가입 시키기
-            String kakaoId = userInfo.get("id");
-            System.out.println(kakaoId);
-            if (!authService.isUser(kakaoId)) {
-                User user = userService.createUser(userInfo);
+            kakaoId = userInfo.get("id");
+            isUser = authService.isUser(kakaoId);
+
+            if (isUser != null) {
+                user = isUser.getUser();
+            } else {
+                user = userService.createUser(userInfo);
                 authService.createAuth(user, kakaoId);
             }
 
-            // TODO: 4. Redis Session에 token 과 user 정보 저장
-
-            // - refresh token의 expire 시간을 session 만료 시간으로 설정
+            // 4. Redis에 token 과 user 정보 저장
+            redisService.saveToken(
+                    user.getId(), "access_token", tokenInfo.get("access_token"), Long.valueOf(tokenInfo.get("expires_in")));
+            redisService.saveToken(
+                    user.getId(), "refresh_token", tokenInfo.get("refresh_token"), Long.valueOf(tokenInfo.get("refresh_token_expires_in"))
+            );
 
             // 5. Cookie에 token 저장
             String accessToken = tokenInfo.get("access_token");
@@ -81,7 +99,10 @@ public class AuthController {
             e.printStackTrace();
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2010, "Success"));
+        if (isUser == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2010, "Success", kakaoId, user));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2000, "Success", kakaoId, user));
     }
 
     @Operation(summary = "카카오 로그아웃 메서드")
@@ -91,25 +112,11 @@ public class AuthController {
     )
     @GetMapping("/logout")
     public ResponseEntity<? extends BaseResponseBody> logout(HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = null;
-        String refreshToken = null;
-        String bearer = request.getHeader("Authorization");
+        Map<String, String> tokenInfo = cookieUtil.getTokenInfo(request);
+        String accessToken = tokenInfo.get("access_token");
+        String refreshToken = tokenInfo.get("refresh_token");
 
-//        if (bearer != null && !"".equals(bearer)) {
-//            accessToken = bearer.split(" ")[1];
-//        }
-
-        Cookie[] cookies = request.getCookies();
-
-        for (Cookie c : cookies) {
-            if ("accessToken".equals(c.getName())) {
-                accessToken = c.getValue();
-            } else if ("refreshToken".equals(c.getName())) {
-                refreshToken = c.getValue();
-            }
-        }
-
-        String id = kakaoService.logout(accessToken);
+        kakaoService.logout(accessToken);
 
         Cookie accessCookie = new Cookie("accessToken", null);
         accessCookie.setMaxAge(0);
@@ -121,7 +128,9 @@ public class AuthController {
         refreshCookie.setPath("/");
         response.addCookie(refreshCookie);
 
-        // TODO: Redis Session 만료
+        // Redis Token 삭제
+        redisService.deleteToken("access_token", accessToken);
+        redisService.deleteToken("refresh_token", refreshToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2000, "Success"));
     }
