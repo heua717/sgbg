@@ -54,7 +54,7 @@ const CommunityTab = (props: any) => {
     .then(({data})=> {
       console.log(data);
       // 저장해주고
-      setCommentList(commentList)
+      setCommentList(data)
       // navigate(0)
     })
     console.log(commentList.length);
@@ -110,7 +110,7 @@ const CommunityTab = (props: any) => {
             </button>
           </div>
           {/* 작성된 게시글 */}
-        {commentList.length > 1 && (
+        {commentList.length && (
           <div className="h-[75vh]">
             {commentList.map(comment=>
               <div className="my-5 border rounded p-2">
@@ -148,7 +148,7 @@ const CommunityTab = (props: any) => {
           </div>
         )}
         </div>
-      {commentList.length === 1 && (
+      {!commentList.length && (
         <p className="mt-5 text-lg text-center font-semibold">아직 작성된 글이 없습니다!</p>
       )}
     </div>
