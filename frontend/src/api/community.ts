@@ -3,7 +3,7 @@ import { api } from "./API";
 
 type comments = {
   content: string;
-  room_id: number
+  roomId: number;
 }
 
 export const createComment = (data: comments) => {
