@@ -8,11 +8,17 @@ import com.sgbg.blockchain.repository.WalletRepository;
 import com.sgbg.blockchain.service.interfaces.IWalletService;
 import com.sgbg.blockchain.domain.Wallet;
 import com.sgbg.blockchain.wrapper.Cash_sol_Cash;
+import com.sgbg.blockchain.wrapper.Contracts_SingleBungle_sol_SingleBungle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.tx.gas.StaticGasProvider;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -29,8 +35,14 @@ public class WalletService implements IWalletService {
     @Autowired
     Web3j web3j;
 
-    @Autowired
-    Cash_sol_Cash cashContract;
+    @Value("${eth.cash.contract}")
+    String cashContractAddress;
+
+    @Value("${eth.admin.address}")
+    String admin;
+
+    @Value("${eth.admin.private}")
+    String adminPrivateKey;
 
     @Autowired
     WalletHistoryRepository walletHistoryRepository;
@@ -89,17 +101,22 @@ public class WalletService implements IWalletService {
         String publicKey = wallet.getPublicKey();
         Credentials credentials = Credentials.create(privateKey, publicKey);
         String address = credentials.getAddress();
-
-
-
-
+        System.out.println(address);
 
         // -------------- 스마트 컨트랙트 함수 ---------------
         // 지갑 address와 money를 통해 우리가 만든 토큰을 충전한다.
-        Wallet admin = getWallet(1, "ssafy");
-        cashContract.transferFrom(admin.getAddress(), address, new BigInteger("100"));
+        Credentials credentialsAdmin = Credentials.create(adminPrivateKey);
+        ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
+        Cash_sol_Cash cashContract = Cash_sol_Cash.load(cashContractAddress, web3j, credentialsAdmin, contractGasProvider);
+
+        cashContract.approve(admin, BigInteger.valueOf(money)).send();
+        TransactionReceipt receipt = cashContract.transferFrom(admin, address, BigInteger.valueOf(money)).send();
         System.out.println("컨트랙트 주소: " + cashContract.getContractAddress());
         System.out.println("충전 balance: " + cashContract.balanceOf(address).send());
+        System.out.println("admin balance: "+ cashContract.balanceOf(admin).send());
+        System.out.println("receipt: "+ receipt.getTransactionHash());
+
+        // TransactionReceipt를 가지고 Transaction 엔티티만들어서 저장한다.
 
         // -----------------------------------------------
 
@@ -115,13 +132,6 @@ public class WalletService implements IWalletService {
                 .type("charge")
                 .build();
         walletHistoryRepository.save(walletHistory);
-
-
-
-        // 트랜잭션 해시값을 얻는 방법과 그것을 통해 트랜잭션receipt을 받아서 db에 저장한다.
-//        Web3j web3j = Web3j.build(new HttpService());
-//        web3j.ethGetTransactionReceipt();
-//        RawTransaction.crea
 
         return wallet;
     }
@@ -149,10 +159,33 @@ public class WalletService implements IWalletService {
     }
 
     @Override
-    public Wallet enterRoom (long userId, long hostId, long roomId, long money) throws Exception {
+    public String createRoom(long hostId, long duration, long minimumAmount) throws Exception {
+
+        // 방장이 방을 만들고 SingleBungle 스마트 컨트랙트를 생성하는 함수
+        Wallet wallet = walletRepository.findByOwnerId(hostId).orElse(null);
+        if(wallet == null){
+            throw new NoWalletException();
+        }
+
+        Credentials credentials = Credentials.create(wallet.getPrivateKey(), wallet.getPublicKey());
+        ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
+        Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.deploy(web3j, credentials, contractGasProvider, cashContractAddress, credentials.getAddress(), BigInteger.valueOf(duration), BigInteger.valueOf(minimumAmount)).send();
+
+        // contract 로부터 transactionReceipt를 받아와서 transaction 저장
+        TransactionReceipt receipt = contract.getTransactionReceipt().orElse(null);
+        //-----------------------------------------------------------
+
+        return contract.getContractAddress(); // 방금 생성한 싱글벙글 스마트 컨트랙트 주소 반환
+        // room에서는 이 컨트랙트 주소를 room에서 저장해야 한다.
+
+    }
+
+    @Override
+    public Wallet enterRoom (long userId, long hostId, String sgbgContractAddress, long money) throws Exception {
 
         // room 쪽에서 wallet api를 콜하는 게 맞는 것 같다.
         // roomApi에서 가져온 hostId를 사용하여 hostWallet을 구한다.
+        // 이곳에서는 room을 조회하지 않는다. room에서 요청한 사항만을 전달할 뿐이다.
 
         Wallet hostWallet = walletRepository.findByOwnerId(hostId).orElse(null);
         if(hostWallet == null){
@@ -162,9 +195,6 @@ public class WalletService implements IWalletService {
         String hostPrivateKey = hostWallet.getPrivateKey();
         String hostPublicKey = hostWallet.getPublicKey();
         Credentials hostCredentials = Credentials.create(hostPrivateKey, hostPublicKey);
-        String hostAddress = hostCredentials.getAddress(); // 방장의 지갑 주소
-
-
 
         Wallet userWallet = walletRepository.findByOwnerId(userId).orElse(null);
         if(userWallet == null){
@@ -176,10 +206,14 @@ public class WalletService implements IWalletService {
         Credentials userCredentials = Credentials.create(userPrivateKey, userPublicKey);
         String userAddress = userCredentials.getAddress();
 
-
         // -------------- 스마트 컨트랙트 함수 ------------------
         // 주어진 값 : host 지갑 address, 유저 지갑 address, 지불할 금액(money)
         // 지갑 address를 가지고 private network에 가서 작업을 수행하도록 스마트 컨트랙트 실행
+        ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
+        Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
+        TransactionReceipt receipt = contract.enterRoom(userAddress, BigInteger.valueOf(money)).send();
+
+        // transactionReceipt를 통해 엔티티 저장
 
         // -------------- 스마트 컨트랙트 끝 --------------------
 
@@ -199,16 +233,7 @@ public class WalletService implements IWalletService {
     }
 
     @Override
-    public Wallet exitRoom (long userId, long hostId, long roomId, long money) throws Exception {
-
-//        Room room = roomRepository.findByRoomId(roomId).orElse(null);
-//        if(room == null){
-//            // custom exception
-//            // 해커임 ㅋㅋ
-//            System.out.println("room null in exitRoom");
-//            throw new Exception("이거 null 처리해야함");
-//        }
-//        long hostId = room.getHostId();
+    public Wallet exitRoom (long userId, long hostId, String sgbgContractAddress, long money) throws Exception {
 
         Wallet hostWallet = walletRepository.findByOwnerId(hostId).orElse(null);
         if(hostWallet == null){
@@ -218,9 +243,6 @@ public class WalletService implements IWalletService {
         String hostPrivateKey = hostWallet.getPrivateKey();
         String hostPublicKey = hostWallet.getPublicKey();
         Credentials hostCredentials = Credentials.create(hostPrivateKey, hostPublicKey);
-        String hostAddress = hostCredentials.getAddress(); // 방장의 지갑 주소
-
-
 
         Wallet userWallet = walletRepository.findByOwnerId(userId).orElse(null);
         if(userWallet == null){
@@ -237,6 +259,11 @@ public class WalletService implements IWalletService {
         // 주어진 값 : host 지갑 address, 유저 지갑 address, 지불할 금액(money)
         // 방을 다시 나가므로 지불했던 돈 다시 반환받기
         // 지갑 address를 가지고 private network에 가서 작업을 수행하도록 스마트 컨트랙트 실행
+        ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
+        Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
+        TransactionReceipt receipt = contract.leaveRoom(userAddress, BigInteger.valueOf(money)).send();
+
+        // transaction 엔티티 저장
 
         // -------------- 스마트 컨트랙트 끝 --------------------
 
@@ -251,12 +278,13 @@ public class WalletService implements IWalletService {
 
         userWallet.setCash(userWallet.getCash()+money);
 
-        return null; // 반환값을 어떻게 할지는 의논 후 결정
+        return userWallet; // 반환값을 어떻게 할지는 의논 후 결정
     }
 
     @Override
-    public Wallet endRoom(long roomId, long hostId) throws Exception {
+    public Wallet endRoom(long roomId, long hostId, String sgbgContractAddress) throws Exception {
         // 모집이 끝났을 때 방장에게 모아둔 돈을 주는 메서드
+
 
         Wallet hostWallet = walletRepository.findByOwnerId(hostId).orElse(null);
         if(hostWallet == null){
@@ -268,13 +296,25 @@ public class WalletService implements IWalletService {
         Credentials hostCredentials = Credentials.create(hostPrivateKey, hostPublicKey);
         String hostAddress = hostCredentials.getAddress(); // 방장의 지갑 주소
         // 스마트 컨트랙트를 사용하여 방 모임에 대한 모집 끝남을 알린다.
+        ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
+        Credentials credentialsAdmin = Credentials.create(adminPrivateKey);
+        Cash_sol_Cash cashContract = Cash_sol_Cash.load(cashContractAddress, web3j, credentialsAdmin, contractGasProvider);
+        BigInteger beforeWithdraw = cashContract.balanceOf(hostAddress).send();
+
+        Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
+        TransactionReceipt receipt = contract.withdraw(hostAddress).send();
+        // transaction 엔티티 저장
+
+        BigInteger afterWithdraw = cashContract.balanceOf(hostAddress).send();
+        long withdrawMoney = afterWithdraw.longValue() - beforeWithdraw.longValue();
+
         // 모임에서 모인 돈을 계산하여 hostWallet.setCash()를 해준다.
-        long money = 100L;
+        hostWallet.setCash(afterWithdraw.longValue());
 
         WalletHistory hostWalletHistory = WalletHistory.builder()
                 .wallet(hostWallet)
                 .totalMoneyBeforeTransaction(hostWallet.getCash())
-                .money(money)
+                .money(withdrawMoney)
                 .createdAt(LocalDateTime.now())
                 .type("end")
                 .build();

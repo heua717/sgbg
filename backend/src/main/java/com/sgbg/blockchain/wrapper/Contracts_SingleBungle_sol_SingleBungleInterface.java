@@ -54,34 +54,37 @@ public class Contracts_SingleBungle_sol_SingleBungleInterface extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> enterRoom() {
+    public RemoteFunctionCall<TransactionReceipt> enterRoom(String _member, BigInteger _value) {
         final Function function = new Function(
                 FUNC_ENTERROOM, 
-                Arrays.<Type>asList(), 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, _member), 
+                new org.web3j.abi.datatypes.generated.Uint256(_value)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> isSuccess(Boolean _flag) {
+    public RemoteFunctionCall<TransactionReceipt> isSuccess(String _member, Boolean _flag) {
         final Function function = new Function(
                 FUNC_ISSUCCESS, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Bool(_flag)), 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, _member), 
+                new org.web3j.abi.datatypes.Bool(_flag)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> leaveRoom() {
+    public RemoteFunctionCall<TransactionReceipt> leaveRoom(String _member, BigInteger _value) {
         final Function function = new Function(
                 FUNC_LEAVEROOM, 
-                Arrays.<Type>asList(), 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, _member), 
+                new org.web3j.abi.datatypes.generated.Uint256(_value)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> withdraw() {
+    public RemoteFunctionCall<TransactionReceipt> withdraw(String _sender) {
         final Function function = new Function(
                 FUNC_WITHDRAW, 
-                Arrays.<Type>asList(), 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, _sender)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }

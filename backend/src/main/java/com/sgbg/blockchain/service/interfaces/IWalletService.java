@@ -17,11 +17,13 @@ public interface IWalletService {
 
     Wallet getWallet(long userId, String password) throws Exception;
 
-    Wallet enterRoom (long userId, long hostId, long roomId, long money) throws Exception;
+    String createRoom(long hostId, long duration, long minimumAmount) throws Exception;
 
-    Wallet exitRoom (long userId, long hostId, long roomId, long money) throws Exception;
+    Wallet enterRoom (long userId, long hostId, String sgbgContractAddress, long money) throws Exception;
 
-    Wallet endRoom (long userId, long hostId) throws Exception;
+    Wallet exitRoom (long userId, long hostId, String sgbgContractAddress, long money) throws Exception;
+
+    Wallet endRoom (long userId, long hostId, String sgbgContractAddress) throws Exception;
 
     List<WalletHistory> getHistoryList(long userId) throws Exception;
 }

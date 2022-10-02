@@ -9,6 +9,7 @@ import com.sgbg.blockchain.common.exception.WrongPasswordException;
 import com.sgbg.blockchain.domain.Wallet;
 import com.sgbg.blockchain.domain.WalletHistory;
 import com.sgbg.blockchain.service.interfaces.IWalletService;
+import com.sgbg.common.util.CookieUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Tag(name = "Wallet API", description = "사용자의 지갑 기능 제공")
@@ -26,11 +28,15 @@ public class WalletController {
     @Autowired
     private IWalletService walletService;
 
+    @Autowired
+    private CookieUtil cookieUtil;
+
     @GetMapping
-    public ResponseEntity<? extends BaseResponseBody> checkWallet() {
+    public ResponseEntity<? extends BaseResponseBody> checkWallet(HttpServletRequest request) {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = 1L;
+//        cookieUtil.getUserIdByToken(request);
+        long userId = 3L;
 
         try {
             walletService.checkWallet(userId);
@@ -65,7 +71,7 @@ public class WalletController {
     public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestParam String password) {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = 2L;
+        long userId = 3L;
 
         Wallet wallet = null;
         try {
