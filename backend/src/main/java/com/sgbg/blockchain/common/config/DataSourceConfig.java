@@ -1,5 +1,9 @@
-package com.sgbg.common.config;
+package com.sgbg.blockchain.common.config;
 
+import com.sgbg.blockchain.domain.Wallet;
+import com.sgbg.blockchain.service.WalletService;
+import com.sgbg.blockchain.wrapper.Cash_sol_Cash;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -10,17 +14,26 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.http.HttpService;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 @Configuration
 @EnableTransactionManagement
 public class DataSourceConfig {
     @Value("${spring.web3j.client-address}")
     private String NETWORK_URL;
+
+
 
 //    @Primary
 //    @Bean
@@ -48,6 +61,7 @@ public class DataSourceConfig {
 
     @Bean
     public Web3j web3j() {
+
         return Web3j.build(new HttpService(NETWORK_URL));
     }
 

@@ -1,6 +1,5 @@
 package com.sgbg.blockchain.service;
 
-import com.sgbg.blockchain.api.response.WalletHistoryListRes;
 import com.sgbg.blockchain.common.exception.NoWalletException;
 import com.sgbg.blockchain.common.exception.WrongPasswordException;
 import com.sgbg.blockchain.domain.WalletHistory;
@@ -8,14 +7,14 @@ import com.sgbg.blockchain.repository.WalletHistoryRepository;
 import com.sgbg.blockchain.repository.WalletRepository;
 import com.sgbg.blockchain.service.interfaces.IWalletService;
 import com.sgbg.blockchain.domain.Wallet;
-import com.sgbg.domain.Room;
-import com.sgbg.repository.RoomRepository;
+import com.sgbg.blockchain.wrapper.Cash_sol_Cash;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.crypto.*;
+import org.web3j.protocol.Web3j;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,6 +25,12 @@ public class WalletService implements IWalletService {
 
     @Autowired
     WalletRepository walletRepository;
+
+    @Autowired
+    Web3j web3j;
+
+    @Autowired
+    Cash_sol_Cash cashContract;
 
     @Autowired
     WalletHistoryRepository walletHistoryRepository;
@@ -86,8 +91,16 @@ public class WalletService implements IWalletService {
         String address = credentials.getAddress();
 
 
+
+
+
         // -------------- 스마트 컨트랙트 함수 ---------------
         // 지갑 address와 money를 통해 우리가 만든 토큰을 충전한다.
+        Wallet admin = getWallet(1, "ssafy");
+        cashContract.transferFrom(admin.getAddress(), address, new BigInteger("100"));
+        System.out.println("컨트랙트 주소: " + cashContract.getContractAddress());
+        System.out.println("충전 balance: " + cashContract.balanceOf(address).send());
+
         // -----------------------------------------------
 
         // 스마트 컨트랙트를 사용하여 돈을 충전했다면 db에도 반영시킨다.

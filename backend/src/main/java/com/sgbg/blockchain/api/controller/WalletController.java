@@ -65,7 +65,7 @@ public class WalletController {
     public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestParam String password) {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = 1L;
+        long userId = 2L;
 
         Wallet wallet = null;
         try {
@@ -85,7 +85,7 @@ public class WalletController {
     public ResponseEntity<? extends BaseResponseBody> charge(@RequestParam long money){
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = 1L;
+        long userId = 2L;
 
         try {
             Wallet wallet = walletService.charge(userId, money);
