@@ -2,9 +2,11 @@ package com.sgbg.service;
 
 import com.sgbg.api.request.CommentReq;
 import com.sgbg.api.response.CommentRes;
+import com.sgbg.domain.Auth;
 import com.sgbg.domain.Comment;
 import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
+import com.sgbg.repository.AuthRepository;
 import com.sgbg.repository.RoomRepository;
 import com.sgbg.repository.UserRepository;
 import com.sgbg.repository.interfaces.CommentRepository;
@@ -34,6 +36,9 @@ public class CommentServiceImpl implements ICommentService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AuthRepository authRepository;
 
 
     @Override
@@ -117,6 +122,11 @@ public class CommentServiceImpl implements ICommentService {
                 msg = (diffTime) + "년 전";
             }
             commentRes.setCreatedAt(msg);
+
+            Optional<Auth> auth = authRepository.findByUser_userId(comment.getUserId());
+
+            commentRes.setKakaoNumber(auth.get().getKakaoNumber());
+
 
            commentResList.add(commentRes);
         }
