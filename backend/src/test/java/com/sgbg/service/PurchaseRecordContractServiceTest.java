@@ -1,8 +1,6 @@
 package com.sgbg.service;
 
 import com.sgbg.Application;
-import com.sgbg.domain.Record;
-import com.sgbg.service.interfaces.IPurchaseRecordContractService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

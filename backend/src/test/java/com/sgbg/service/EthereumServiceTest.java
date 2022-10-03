@@ -1,8 +1,6 @@
 package com.sgbg.service;
 
 import com.sgbg.Application;
-import com.sgbg.domain.Address;
-import com.sgbg.service.interfaces.IEthereumService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
