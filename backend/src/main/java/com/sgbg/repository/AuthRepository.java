@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface AuthRepository extends JpaRepository<Auth, Long> {
     Optional<Auth> findByKakaoNumber(Long kakaoNumber);
-    Optional<Auth> findByUser_userId(Long userId);
 }
