@@ -9,4 +9,6 @@ public interface IMemberEvaluationService {
 
 
     MemberEvaluation createEvaluation(BaseMemberEvaluationReq memberEvaluationReq, Room room, User evaluator, User user);
+
+    Boolean checkMemberEvaluation(User evaluator, Room room);
 }

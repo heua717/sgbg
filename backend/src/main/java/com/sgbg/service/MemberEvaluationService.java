@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class MemberEvaluationService implements IMemberEvaluationService {
@@ -32,5 +34,12 @@ public class MemberEvaluationService implements IMemberEvaluationService {
         memberEvaluationRepository.save(memberEvaluation);
 
         return memberEvaluation;
+    }
+
+    @Override
+    public Boolean checkMemberEvaluation(User evaluator, Room room) {
+        List<MemberEvaluation> memberEvaluations = memberEvaluationRepository.findMemberEvaluationByEvaluatorAndRoom(evaluator, room);
+
+        return memberEvaluations.size() != 0;
     }
 }

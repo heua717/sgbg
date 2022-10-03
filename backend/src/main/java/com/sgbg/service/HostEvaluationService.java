@@ -29,4 +29,9 @@ public class HostEvaluationService implements IHostEvaluationService {
         return hostEvaluation;
     }
 
+    @Override
+    public Boolean checkHostEvaluation(User user, Room room) {
+        HostEvaluation hostEvaluation = hostEvaluationRepository.findHostEvaluationByUserAndRoom(user, room).orElse(null);
+        return hostEvaluation != null;
+    }
 }

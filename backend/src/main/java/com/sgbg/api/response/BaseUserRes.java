@@ -12,6 +12,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class BaseUserRes {
+
+    @Schema(description = "회원 번호", example = "1234567")
+    private String kakaoId;
+
     @Schema(description = "이름", example = "Bungle")
     private String name;
 
@@ -24,12 +28,13 @@ public class BaseUserRes {
     @Schema(description = "참가자 점수", example = "84")
     private int memberScore;
 
-    public static BaseUserRes of(User user) {
+    public static BaseUserRes of(User user, String kakaoId) {
         BaseUserRes res = new BaseUserRes();
         res.setName(user.getName());
         res.setEmail(user.getEmail());
         res.setHostScore(user.getHostScore());
         res.setMemberScore(user.getMemberScore());
+        res.setKakaoId(kakaoId);
         return res;
     }
 }

@@ -1,6 +1,7 @@
 package com.sgbg.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,10 @@ public class User {
     private int memberScore;
 
     private int avgEvaluateScore;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "user")
+    private Auth auth;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Participation> myRooms = new ArrayList<>();
