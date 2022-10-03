@@ -77,6 +77,8 @@ public class UserController {
         Long userId = cookieUtil.getUserIdByToken(request);
         List<Room> rooms = userService.getMyRooms(userId, Boolean.parseBoolean(host));
 
+        // TODO: 각 room 별로 review 작성 여부 확인
+        
         return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.of(2000, "Success", rooms));
     }
 }

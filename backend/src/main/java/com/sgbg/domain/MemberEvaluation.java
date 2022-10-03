@@ -16,10 +16,8 @@ public class MemberEvaluation {
     @Column(name = "member_evaluation_id")
     private Long id;
 
-    @Column(name = "is_success")
-    private Boolean isSuccess;
+    private int score;
 
-    @Column(name = "transaction_id")
     private Long transactionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,26 +33,17 @@ public class MemberEvaluation {
     private Room room;
 
     @Builder
-    public MemberEvaluation(Boolean isSuccess, User evaluator, Long transactionId, User user, Room room) {
-        this.isSuccess = isSuccess;
+    public MemberEvaluation(int score, User evaluator, Long transactionId, User user, Room room) {
+        this.score = score;
         this.transactionId = transactionId;
         this.evaluator = evaluator;
         this.user = user;
         this.room = room;
     }
 
-    public void setEvaluator(User user) {
-        this.evaluator = user;
-        user.getMyMemberEvaluations().add(this);
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-        user.getMyMemberEvaluations().add(this);
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
+    public void addMemberEvaluation(Room room, User evaluator, User user) {
         room.getMemberEvaluations().add(this);
+        evaluator.getMyMemberEvaluations().add(this);
+        user.getMyMemberEvaluationResults().add(this);
     }
 }
