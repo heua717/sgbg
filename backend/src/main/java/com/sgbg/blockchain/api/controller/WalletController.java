@@ -35,7 +35,8 @@ public class WalletController {
     @GetMapping
     public ResponseEntity<? extends BaseResponseBody> checkWallet(HttpServletRequest request) {
 
-        long userId = cookieUtil.getUserIdByToken(request);
+//        long userId = cookieUtil.getUserIdByToken(request);
+        long userId = 3L;
 
         try {
             walletService.checkWallet(userId);
@@ -52,7 +53,8 @@ public class WalletController {
     @PostMapping
     public ResponseEntity<? extends BaseResponseBody> getWallet(@RequestParam String password, HttpServletRequest request) {
 
-        long userId = cookieUtil.getUserIdByToken(request);
+//        long userId = cookieUtil.getUserIdByToken(request);
+        long userId = 3L;
 
         try {
             Wallet wallet = walletService.getWallet(userId, password);
@@ -69,7 +71,8 @@ public class WalletController {
     public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestParam String password, HttpServletRequest request) {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = cookieUtil.getUserIdByToken(request);
+//        long userId = cookieUtil.getUserIdByToken(request);
+        long userId = 4L;
 
         Wallet wallet = null;
         try {
@@ -89,7 +92,8 @@ public class WalletController {
     public ResponseEntity<? extends BaseResponseBody> charge(@RequestParam long money, HttpServletRequest request){
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = cookieUtil.getUserIdByToken(request);
+//        long userId = cookieUtil.getUserIdByToken(request);
+        long userId = 4L;
 
         try {
             Wallet wallet = walletService.charge(userId, money);
@@ -107,12 +111,30 @@ public class WalletController {
     public ResponseEntity<? extends BaseResponseBody> history(HttpServletRequest request){
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = cookieUtil.getUserIdByToken(request);
+//        long userId = cookieUtil.getUserIdByToken(request);
+        long userId = 4L;
 
         try {
             List<WalletHistory> walletHistoryList = walletService.getHistoryList(userId);
             return ResponseEntity.status(HttpStatus.OK).body(WalletHistoryListRes.of(2000, "Accepted", walletHistoryList));
         } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    // test용
+    @PostMapping("/createroom")
+    public ResponseEntity<? extends BaseResponseBody> rooms(HttpServletRequest request){
+
+        long userId = 4L;
+
+        try {
+            String contractAddress = walletService.createRoom(userId, 7, 100);
+            System.out.println("controller : " + contractAddress);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
 
