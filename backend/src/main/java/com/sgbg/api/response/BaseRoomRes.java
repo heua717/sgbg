@@ -1,6 +1,7 @@
 package com.sgbg.api.response;
 
 import com.sgbg.domain.Location;
+import com.sgbg.domain.Participation;
 import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -63,9 +64,15 @@ public class BaseRoomRes {
     @Schema(name = "members")
     private List<BaseUserRes> members = new ArrayList<>();
 
+    @Schema(name = "hostReview")
+    private Boolean hostReview = null;
+
+    @Schema(name = "memberReview")
+    private Boolean memberReview = null;
+
     public static BaseRoomRes of(Room room) {
         BaseRoomRes baseRoomRes = new BaseRoomRes();
-        baseRoomRes.setRoomId(room.getRoomId());
+        baseRoomRes.setRoomId(room.getId());
         baseRoomRes.setTitle(room.getTitle());
         baseRoomRes.setHostName(room.getHostName());
         baseRoomRes.setParentCategory(room.getParentCategory());
@@ -82,9 +89,17 @@ public class BaseRoomRes {
         return baseRoomRes;
     }
 
-    public void setMembers(List<User> members) {
-        for(User member: members) {
-            this.members.add(BaseUserRes.of(member));
+    public static BaseRoomRes createMyRoomRes(Room room, Boolean hostReview, Boolean memberReview) {
+        BaseRoomRes res = BaseRoomRes.of(room);
+        res.setHostReview(hostReview);
+        res.setMemberReview(memberReview);
+        return res;
+    }
+
+    public void setMembers(List<Participation> members) {
+        for(Participation participation: members) {
+            User member = participation.getUser();
+            this.members.add(BaseUserRes.of(member, String.valueOf(member.getAuth().getKakaoNumber())));
         }
     }
 }
