@@ -3,7 +3,7 @@ services:
     nginx:
         container_name: sgbg-nginx
         build:
-            context: ./backend
+            context: .
         depends_on:
             - server
         ports:
