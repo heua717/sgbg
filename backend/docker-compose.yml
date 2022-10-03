@@ -60,7 +60,7 @@ services:
             - redis
         build:
             context: .
-            Dockerfile: ./sgbg/backend/Dockerfile
+            dockerfile: ./SGBG/backend/Dockerfile
         ports:
             - 8080:8080
         restart: on-failure
