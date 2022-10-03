@@ -5,7 +5,7 @@ FROM openjdk:15-jdk-alpine as builder
 # workspace/SGBG/backend/src/main/resources/application.properties
 WORKDIR /app
 
-COPY ./SGBG/backend .
+COPY /SGBG/backend .
 COPY application.properties ./src/main/resources/
 
 RUN chmod +x ./gradlew
