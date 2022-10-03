@@ -29,19 +29,22 @@ public class UserService implements IUserService {
         User user = User.builder()
                 .name(userInfo.get("name"))
                 .email(userInfo.get("email"))
+                .memberScore(50)
+                .hostScore(50)
+                .avgEvaluateScore(0)
                 .build();
 
         return userRepository.save(user);
     }
 
     @Override
-    public User findUserById(Long userId) {
+    public User getUserById(Long userId) {
         return userRepository.findUserById(userId).orElse(null);
     }
 
     @Override
     public List<Room> getMyRooms(Long userId, Boolean isHost) {
-        User user = findUserById(userId);
+        User user = getUserById(userId);
         if (user == null) {
             throw new NotFoundException("회원 정보를 찾을 수 없습니다.");
         }

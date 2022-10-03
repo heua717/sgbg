@@ -15,7 +15,7 @@ public class HostEvaluation {
     @Column(name = "host_evaluation_id")
     private Long id;
 
-    private int score;
+    private Boolean isSuccess;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -26,19 +26,14 @@ public class HostEvaluation {
     private Room room;
 
     @Builder
-    public HostEvaluation(int score, User user, Room room) {
-        this.score = score;
+    public HostEvaluation(Boolean isSuccess, User user, Room room) {
+        this.isSuccess = isSuccess;
         this.user = user;
         this.room = room;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void addHostEvaluation(User user, Room room) {
         user.getMyHostEvaluationResults().add(this);
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
         room.getHostEvaluations().add(this);
     }
 }
