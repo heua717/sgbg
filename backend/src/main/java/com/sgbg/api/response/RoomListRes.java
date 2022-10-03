@@ -16,11 +16,19 @@ public class RoomListRes extends BaseResponseBody {
     private List<BaseRoomRes> roomListInfo = new ArrayList<>();
 
     public static RoomListRes of(Integer statusCode, String message, List<Room> roomList) {
-        RoomListRes roomListRes = new RoomListRes();
-        roomListRes.setStatusCode(statusCode);
-        roomListRes.setMessage(message);
-        roomListRes.setRoomListInfo(roomList);
-        return roomListRes;
+        RoomListRes res = new RoomListRes();
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+        res.setRoomListInfo(roomList);
+        return res;
+    }
+
+    public static RoomListRes createMyRoomList(Integer statusCode, String message, List<Room> roomList, List<Boolean> hostReviews, List<Boolean> memberReviews) {
+        RoomListRes res = new RoomListRes();
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+        res.setRoomListInfo(roomList, hostReviews, memberReviews);
+        return res;
     }
 
     public void setRoomListInfo(List<Room> roomList) {
@@ -29,4 +37,11 @@ public class RoomListRes extends BaseResponseBody {
         }
     }
 
+    public void setRoomListInfo(List<Room> roomList, List<Boolean> hostReviews, List<Boolean> memberReviews) {
+        for(int i = 0; i < roomList.size(); i++) {
+            this.roomListInfo.add(
+                    BaseRoomRes.createMyRoomRes(roomList.get(i), hostReviews.get(i), memberReviews.get(i))
+            );
+        }
+    }
 }

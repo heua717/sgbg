@@ -15,6 +15,7 @@ public class CommentRes extends BaseResponseBody {
     private String username;
     private Integer userScore;
     private Integer hostScore;
+    private Long kakaoNumber;
 
 
 //    public static CommentRes detailComment(Integer statusCode, String message, Long commentId, String content, String createdAt, String username, Integer userScore) {
@@ -39,6 +40,7 @@ public class CommentRes extends BaseResponseBody {
         res.setUsername("이름");
         res.setUserScore(1);
         res.setHostScore(1);
+        res.setKakaoNumber(1L);
         return res;
     }
 
