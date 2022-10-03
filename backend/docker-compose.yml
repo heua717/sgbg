@@ -59,7 +59,7 @@ services:
             - mysql-db
             - redis
         build:
-            context: ./SGBG/backend
+            context: ./
         ports:
             - 8080:8080
         restart: on-failure
