@@ -8,6 +8,8 @@ import com.sgbg.domain.Auth;
 import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
 import com.sgbg.service.interfaces.IAuthService;
+import com.sgbg.service.interfaces.IHostEvaluationService;
+import com.sgbg.service.interfaces.IMemberEvaluationService;
 import com.sgbg.service.interfaces.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,6 +26,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "User API", description = "회원 등록, 회원 정보 조회 등의 기능 제공")
@@ -34,13 +37,19 @@ public class UserController {
 
     private IUserService userService;
     private IAuthService authService;
+
+    private IHostEvaluationService hostEvaluationService;
+
+    private IMemberEvaluationService memberEvaluationService;
     private CookieUtil cookieUtil;
 
     @Autowired
-    public UserController(IUserService userService, IAuthService authService, CookieUtil cookieUtil) {
+    public UserController(IUserService userService, IAuthService authService, IHostEvaluationService hostEvaluationService, IMemberEvaluationService memberEvaluationService, CookieUtil cookieUtil) {
         Assert.notNull(userService, "userService 개체가 반드시 필요!");
         this.userService = userService;
         this.authService = authService;
+        this.hostEvaluationService = hostEvaluationService;
+        this.memberEvaluationService = memberEvaluationService;
         this.cookieUtil = cookieUtil;
     }
 
@@ -77,6 +86,17 @@ public class UserController {
         Long userId = cookieUtil.getUserIdByToken(request);
         List<Room> rooms = userService.getMyRooms(userId, Boolean.parseBoolean(host));
 
-        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.of(2000, "Success", rooms));
+        User user = userService.getUserById(userId);
+        List<Boolean> hostReviews = new ArrayList<>();
+        List<Boolean> memberReviews = new ArrayList<>();
+
+        for (Room room: rooms) {
+            Boolean hostReview = hostEvaluationService.checkHostEvaluation(user, room);
+            Boolean memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
+            hostReviews.add(hostReview);
+            memberReviews.add(memberReview);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyRoomList(2000, "Success", rooms, hostReviews, memberReviews));
     }
 }
