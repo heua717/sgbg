@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 type SearchBarProps = {
   handleKeyword : (e: string) => void;
@@ -25,6 +25,11 @@ const SearchBar = (props:SearchBarProps) => {
         pathname: 'result',
         search: `keyword=${keyword}`,
       })
+    } else if (props.name === "searchResult") {
+      navigate({
+        search: `keyword=${keyword}`,
+      })
+      navigate(0)
     }
   }
 

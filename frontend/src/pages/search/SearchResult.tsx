@@ -10,6 +10,7 @@ import { getSearchKeywordResult } from "../../api/search";
 
 const SearchResult = () => {
   const [key, setKey] = useState('')
+  const [keyword, setKeyword] = useState<string>("");
   const [value, setValue] = useState('')
   const [childCategories, setChildCategories] = useState(Array<string>)
   const [results, setResults] = useState([])
@@ -19,7 +20,7 @@ const SearchResult = () => {
     const params = window.location.href.split('?')[1].split('=')
     // console.log(params);
     setKey(params[0])
-    console.log(decodeURI(params[1]),'----', key);
+    // console.log(decodeURI(params[1]),'----', key);
 
     // axios 요청
     // decoding을 해주지 않으면 인코딩된 형태로 나옴
@@ -31,7 +32,7 @@ const SearchResult = () => {
     if (params[0] === 'parentCategory' || params[0] === 'childCategory') {
       getSearchCategoryResult(params[0], value).then((res)=>{
         // console.log(res);
-        console.log(key, '===', value);
+        console.log('category search');
         
         setResults(res.data)
       }).catch((err) => {
@@ -39,6 +40,8 @@ const SearchResult = () => {
         // console.log(value); 
       })
     } else if (params[0] === 'keyword') {
+      console.log('searchresult axios else if=', value);
+      
       getSearchKeywordResult(value).then((res) => {
         console.log(res);
         setResults(res.data)
@@ -59,21 +62,9 @@ const SearchResult = () => {
     }
   }, [])
 
-  const [keyword, setKeyword] = useState<string>("");
-
-  const handleSearch = (keyword: string) => {
-    console.log(keyword);
-    
-    getSearchKeywordResult(keyword)
-    .then((res)=>{
-      console.log('keyword search=', res.data);
-    }).catch((err)=>{
-      console.log('keyword search error=', err);
-    })    
-  };
 
   useEffect(() => {
-    console.log('search result = ', keyword);
+    // console.log('search result = ', keyword);
     
     // handleSearch(keyword);
   }, [])
@@ -84,7 +75,7 @@ const SearchResult = () => {
   return (      
     <div>
       <SearchBar name={"searchResult"} handleKeyword={setKeyword}/>
-      <p className="ml-3 my-2 text-lg mr-1"><strong>{value}</strong>에 대한 검색결과</p>
+      <p className="ml-3 my-2 text-lg"><strong className="mr-1">{value}</strong>에 대한 검색결과</p>
       {/* 세부 카테고리 바 */} 
       {key==='parentCategory'? <SubCategoriesBar childCategories={childCategories} />  : ''}
 

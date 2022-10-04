@@ -12,6 +12,8 @@ const BtnCreateRoom = () => {
 
 
   const onClick = () =>{
+    // navigate('/meeting/create')    
+
     if (userAuth.isLogined) {
       navigate('/meeting/create')    
     } else if (!userAuth.isLogined) {
