@@ -1,10 +1,7 @@
 package com.sgbg.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,6 +16,7 @@ import java.util.List;
 @DynamicUpdate
 @DynamicInsert
 @Getter
+@Setter
 @NoArgsConstructor
 @ToString
 public class Room {
@@ -69,6 +67,9 @@ public class Room {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "contract_address")
+    private String contractAddress;
+
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     private List<Participation> members = new ArrayList<>();
 
@@ -82,7 +83,7 @@ public class Room {
     public Room(String parentCategory, String childCategory,
                 Long hostId, String hostName, String title, Long minUser, Long maxUser,
                 Long price, Location location, LocalDateTime reservationDate,
-                LocalDateTime endDate, Double minMemberScore, String description) {
+                LocalDateTime endDate, Double minMemberScore, String description, String contractAddress) {
 
         this.parentCategory = parentCategory;
         this.childCategory = childCategory;
@@ -97,5 +98,6 @@ public class Room {
         this.endDate = endDate;
         this.minMemberScore = minMemberScore;
         this.description = description;
+        this.contractAddress = contractAddress;
     }
 }

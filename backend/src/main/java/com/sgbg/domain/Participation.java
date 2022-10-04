@@ -34,10 +34,7 @@ public class Participation {
     }
 
     public void addMember(User user, Room room) {
-        this.user = user;
         user.getMyRooms().add(this);
-
-        this.room = room;
         room.getMembers().add(this);
     }
 

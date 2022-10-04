@@ -4,6 +4,7 @@ import com.sgbg.api.request.RoomReq;
 import com.sgbg.api.response.BaseResponseBody;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.RoomRes;
+import com.sgbg.blockchain.service.SingleBungleService;
 import com.sgbg.common.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.Room;
@@ -21,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Tag(name = "Room API", description = "방 생성, 카테고리별 방 목록 조회, 방 상세정보 조회 기능 제공")
@@ -35,6 +38,9 @@ public class RoomController {
     RedisService redisService;
 
     @Autowired
+    SingleBungleService singleBungleService;
+
+    @Autowired
     CookieUtil cookieUtil;
 
 
@@ -42,9 +48,18 @@ public class RoomController {
     @Parameters()
     @PostMapping("/create")
     public ResponseEntity createRoom(@RequestBody RoomReq roomReq, HttpServletRequest request) {
-//        Long userId = cookieUtil.getUserIdByToken(request);
+        Long userId = cookieUtil.getUserIdByToken(request);
 
-        roomService.createRoom(roomReq);
+        try {
+            String contractAddress = singleBungleService.createRoom(
+                    userId, Duration.between(LocalDateTime.now(), roomReq.getEndDate()).getSeconds(), roomReq.getPrice());
+
+            roomService.createRoom(roomReq, userId, contractAddress);
+
+            // TODO: wallet 잔액 부족한 경우
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(2010, "Accepted"));
     }
