@@ -3,7 +3,7 @@ package com.sgbg.api.controller;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.UserRes;
 import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
-import com.sgbg.common.exception.NotFoundException;
+import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.Auth;
 import com.sgbg.domain.Participation;

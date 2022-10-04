@@ -1,4 +1,4 @@
-package com.sgbg.common.exception;
+package com.sgbg.common.util.exception;
 
 public class EmptyListException extends RuntimeException {
 

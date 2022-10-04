@@ -13,6 +13,9 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findAllByParentCategory(String parentCategory);
 
     List<Room> findAllByChildCategory(String childCategory);
+
+    List<Room> findByTitleContaining(String keyword);
+
 //    List<Room> findAllBy(Pageable pageable);
 //    Optional<Room> findByUserId(Long userId);
 //    List<Room> findByUserId(Long userId);

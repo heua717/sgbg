@@ -1,4 +1,4 @@
-package com.sgbg.common.exception;
+package com.sgbg.common.util.exception;
 
 public class NotFoundException extends RuntimeException {
     private static final long serialVersionUID = 2157902426746147324L;
