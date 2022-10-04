@@ -1,7 +1,9 @@
 import MeetingCard from "../cards/MeetingCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getMyPageHostList } from "../../api/profile";
+import UnevalMeetingCard from "../cards/UnevalMeetingCard";
+import MeetingReviewModal from "../modals/MeetingReviewModal";
 
 type room = {
   roomId: number;
@@ -33,31 +35,14 @@ type room = {
       memberScore: number;
     }
   ];
+  hostReview: boolean;
+  memberReview: boolean;
 };
-const MeetingListHost = () => {
 
-//   const room:roomMore = {
-//     "roomId": '',
-//     "title":"만든 모임",
-//     "parentCategory":"기타",
-//     "childCategory":"기타",
-//     "minUser":2,
-//     "maxUser":10,
-//     "location":{
-//         "locationId": "17573702",
-//         "name": "코엑스",
-//         "latitude": "127.05882784390123",
-//         "hardness": "37.51266138067201",
-//         "roadAddress":"서울 강남구"
-//     },
-//     "description":"ㅎㅎㅎㅎㅎ",
-//     "endDate":"2022-09-30T15:21:00",
-//     "reservationDate":"2022-10-01T15:21:00",
-//     "price":20000,
-//     "minMemberScore":50
-// }
-  const list = [0,0,0,0,0]
-  
+const MeetingListHost = () => {
+  const navigator = useNavigate();
+  const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
+  const [selectedRoomId, setSelectedRoomId] = useState<number>(-1);
   const [roomList, setRoomList] = useState<room[]>([]);
   useEffect(() => {
     getMyPageHostList()
@@ -69,9 +54,14 @@ const MeetingListHost = () => {
 
   return (
     <div className="w-full">
-      {roomList.map((room) => (
-        <MeetingCard key={room.roomId} name="meetingListParticipant" room={room} />
-      ))}
+      {roomList.map((room) => {
+        return room.hostReview && room.memberReview ? (
+          <MeetingCard key={room.roomId} name="meetingListParticipant" room={room} />
+        ) : (
+          <UnevalMeetingCard key={room.roomId} name="meetingListParticipant" room={room} />
+        );
+      })}
+      <MeetingReviewModal isVisible={isVisibleModal} setIsVisible={setIsVisibleModal} roomId={selectedRoomId} />
     </div>
   );
 };

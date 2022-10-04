@@ -10,7 +10,7 @@ const CreateRoomCategory = () => {
       </Link>
       <h2 className="text-lg font-bold text-center mb-5 col-span-4">카테고리</h2>
     </div>
-    <AllCatetoryList />
+    <AllCatetoryList name="createRoom" />
 
   </div>);
 };

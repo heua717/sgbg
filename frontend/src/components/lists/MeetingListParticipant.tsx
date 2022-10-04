@@ -1,6 +1,9 @@
 import MeetingCard from "../cards/MeetingCard";
 import { useEffect, useState } from "react";
 import { getMyPageParticipantList } from "../../api/profile";
+import UnevalMeetingCard from "../cards/UnevalMeetingCard";
+import MeetingReviewModal from "../modals/MeetingReviewModal";
+import { useNavigate } from "react-router-dom";
 
 type room = {
   roomId: number;
@@ -32,9 +35,14 @@ type room = {
       memberScore: number;
     }
   ];
+  hostReview: boolean;
+  memberReview: boolean;
 };
 
 const MeetingListParticipant = () => {
+  const navigator = useNavigate();
+  const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
+  const [selectedRoomId, setSelectedRoomId] = useState<number>(-1);
   const [roomList, setRoomList] = useState<room[]>([]);
   useEffect(() => {
     getMyPageParticipantList()
@@ -43,11 +51,25 @@ const MeetingListParticipant = () => {
       })
       .catch();
   }, []);
+
+  const handleReview = (host: boolean, roomId: number) => {
+    if (host) {
+      navigator(`/eval/${roomId}`);
+    } else {
+      setSelectedRoomId(roomId);
+      setIsVisibleModal(true);
+    }
+  }
   return (
     <div className="w-full">
-      {roomList.map((room) => (
-        <MeetingCard key={room.roomId} name="meetingListParticipant" room={room} />
-      ))}
+      {roomList.map((room) => {
+        return room.hostReview && room.memberReview ? (
+          <MeetingCard key={room.roomId} name="meetingListParticipant" room={room} />
+        ) : (
+            <UnevalMeetingCard key={room.roomId} name="meetingListParticipant" room={room} handleReview={ handleReview } />
+        );
+      })}
+      <MeetingReviewModal isVisible={isVisibleModal} setIsVisible={setIsVisibleModal} roomId={selectedRoomId} />
     </div>
   );
 };

@@ -12,6 +12,11 @@ export const readRoom = (_id: string) => {
 };
 
 export const intoRoom = (id: any) => {
-  const url = "user/room/add";
-  return api.post(url, id)
+  const url = `user/room/${id}/add`;
+  return api.get(url)
+}
+
+export const outRoom = (id: any) => {
+  const url = `user/room/${id}/delete`
+  return api.get(url)
 }
