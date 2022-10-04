@@ -1,5 +1,6 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 import { formatDate } from "../../util/room";
 // import { useEffect } from "react";
 // import { useRecoilState } from "recoil";
@@ -9,6 +10,8 @@ import { formatDate } from "../../util/room";
 
 
 const MeetingCard = (props:any): JSX.Element => {
+  const [meetingText, setMeetingText] = useState('모집 중')
+
   const getStateBadgeColor = () => {
     return 'bg-yellow-100';
   }
@@ -16,15 +19,44 @@ const MeetingCard = (props:any): JSX.Element => {
     return 'bg-gray-100';
   }
 
+  const getIsImminent = () =>{
+    const monthNow = new Date().getMonth() + 1
+    const dateNow = new Date().getDate()
+
+    const endDate = props.room.endDate.split('T')[0]
+    const endDateSplited = endDate.split('-')
+    const endDateMonth = Number(endDateSplited[1])
+    const endDateDate = Number(endDateSplited[2])
+    
+    // console.log(endDateMonth, endDateDate );
+    
+    
+    // 달이 같고, 일의 차이가 1 이하이면 마감 임박
+    if (monthNow === endDateMonth && (endDateDate - dateNow) <= 1) {
+      // console.log(monthNow, endDateMonth, endDateDate, dateNow);
+      
+      setMeetingText('마감 임박')
+    } else {
+      setMeetingText('모집 중')
+    }
+    // 아니면 모집 중    
+  }
+
+  useEffect(()=>{
+    // console.log('hi');
+    
+    getIsImminent();
+  }, [props.room.endDate])
+
   return (
     // w-per100 h-per100 
     <div className="flex flex-row border rounded-lg p-2 mb-2">
       {/* 모임 이미지, 뱃지 */}
       <div className="w-per45 mr-5 relative">
-        <div className={`absolute top-0 left-0 rounded ${getStateBadgeColor()} text-sm font-semibold px-2 py-1`}>{`마감 임박`}</div>
+        <div className={`absolute top-0 left-0 rounded ${getStateBadgeColor()} text-sm font-semibold px-2 py-1`}>{meetingText}</div>
         <img
           className="w-full h-full rounded"
-          src={process.env.PUBLIC_URL + `/img/이색놀거리_방탈출.png`}
+          src={process.env.PUBLIC_URL + `/img/${props.room.parentCategory}_${props.room.childCategory.replace('/', '')}.jpg`}
           alt="소분류 카테고리 사진"></img>
 
         <div className={`absolute bottom-0 right-0 rounded ${getMemberBadgeColor()} text-sm font-semibold px-2`}>

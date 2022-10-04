@@ -41,7 +41,7 @@ const CreateRoomMap = () => {
     handleSearch(keyword, page);
   }, [keyword, page])
 
-  
+
   const newaddr = selected.road_address.split(" ")
   console.log(newaddr);
   console.log(newaddr[0] + ' ' + newaddr[1]);
@@ -86,7 +86,7 @@ const CreateRoomMap = () => {
 
   return (
     <div className="flex flex-col p-2">
-      <SearchBar handleKeyword={setKeyword} />
+      <SearchBar name={"createRoomMap"} handleKeyword={setKeyword} />
       {selected.id ? (
           <div className="flex flex-col bg-yellow-100 rounded border border-gray-200 p-2 mb-2">
             <span className="flex flex-row items-center">
