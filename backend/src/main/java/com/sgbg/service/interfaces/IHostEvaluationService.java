@@ -6,7 +6,9 @@ import com.sgbg.domain.User;
 
 public interface IHostEvaluationService {
 
-    HostEvaluation createEvaluation(User user, Room room, Boolean isSuccess);
+    HostEvaluation createEvaluation(User user, Room room, Boolean isSuccess, Long transactionId);
 
     Boolean checkHostEvaluation(User user, Room room);
+
+    int getSuccessEvaluation(Room room);
 }

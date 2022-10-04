@@ -27,7 +27,15 @@ public class RoomListRes extends BaseResponseBody {
         RoomListRes res = new RoomListRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);
-        res.setRoomListInfo(roomList, hostReviews, memberReviews);
+        res.setMyRoomListInfo(roomList, hostReviews, memberReviews);
+        return res;
+    }
+
+    public static RoomListRes createMyCompleteRoomList(Integer statusCode, String message, List<Room> roomList, List<Integer> hostReviewResults, List<ReviewRes> memberReviewResults) {
+        RoomListRes res = new RoomListRes();
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+        res.setMyCompleteRoomListInfo(roomList, hostReviewResults, memberReviewResults);
         return res;
     }
 
@@ -37,10 +45,18 @@ public class RoomListRes extends BaseResponseBody {
         }
     }
 
-    public void setRoomListInfo(List<Room> roomList, List<Boolean> hostReviews, List<Boolean> memberReviews) {
-        for(int i = 0; i < roomList.size(); i++) {
+    public void setMyRoomListInfo(List<Room> roomList, List<Boolean> hostReviews, List<Boolean> memberReviews) {
+        for (int i = 0; i < roomList.size(); i++) {
             this.roomListInfo.add(
                     BaseRoomRes.createMyRoomRes(roomList.get(i), hostReviews.get(i), memberReviews.get(i))
+            );
+        }
+    }
+
+    public void setMyCompleteRoomListInfo(List<Room> roomList, List<Integer> hostReviewResults, List<ReviewRes> memberReviewResults) {
+        for (int i = 0; i < roomList.size(); i++) {
+            this.roomListInfo.add(
+                    BaseRoomRes.createMyCompleteRoomRes(roomList.get(i), hostReviewResults.get(i), memberReviewResults.get(i))
             );
         }
     }

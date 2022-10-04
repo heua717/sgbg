@@ -42,8 +42,6 @@ public class Transaction {
     private LocalDateTime storedAt;
 
     private Boolean relatedToMoney;
-    // 돈 관련 있는 것과 아닌 것으로 나누고 싶다고 누군가가 말했음
-
 
     @Builder
     public Transaction(long id, String hash, String contractAddress, String blockHash, long blockNumber, long transactionIndex, String from, String to, long money, long gas, LocalDateTime storedAt, Boolean relatedToMoney) {

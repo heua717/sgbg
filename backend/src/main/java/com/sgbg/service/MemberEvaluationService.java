@@ -21,13 +21,11 @@ public class MemberEvaluationService implements IMemberEvaluationService {
 
     @Override
     public MemberEvaluation createEvaluation(BaseMemberEvaluationReq memberEvaluationReq, Room room, User evaluator, User user) {
-        // TODO: set transaction id
         MemberEvaluation memberEvaluation = MemberEvaluation.builder()
                 .room(room)
                 .evaluator(evaluator)
                 .user(user)
                 .score(memberEvaluationReq.getReview().getScore())
-//                .transactionId()
                 .build();
 
         memberEvaluation.addMemberEvaluation(room, evaluator, user);
@@ -38,8 +36,13 @@ public class MemberEvaluationService implements IMemberEvaluationService {
 
     @Override
     public Boolean checkMemberEvaluation(User evaluator, Room room) {
-        List<MemberEvaluation> memberEvaluations = memberEvaluationRepository.findMemberEvaluationByEvaluatorAndRoom(evaluator, room);
+        List<MemberEvaluation> memberEvaluations = memberEvaluationRepository.findMemberEvaluationsByEvaluatorAndRoom(evaluator, room);
 
         return memberEvaluations.size() != 0;
+    }
+
+    @Override
+    public List<MemberEvaluation> getMemberEvaluations(User user, Room room) {
+        return memberEvaluationRepository.findMemberEvaluationsByUserAndRoom(user, room);
     }
 }
