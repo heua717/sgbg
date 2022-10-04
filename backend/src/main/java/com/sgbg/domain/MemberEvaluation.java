@@ -22,8 +22,6 @@ public class MemberEvaluation {
 
     private int score;
 
-    private Long transactionId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "evaluator_id", referencedColumnName = "user_id")
     private User evaluator; // 평가하는 사람
@@ -37,9 +35,8 @@ public class MemberEvaluation {
     private Room room;
 
     @Builder
-    public MemberEvaluation(int score, User evaluator, Long transactionId, User user, Room room) {
+    public MemberEvaluation(int score, User evaluator, User user, Room room) {
         this.score = score;
-        this.transactionId = transactionId;
         this.evaluator = evaluator;
         this.user = user;
         this.room = room;

@@ -21,13 +21,11 @@ public class MemberEvaluationService implements IMemberEvaluationService {
 
     @Override
     public MemberEvaluation createEvaluation(BaseMemberEvaluationReq memberEvaluationReq, Room room, User evaluator, User user) {
-        // TODO: set transaction id
         MemberEvaluation memberEvaluation = MemberEvaluation.builder()
                 .room(room)
                 .evaluator(evaluator)
                 .user(user)
                 .score(memberEvaluationReq.getReview().getScore())
-//                .transactionId()
                 .build();
 
         memberEvaluation.addMemberEvaluation(room, evaluator, user);

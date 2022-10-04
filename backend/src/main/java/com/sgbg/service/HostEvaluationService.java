@@ -19,11 +19,12 @@ public class HostEvaluationService implements IHostEvaluationService {
     HostEvaluationRepository hostEvaluationRepository;
 
     @Override
-    public HostEvaluation createEvaluation(User user, Room room, Boolean isSuccess) {
+    public HostEvaluation createEvaluation(User user, Room room, Boolean isSuccess, Long transactionId) {
         HostEvaluation hostEvaluation = HostEvaluation.builder()
                 .user(user)
                 .room(room)
                 .isSuccess(isSuccess)
+                .transactionId(transactionId)
                 .build();
 
         hostEvaluation.addHostEvaluation(user, room);
