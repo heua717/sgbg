@@ -4,6 +4,7 @@ services:
         container_name: sgbg-nginx
         build:
             context: .
+            dockerfile: ./frontend/Dockerfile
         depends_on:
             - server
         ports:
