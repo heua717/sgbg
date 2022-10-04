@@ -85,7 +85,7 @@ const CreateRoomMap = () => {
   return (
     <div className="flex flex-col p-2">
       <SearchBar handleKeyword={setKeyword} />
-      {selected ? (
+      {selected.id ? (
           <div className="flex flex-col bg-yellow-100 rounded border border-gray-200 p-2 mb-2">
             <span className="flex flex-row items-center">
               <FontAwesomeIcon className="text-2xl text-blue-300 mr-2" icon={faCheck} />
