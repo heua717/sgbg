@@ -39,7 +39,7 @@ const Main = () => {
       {/* 카테고리 */}
       <CategoriesBar />
       {/* 필터바 */}
-      <FilterBar />
+      {/* <FilterBar /> */}
       {/* 모임리스트 */}
       <div className="w-per95 m-auto grid grid-cols-1 gap-1">
         {mainRoomList.map((room:roomMore) => (

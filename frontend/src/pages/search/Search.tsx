@@ -5,7 +5,7 @@ const Search = () => {
   return (<div className="mt-5">
     <SearchBar handleKeyword={() => {}}/>
     <div className="mx-2 mt-5">
-      <AllCatetoryList />
+      <AllCatetoryList name="search"/>
     </div>
   </div>);
 };
