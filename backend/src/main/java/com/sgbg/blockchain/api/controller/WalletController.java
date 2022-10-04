@@ -35,14 +35,14 @@ public class WalletController {
     @GetMapping
     public ResponseEntity<? extends BaseResponseBody> checkWallet(HttpServletRequest request) {
 
-//        long userId = cookieUtil.getUserIdByToken(request);
-        long userId = 3L;
+        long userId = cookieUtil.getUserIdByToken(request);
+//        long userId = 3L;
 
         try {
             walletService.checkWallet(userId);
             return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2000, "Success"));
         } catch(NoWalletException e){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(BaseResponseBody.of(4020, "No Wallet"));
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(4020, "No Wallet"));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -53,8 +53,7 @@ public class WalletController {
     @PostMapping
     public ResponseEntity<? extends BaseResponseBody> getWallet(@RequestParam String password, HttpServletRequest request) {
 
-//        long userId = cookieUtil.getUserIdByToken(request);
-        long userId = 3L;
+        long userId = cookieUtil.getUserIdByToken(request);
 
         try {
             Wallet wallet = walletService.getWallet(userId, password);
@@ -71,8 +70,8 @@ public class WalletController {
     public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestParam String password, HttpServletRequest request) {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-//        long userId = cookieUtil.getUserIdByToken(request);
-        long userId = 4L;
+        long userId = cookieUtil.getUserIdByToken(request);
+//        long userId = 4L;
 
         Wallet wallet = null;
         try {
@@ -92,14 +91,14 @@ public class WalletController {
     public ResponseEntity<? extends BaseResponseBody> charge(@RequestParam long money, HttpServletRequest request){
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-//        long userId = cookieUtil.getUserIdByToken(request);
-        long userId = 4L;
+        long userId = cookieUtil.getUserIdByToken(request);
+//        long userId = 4L;
 
         try {
             Wallet wallet = walletService.charge(userId, money);
             return ResponseEntity.status(HttpStatus.OK).body(WalletRes.of(2010, "Accepted", wallet));
         } catch (NoWalletException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseResponseBody.of(4020, "No Wallet"));
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(4020, "No Wallet"));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -111,8 +110,8 @@ public class WalletController {
     public ResponseEntity<? extends BaseResponseBody> history(HttpServletRequest request){
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-//        long userId = cookieUtil.getUserIdByToken(request);
-        long userId = 4L;
+        long userId = cookieUtil.getUserIdByToken(request);
+//        long userId = 4L;
 
         try {
             List<WalletHistory> walletHistoryList = walletService.getHistoryList(userId);
