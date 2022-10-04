@@ -119,5 +119,12 @@ public class RoomController {
         return ResponseEntity.status(200).body(RoomListRes.of(2000, "Success", roomList));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity searchRoom(@RequestParam String keyword) {
 
+        List<Room> roomList = roomService.searchRoom(keyword);
+
+        return ResponseEntity.status(200).body(roomList);
+       }
 }
+

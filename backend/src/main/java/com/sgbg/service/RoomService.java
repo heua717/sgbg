@@ -97,4 +97,9 @@ public class RoomService {
 //        }
         return roomRepository.findAllByChildCategory(childCategory);
     }
+
+    public List<Room> searchRoom(String keyword) {
+        List<Room> rooms = roomRepository.findByTitleContaining(keyword);
+        return rooms;
+    }
 }
