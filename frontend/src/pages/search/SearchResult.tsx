@@ -5,6 +5,7 @@ import SubCategoriesBar from "../../components/bars/SubCategoriesBar";
 import MeetingCard from "../../components/cards/MeetingCard";
 import { getSearchCategoryResult } from "../../api/search";
 import data from "../../util/category";
+import { getSearchKeywordResult } from "../../api/search";
 
 
 const SearchResult = () => {
@@ -45,13 +46,32 @@ const SearchResult = () => {
       })
     }
   }, [])
+
+  const [keyword, setKeyword] = useState<string>("");
+
+  const handleSearch = (keyword: string) => {
+    console.log(keyword);
+    
+    getSearchKeywordResult(keyword)
+    .then((res)=>{
+      console.log('keyword search=', res.data);
+    }).catch((err)=>{
+      console.log('keyword search error=', err);
+    })    
+  };
+
+  useEffect(() => {
+    console.log('search result = ', keyword);
+    
+    handleSearch(keyword);
+  }, [keyword])
   // React Hook useEffect has missing dependencies: 'key' and 'results'. Either include them or remove the dependency array. You can also do a functional update 'setResults(r => ...)' if you only need 'results' in the 'setResults' call  react-hooks/exhaustive-deps
   // 위에 같은 에러가 떠서 key,results를 넣었더니 무한으로 업데이트가 되어서 지워줬더니 해결됨
 
-  // const list = [0, 0, 0, 0, 0, 0];
+  
   return (      
     <div>
-      <SearchBar handleKeyword={() => {}}/>
+      <SearchBar handleKeyword={setKeyword}/>
       <p className="ml-3 my-2 text-lg"><strong>{value}</strong>에 대한 검색결과</p>
       {/* 세부 카테고리 바 */} 
       {key==='parentCategory'? <SubCategoriesBar childCategories={childCategories} />  : ''}
