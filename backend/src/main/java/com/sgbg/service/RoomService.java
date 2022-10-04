@@ -1,8 +1,7 @@
 package com.sgbg.service;
 
 import com.sgbg.api.request.RoomReq;
-import com.sgbg.api.response.RoomRes;
-import com.sgbg.common.exception.NotFoundException;
+import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.domain.Location;
 import com.sgbg.domain.Participation;
 import com.sgbg.domain.Room;
@@ -11,16 +10,11 @@ import com.sgbg.repository.LocationRepository;
 import com.sgbg.repository.ParticipationRepository;
 import com.sgbg.repository.RoomRepository;
 import com.sgbg.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
@@ -96,5 +90,10 @@ public class RoomService {
 //            }
 //        }
         return roomRepository.findAllByChildCategory(childCategory);
+    }
+
+    public List<Room> searchRoom(String keyword) {
+        List<Room> rooms = roomRepository.findByTitleContaining(keyword);
+        return rooms;
     }
 }

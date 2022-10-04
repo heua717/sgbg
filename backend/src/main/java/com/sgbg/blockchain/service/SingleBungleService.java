@@ -1,6 +1,7 @@
 package com.sgbg.blockchain.service;
 
 import com.sgbg.blockchain.common.exception.NoWalletException;
+import com.sgbg.blockchain.common.exception.NotEnoughMoneyException;
 import com.sgbg.blockchain.domain.Transaction;
 import com.sgbg.blockchain.domain.Wallet;
 import com.sgbg.blockchain.domain.WalletHistory;
@@ -50,12 +51,16 @@ public class SingleBungleService implements ISingleBungleService {
 
     @Override
     public String createRoom(long hostId, long duration, long minimumAmount) throws Exception {
-        // TODO: 방장 wallet 잔액 확인
 
         // 방장이 방을 만들고 SingleBungle 스마트 컨트랙트를 생성하는 함수
         Wallet wallet = walletRepository.findByOwnerId(hostId).orElse(null);
         if (wallet == null) {
             throw new NoWalletException();
+        }
+        long hostMoney = wallet.getCash();
+        if(hostMoney < minimumAmount){
+            return null;
+//            throw new NotEnoughMoneyException();
         }
 
         Credentials credentials = Credentials.create(wallet.getPrivateKey(), wallet.getPublicKey());
@@ -97,10 +102,13 @@ public class SingleBungleService implements ISingleBungleService {
         String hostPublicKey = hostWallet.getPublicKey();
         Credentials hostCredentials = Credentials.create(hostPrivateKey, hostPublicKey);
 
-        // TODO: user wallet 잔액 확인
         Wallet userWallet = walletRepository.findByOwnerId(userId).orElse(null);
         if (userWallet == null) {
             throw new NoWalletException();
+        }
+        if(userWallet.getCash() < money) {
+            return null;
+            // throw new NotEnoughMoneyException;
         }
 
         String userPrivateKey = userWallet.getPrivateKey();
@@ -244,6 +252,45 @@ public class SingleBungleService implements ISingleBungleService {
         walletHistoryRepository.save(hostWalletHistory);
 
         return hostWallet;
+    }
+
+    @Override
+    public Wallet isSuccess(long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception{
+
+        Wallet hostWallet = walletRepository.findByOwnerId(hostId).orElse(null);
+        if (hostWallet == null) {
+            return null;
+        }
+        String hostPrivateKey = hostWallet.getPrivateKey();
+        String hostPublicKey = hostWallet.getPublicKey();
+        Credentials hostCredentials = Credentials.create(hostPrivateKey, hostPublicKey);
+
+        Wallet userWallet = walletRepository.findByOwnerId(userId).orElse(null);
+        if (userWallet == null) {
+            throw new NoWalletException();
+        }
+
+        String userPrivateKey = userWallet.getPrivateKey();
+        String userPublicKey = userWallet.getPublicKey();
+        Credentials userCredentials = Credentials.create(userPrivateKey, userPublicKey);
+        String userAddress = userCredentials.getAddress();
+
+        ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
+        Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
+        TransactionReceipt receipt = contract.isSuccess(userAddress, isSuccess).send();
+
+        // transaction 엔티티 저장
+        // TODO : transaction 종류 enum으로 생성하기
+        Transaction transaction = Transaction.builder()
+                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+                .transactionIndex(receipt.getTransactionIndex().longValue())
+                .from(receipt.getFrom()).to(receipt.getTo())
+                .gas(receipt.getGasUsed().longValue())
+                .storedAt(LocalDateTime.now()).relatedToMoney(false).build();
+        transactionRepository.save(transaction);
+
+        return userWallet;
     }
 
 }

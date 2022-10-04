@@ -157,6 +157,7 @@ public class WalletService implements IWalletService {
         if (wallet == null) {
             throw new NoWalletException();
         }
+//        System.out.println(wallet.getPrivateKey());
     }
 
     @Override

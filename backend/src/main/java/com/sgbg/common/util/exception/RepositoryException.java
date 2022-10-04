@@ -1,4 +1,4 @@
-package com.sgbg.common.exception;
+package com.sgbg.common.util.exception;
 
 public class RepositoryException extends RuntimeException {
     static final long serialVersionUID = 1;

@@ -5,7 +5,7 @@ import com.sgbg.api.response.BaseResponseBody;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.RoomRes;
 import com.sgbg.blockchain.service.SingleBungleService;
-import com.sgbg.common.exception.NotFoundException;
+import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.Room;
 import com.sgbg.service.RedisService;
@@ -119,5 +119,12 @@ public class RoomController {
         return ResponseEntity.status(200).body(RoomListRes.of(2000, "Success", roomList));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity searchRoom(@RequestParam(value="keyword") String keyword) {
 
+        List<Room> roomList = roomService.searchRoom(keyword);
+
+        return ResponseEntity.status(200).body(roomList);
+       }
 }
+
