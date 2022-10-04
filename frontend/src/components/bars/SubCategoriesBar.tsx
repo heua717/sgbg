@@ -1,11 +1,11 @@
 import BtnSubCategory from "../buttons/BtnSubCategory";
 
-const SubCategoriesBar = () => {
-  const list = [0, 0, 0, 0];
+const SubCategoriesBar = (props: any) => {
+  // const list = [0, 0, 0, 0];
   return (
     <div className="w-full mb-1">
-      {list.map(() => (
-        <BtnSubCategory />
+      {props.childCategories.map((childCategory: string) => (
+        <BtnSubCategory childCategory={childCategory} />
       ))}
     </div>
   );

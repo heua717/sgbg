@@ -19,6 +19,7 @@ const CommunityTab = (props: any) => {
     commentId: 0,
     createdAt: '',
     username: '',
+    userId: '',
     userScore: 0,
     }])
 
@@ -64,7 +65,7 @@ const CommunityTab = (props: any) => {
   useEffect(()=>{
     // 만약 로그인이 안되어 있거나, 이 모임의 참여자가 아니면 리다이렉트 시키기
     console.log(userAuth);
-    /* if (userAuth.isLogined === false){
+    if (!userAuth.isLogined || !props.isInThisRoom){
       Swal.fire({
         title: '모임에 참여한 사용자만 접근 가능합니다.',
         icon: 'error',
@@ -72,9 +73,9 @@ const CommunityTab = (props: any) => {
       }).then(()=>{
         navigate(0);
       })
-    } else { */
+    } else { 
       readCommentList();
-    // }
+    }
     
     // 전체 커뮤니티 글 읽어오기
   }, [])
@@ -129,7 +130,8 @@ const CommunityTab = (props: any) => {
                       <span className="font-semibold leading-tightl">{comment.username}</span>
                     </div>
                   </Link>
-                  {userAuth.userId === comment.username && (
+                  {/* 현재 유저와 작성한 유저가 같으면 삭제되도록 */}
+                  {userAuth.userId === comment.userId && (
                     <div>
                       {/* <button onClick={onClickUpdate(comment.commentId)}>수정하기</button> */}
                       <button onClick={onClickDelete(comment.commentId)}>삭제하기</button>

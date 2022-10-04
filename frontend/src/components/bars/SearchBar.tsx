@@ -3,8 +3,9 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 type SearchBarProps = {
-  handleKeyword : (e: string) => void,
+  handleKeyword : (e: string) => void;
 }
+
 
 const SearchBar = (props:SearchBarProps) => {
   const [keyword, setKeyword] = useState<string>("");
