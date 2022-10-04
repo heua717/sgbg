@@ -70,6 +70,12 @@ public class BaseRoomRes {
     @Schema(name = "memberReview")
     private Boolean memberReview = null;
 
+    @Schema(name = "hostReviewResult")
+    private int hostReviewResult;
+
+    @Schema(name = "memberReviewResult")
+    private ReviewRes memberReviewResult;
+
     public static BaseRoomRes of(Room room) {
         BaseRoomRes baseRoomRes = new BaseRoomRes();
         baseRoomRes.setRoomId(room.getId());
@@ -93,6 +99,13 @@ public class BaseRoomRes {
         BaseRoomRes res = BaseRoomRes.of(room);
         res.setHostReview(hostReview);
         res.setMemberReview(memberReview);
+        return res;
+    }
+
+    public static BaseRoomRes createMyCompleteRoomRes(Room room, int hostReviewResult, ReviewRes memberReviewResult) {
+        BaseRoomRes res = BaseRoomRes.of(room);
+        res.setHostReviewResult(hostReviewResult);
+        res.setMemberReviewResult(memberReviewResult);
         return res;
     }
 

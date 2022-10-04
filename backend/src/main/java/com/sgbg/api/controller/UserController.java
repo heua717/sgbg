@@ -1,14 +1,13 @@
 package com.sgbg.api.controller;
 
+import com.sgbg.api.request.Review;
+import com.sgbg.api.response.ReviewRes;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.UserRes;
 import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
 import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
-import com.sgbg.domain.Auth;
-import com.sgbg.domain.Participation;
-import com.sgbg.domain.Room;
-import com.sgbg.domain.User;
+import com.sgbg.domain.*;
 import com.sgbg.service.interfaces.IAuthService;
 import com.sgbg.service.interfaces.IHostEvaluationService;
 import com.sgbg.service.interfaces.IMemberEvaluationService;
@@ -28,6 +27,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +97,7 @@ public class UserController {
         List<Boolean> hostReviews = new ArrayList<>();
         List<Boolean> memberReviews = new ArrayList<>();
 
-        for (Room room: rooms) {
+        for (Room room : rooms) {
             Boolean hostReview = hostEvaluationService.checkHostEvaluation(user, room);
             Boolean memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
             hostReviews.add(hostReview);
@@ -114,7 +114,7 @@ public class UserController {
         Long userId = cookieUtil.getUserIdByToken(request);
         User user = userService.getUserById(userId);
         if (user == null) {
-           throw new NotFoundException("User Not Found");
+            throw new NotFoundException("User Not Found");
         }
 
         Participation participation = userService.addMyRoom(userId, Long.valueOf(roomId));
@@ -129,7 +129,6 @@ public class UserController {
         }
     }
 
-    // TODO: 방 나가기
     @GetMapping("/room/{roomId}/delete")
     @Operation(summary = "방 나가기")
     // TODO: API Response 추가
@@ -147,4 +146,53 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/{kakaoId}/room")
+    @Operation(summary = "완료된 모임 조회")
+    public ResponseEntity<? extends RoomListRes> getMyCompleteRooms(
+            @PathVariable String kakaoId,
+            @RequestParam(value = "host") String host,
+            HttpServletRequest request
+    ) {
+        User user = authService.isUser(kakaoId).getUser();
+        if (user == null) {
+            throw new NotFoundException("User Not Found");
+        }
+
+        List<Room> myRooms = userService.getMyRooms(user.getId(), Boolean.parseBoolean(host));
+        List<Room> myCompleteRooms = new ArrayList<>();
+        List<Integer> hostReviewResults = new ArrayList<>();
+        List<ReviewRes> memberReviewResults = new ArrayList<>();
+
+        for (Room room : myRooms) {
+            if (room.getReservationDate().compareTo(LocalDateTime.now()) < 0) { // 예약일 다음날
+                Boolean hostReview = hostEvaluationService.checkHostEvaluation(user, room);
+                Boolean memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
+
+                if (hostReview && memberReview) { // 방장, 참여자 평가가 완료된 경우
+                    int best = 0, good = 0, bad = 0;
+
+                    myCompleteRooms.add(room);
+                    hostReviewResults.add(hostEvaluationService.getSuccessEvaluation(room));
+
+                    List<MemberEvaluation> memberEvaluations = memberEvaluationService.getMemberEvaluations(user, room);
+                    for (MemberEvaluation memberEvaluation : memberEvaluations) {
+                        Review review = memberEvaluation.getReview();
+                        if (review.equals(Review.BEST)) {
+                            best++;
+                        } else if (review.equals(Review.GOOD)) {
+                            good++;
+                        } else if (review.equals(Review.BAD)) {
+                            bad++;
+                        }
+                    }
+                    memberReviewResults.add(ReviewRes.of(best, good, bad));
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyCompleteRoomList(
+                2000, "Success", myCompleteRooms, hostReviewResults, memberReviewResults));
+    }
+
 }

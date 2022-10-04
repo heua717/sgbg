@@ -17,6 +17,8 @@ public class HostEvaluation {
 
     private Boolean isSuccess;
 
+    private Long transactionId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user; // 평가 받는 사람
@@ -26,8 +28,9 @@ public class HostEvaluation {
     private Room room;
 
     @Builder
-    public HostEvaluation(Boolean isSuccess, User user, Room room) {
+    public HostEvaluation(Boolean isSuccess, Long transactionId, User user, Room room) {
         this.isSuccess = isSuccess;
+        this.transactionId = transactionId;
         this.user = user;
         this.room = room;
     }

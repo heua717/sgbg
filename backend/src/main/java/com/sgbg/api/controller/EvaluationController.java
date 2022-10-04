@@ -50,12 +50,6 @@ public class EvaluationController {
     @Autowired
     CookieUtil cookieUtil;
 
-    @Operation(summary = "방장 평가 조회 메서드")
-    @GetMapping("/host/{roomId}")
-    public void getHostEvaluation() {
-
-    }
-
     @Operation(summary = "방장 평가 메서드")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "방장 평가 성공",
@@ -77,18 +71,16 @@ public class EvaluationController {
 
         Boolean isSuccess = hostEvaluation.getIsSuccess();
 
-        hostEvaluationService.createEvaluation(user, room, isSuccess);
-
         // TODO: 스마트 컨트랙트 - 성공/실패 평가 메서드 호출
+        // TODO: create transaction and get transaction id
+
 //        singleBungleService.
 
+        // TODO: transaction id 갖고 오기
+        Long transactionId = null;
+        hostEvaluationService.createEvaluation(user, room, isSuccess, transactionId);
+
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2010, "Success"));
-    }
-
-    @Operation(summary = "참여자 평가 조회 메서드")
-    @GetMapping("/member/{roomId}")
-    public void getMemberEvaluation() {
-
     }
 
     @Operation(summary = "참여자 평가 메서드")
@@ -117,7 +109,6 @@ public class EvaluationController {
             Long kakaoId = memberEvaluation.getKakaoId();
             User user = authService.isUser(String.valueOf(kakaoId)).getUser();
 
-            // TODO: create transaction and get transaction id
             memberEvaluationService.createEvaluation(memberEvaluation, room, evaluator, user);
 
             scoreSum += memberEvaluation.getReview().getScore() - avgEvaluateScore;
@@ -126,6 +117,7 @@ public class EvaluationController {
         totalScore = scoreSum / memberEvaluations.size(); // 평균 점수 + avg evaluate score "나"
 
         // TODO: 방장의 avgEvaluateScore 변경, 참여자들의 신뢰도 결과 반영
+
 
         return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseBody.of(2010, "Success"));
     }
