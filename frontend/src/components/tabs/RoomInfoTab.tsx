@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { readRoom } from "../../api/room";
 import { formatDate, roomMore } from "../../util/room";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
-const RoomInfoTabs = (room:any) => {
-  // const navigator = useNavigate();
+const RoomInfoTabs = (room: any) => {
+  const navigator = useNavigate();
   const { meeting_id } = useParams<{ meeting_id: string }>();
   const [roomInfo, setRoomInfo] = useState<roomMore>({
     title: "",
@@ -27,17 +27,13 @@ const RoomInfoTabs = (room:any) => {
     price: 0,
     minMemberScore: 0,
   });
-  const [lat, setLat] = useState<number>(-1);
-  const [lng, setLng] = useState<number>(-1);
-  const [, updateState] = useState<number[]>();
-
+  
   useEffect(() => {
     //axios
-    // console.log(meeting_id); // ok
+    console.log(meeting_id); // ok
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
-          // console.log(data);
           setRoomInfo({ ...data.roomInfo });
         })
         .catch((e) => {
@@ -48,18 +44,19 @@ const RoomInfoTabs = (room:any) => {
             showConfirmButton: false,
             timer: 1500,
           }).then(() => {
-            //navigator(-1);
+            navigator(-1);
           });
         });
     }
   }, []);
 
+  const [position, setPosition] = useState({ lat: 0, lng: 0 });
+  
   useEffect(() => {
-    // console.log(roomInfo);
-    setLat(parseFloat(roomInfo.location.latitude));
-    setLng(parseFloat(roomInfo.location.hardness));
-    updateState([1]);
-  }, [roomInfo]);
+    setPosition({ lat: parseFloat(roomInfo.location.latitude), lng: parseFloat(roomInfo.location.hardness)})
+  },[roomInfo])
+  
+
 
   return (
     <div>
@@ -79,9 +76,7 @@ const RoomInfoTabs = (room:any) => {
 
       <div className="text-sm grid grid-cols-10">
         <p className="col-span-4 font-bold">모집 마감일</p>
-        <p className="col-start-5 col-end-10">
-          {roomInfo.endDate && formatDate(roomInfo.endDate)}
-        </p>
+        <p className="col-start-5 col-end-10">{roomInfo.endDate && formatDate(roomInfo.endDate)}</p>
       </div>
       <hr className="my-2" />
 
@@ -108,46 +103,19 @@ const RoomInfoTabs = (room:any) => {
       <div className="text-sm">
         <p className="font-bold">모임 위치</p>
         <div className="mt-2">
-          <div>{typeof lat}</div>
-          {lat !== -1 ? (
-            <Map // 지도를 표시할 Container
-              center={{
-                // 지도의 중심좌표
-                lat: lat,
-                lng: lng,
-              }}
-              style={{
-                // 지도의 크기
-                width: "100%",
-                height: "200px",
-              }}
-              level={3} // 지도의 확대 레벨
-            >
-              <MapMarker // 인포윈도우를 생성하고 지도에 표시합니다
-                position={{
-                  // 인포윈도우가 표시될 위치입니다
-                  lat: lat,
-                  lng: lng,
-                }}
-              >
-                {/* MapMarker의 자식을 넣어줌으로 해당 자식이 InfoWindow로 만들어지게 합니다 */}
-                {/* 인포윈도우에 표출될 내용으로 HTML 문자열이나 React Component가 가능합니다 */}
-                <div className="p-5">
-                  <a
-                    href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667"
-                    style={{ color: "blue" }}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {roomInfo.location.name}
-                  </a>
-                  <div>{roomInfo.location.roadAddress}</div>
-                </div>
-              </MapMarker>
-            </Map>
-          ) : (
-            ""
-          )}
+          <Map // 지도를 표시할 Container
+            center={{
+              // 지도의 중심좌표
+              lat: position.lat,
+              lng: position.lng,
+            }}
+            style={{
+              // 지도의 크기
+              width: "100%",
+              height: "200px",
+            }}
+            level={3} // 지도의 확대 레벨
+          ></Map>
         </div>
       </div>
     </div>
