@@ -120,7 +120,7 @@ public class RoomController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity searchRoom(@RequestParam String keyword) {
+    public ResponseEntity searchRoom(@RequestParam(value="keyword") String keyword) {
 
         List<Room> roomList = roomService.searchRoom(keyword);
 
