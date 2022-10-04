@@ -51,12 +51,6 @@ public class EvaluationController {
     @Autowired
     CookieUtil cookieUtil;
 
-    @Operation(summary = "방장 평가 조회 메서드")
-    @GetMapping("/host/{roomId}")
-    public void getHostEvaluation() {
-
-    }
-
     @Operation(summary = "방장 평가 메서드")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "방장 평가 성공",
@@ -84,12 +78,6 @@ public class EvaluationController {
 //        singleBungleService.
 
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2010, "Success"));
-    }
-
-    @Operation(summary = "참여자 평가 조회 메서드")
-    @GetMapping("/member/{roomId}")
-    public void getMemberEvaluation() {
-
     }
 
     @Operation(summary = "참여자 평가 메서드")
@@ -124,9 +112,32 @@ public class EvaluationController {
             scoreSum += memberEvaluation.getReview().getScore() - avgEvaluateScore;
         }
 
+        // user1(나), user2, user3, user4
+        // user2 -> BEST (10)
+        // user3 -> GOOD (5)
+        // user4 -> BAD (-10)
+
+        // User.java -> Entity (avgEvaluateScore = 5)
+        // (10 - 5) + (5 - 5) + (-10 -5) = 5 + 0 + -15 = -10
+        // -10 / 3 = -3.333 => user1(나)한테 반영되는 것
+
+        // -3.3
+
+        // user2를 평가한 사람이 user1(나)를 제외하고도 user3(10), user4(5)
+
+        // 유예기간 7일 안주고, 모든 참여자들이 설문을 한다고 가정함.
+
+        // 1번 방, 평가자는 나니까 1, , ,
+        // (room id, evaluator id, user id, score)
+
+        //
+
+
+
         totalScore = scoreSum / memberEvaluations.size(); // 평균 점수 + avg evaluate score "나"
 
         // TODO: 방장의 avgEvaluateScore 변경, 참여자들의 신뢰도 결과 반영
+
 
         return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseBody.of(2010, "Success"));
     }

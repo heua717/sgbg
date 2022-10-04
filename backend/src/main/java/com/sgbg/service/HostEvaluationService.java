@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class HostEvaluationService implements IHostEvaluationService {
@@ -33,5 +35,11 @@ public class HostEvaluationService implements IHostEvaluationService {
     public Boolean checkHostEvaluation(User user, Room room) {
         HostEvaluation hostEvaluation = hostEvaluationRepository.findHostEvaluationByUserAndRoom(user, room).orElse(null);
         return hostEvaluation != null;
+    }
+
+    @Override
+    public int getSuccessEvaluation(Room room) {
+        List<HostEvaluation> hostEvaluationsByRoomAndIsSuccess = hostEvaluationRepository.findHostEvaluationsByRoomAndIsSuccess(room, true);
+        return hostEvaluationsByRoomAndIsSuccess.size();
     }
 }

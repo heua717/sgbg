@@ -1,5 +1,6 @@
 package com.sgbg.domain;
 
+import com.sgbg.api.request.Review;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,6 +16,9 @@ public class MemberEvaluation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_evaluation_id")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private Review review;
 
     private int score;
 

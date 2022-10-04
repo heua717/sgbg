@@ -38,8 +38,13 @@ public class MemberEvaluationService implements IMemberEvaluationService {
 
     @Override
     public Boolean checkMemberEvaluation(User evaluator, Room room) {
-        List<MemberEvaluation> memberEvaluations = memberEvaluationRepository.findMemberEvaluationByEvaluatorAndRoom(evaluator, room);
+        List<MemberEvaluation> memberEvaluations = memberEvaluationRepository.findMemberEvaluationsByEvaluatorAndRoom(evaluator, room);
 
         return memberEvaluations.size() != 0;
+    }
+
+    @Override
+    public List<MemberEvaluation> getMemberEvaluations(User user, Room room) {
+        return memberEvaluationRepository.findMemberEvaluationsByUserAndRoom(user, room);
     }
 }

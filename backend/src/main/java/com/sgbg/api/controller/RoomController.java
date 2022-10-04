@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Tag(name = "Room API", description = "방 생성, 카테고리별 방 목록 조회, 방 상세정보 조회 기능 제공")
@@ -52,7 +53,7 @@ public class RoomController {
 
         try {
             String contractAddress = singleBungleService.createRoom(
-                    userId, Duration.between(LocalDateTime.now(), roomReq.getEndDate()).getSeconds(), roomReq.getPrice());
+                    userId, ChronoUnit.DAYS.between(LocalDateTime.now(), roomReq.getEndDate()), roomReq.getPrice());
 
             roomService.createRoom(roomReq, userId, contractAddress);
 

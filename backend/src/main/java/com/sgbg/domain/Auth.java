@@ -19,6 +19,7 @@ public class Auth {
     @Column(name = "auth_id")
     private Long id;
 
+    @Column(name = "kakao_number")
     private Long kakaoNumber; // 카카오 고유 회원 번호
 
     @JsonIgnore
