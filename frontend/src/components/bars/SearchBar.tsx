@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 type SearchBarProps = {
   handleKeyword : (e: string) => void;
+  name: string;
 }
 
 
@@ -17,8 +18,14 @@ const SearchBar = (props:SearchBarProps) => {
     setKeyword(e.target.value);
   }
   const handleSearch = () => {
-    // console.log('clicked = ', keyword);
+    console.log('clicked = ', keyword);
     props.handleKeyword(keyword);
+    if(props.name === "search") {
+      navigate({
+        pathname: 'result',
+        search: `keyword=${keyword}`,
+      })
+    }
   }
 
   const navigate = useNavigate();

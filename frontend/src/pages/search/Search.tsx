@@ -7,7 +7,7 @@ const Search = () => {
   
 
   return (<div className="mt-5">
-    <SearchBar handleKeyword={()=>{}}/>
+    <SearchBar name="search" handleKeyword={()=>{}}/>
     <div className="mx-2 mt-5">
       <AllCatetoryList name="search"/>
     </div>
