@@ -123,22 +123,22 @@ public class WalletController {
 
     }
 
-    // test용
-    @PostMapping("/createroom")
-    public ResponseEntity<? extends BaseResponseBody> rooms(HttpServletRequest request){
-
-        long userId = 4L;
-
-        try {
-            String contractAddress = walletService.createRoom(userId, 7, 100);
-            System.out.println("controller : " + contractAddress);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
-    }
+//    // test용
+//    @PostMapping("/createroom")
+//    public ResponseEntity<? extends BaseResponseBody> rooms(HttpServletRequest request){
+//
+//        long userId = 4L;
+//
+//        try {
+//            String contractAddress = walletService.createRoom(userId, 7, 100);
+//            System.out.println("controller : " + contractAddress);
+//            return ResponseEntity.status(HttpStatus.OK).build();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
+//
+//    }
 
 }
 
