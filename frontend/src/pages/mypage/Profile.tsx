@@ -39,10 +39,6 @@ const Profile = () => {
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    console.log(user);
-    
-  },[user])
 
   const handleLogout = () => {
     logout()
