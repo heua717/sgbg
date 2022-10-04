@@ -76,7 +76,7 @@ const Login = () => {
         </div>
       ) : (
         <a
-          href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${kakaoRedirect}`}
+          href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_API_KEY}&redirect_uri=${kakaoRedirect}`}
           className="flex justify-center items-center my-20"
         >
           <img
