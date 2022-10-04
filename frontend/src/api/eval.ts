@@ -1,16 +1,16 @@
 import { api } from "./API";
 
 type Eval = {
-  kakaoId: string,
-  eview: string,
+  kakaoId: number;
+  review: "BEST" | "GOOD" | "BAD";
 }
 
-export const postEvalHost = (roomId: number, value: boolean) => {
+export const postEvalHost = (roomId: string, value: boolean) => {
   const url = `/eval/host/${roomId}`;
   return api.post(url, { isSuccess: value });
 };
 
-export const postEvalMember = (roomId: number, values: Eval[]) => {
+export const postEvalMember = (roomId: string, values: Eval[]) => {
   const url = `/eval/host/${roomId}`;
   return api.post(url, { evaluations: values });
 };

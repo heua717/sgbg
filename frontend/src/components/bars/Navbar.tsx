@@ -17,7 +17,9 @@ const Navbar = () => {
           navigator("/wallet/create");
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error(err);
+      });
   };
   return (
     <div className="w-full h-[60px] fixed bottom-0 flex flex-row justify-between items-center bg-gray-100 border-t border-gray-200 px-5">
