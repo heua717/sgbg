@@ -4,6 +4,8 @@ import com.sgbg.api.request.BaseMemberEvaluationReq;
 import com.sgbg.api.request.HostEvalutionReq;
 import com.sgbg.api.request.MemberEvaluationReq;
 import com.sgbg.api.response.BaseResponseBody;
+import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
+import com.sgbg.blockchain.service.interfaces.IWalletService;
 import com.sgbg.common.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.Room;
@@ -44,6 +46,9 @@ public class EvaluationController {
     MemberEvaluationService memberEvaluationService;
 
     @Autowired
+    ISingleBungleService singleBungleService;
+
+    @Autowired
     CookieUtil cookieUtil;
 
     @Operation(summary = "방장 평가 조회 메서드")
@@ -76,6 +81,7 @@ public class EvaluationController {
         hostEvaluationService.createEvaluation(user, room, isSuccess);
 
         // TODO: 스마트 컨트랙트 - 성공/실패 평가 메서드 호출
+//        singleBungleService.
 
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2010, "Success"));
     }
@@ -86,8 +92,6 @@ public class EvaluationController {
 
     }
 
-    //    (description = "모임 참여자에 대한 평가", required = true,
-//                                                                               content = @Content(schema = @Schema(implementation = MemberEvaluationReq.class)))
     @Operation(summary = "참여자 평가 메서드")
     @PostMapping("/member/{roomId}")
     public ResponseEntity<? extends BaseResponseBody> memberEvaluation(@PathVariable String roomId,
@@ -120,10 +124,9 @@ public class EvaluationController {
             scoreSum += memberEvaluation.getReview().getScore() - avgEvaluateScore;
         }
 
-        totalScore = scoreSum / memberEvaluations.size();
+        totalScore = scoreSum / memberEvaluations.size(); // 평균 점수 + avg evaluate score "나"
 
         // TODO: 방장의 avgEvaluateScore 변경, 참여자들의 신뢰도 결과 반영
-        // 평가 받은 사람의 신뢰도로 들어가야 함
 
         return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseBody.of(2010, "Success"));
     }

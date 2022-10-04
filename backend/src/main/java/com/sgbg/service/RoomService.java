@@ -2,10 +2,13 @@ package com.sgbg.service;
 
 import com.sgbg.api.request.RoomReq;
 import com.sgbg.api.response.RoomRes;
+import com.sgbg.common.exception.NotFoundException;
 import com.sgbg.domain.Location;
+import com.sgbg.domain.Participation;
 import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
 import com.sgbg.repository.LocationRepository;
+import com.sgbg.repository.ParticipationRepository;
 import com.sgbg.repository.RoomRepository;
 import com.sgbg.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,44 +19,61 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
 
     @Autowired
-    RoomRepository roomRepository;
+    private RoomRepository roomRepository;
     @Autowired
-    LocationRepository locationRepository;
+    private LocationRepository locationRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
+    @Autowired
+    private ParticipationRepository participationRepository;
 
-    @Transactional()
-    public void createRoom(RoomReq roomReq) {
+    @Transactional
+    public void createRoom(RoomReq roomReq, Long userId, String contractAddress) {
+        // Room 생성
         Room room = roomReq.toEntity(roomReq);
         Location location = roomReq.getLocation();
 
-        // TODO: 방장(만든 사람)도 member로 추가
-//        User user = userRepository.findById(userId).orElse(null);
-//        if(user==null){
-//            throw NullPointerException;
-//        }
+        User user = userRepository.findUserById(userId).orElse(null);
+        if (user == null) {
+            throw new NotFoundException("User Not Found");
+        }
+        room.setContractAddress(contractAddress);
+        room.setHostId(user.getId());
+        room.setHostName(user.getName());
+
 //        room.builder().hostId(user.getUserId);
 //        room.builder().hostId(user.getUserId())
 //                        .hostName(user.getName()).build();
+
+        // User - Room 관계 엔티티 생성
+        Participation participation = Participation.builder()
+                .isParticipate(true)
+                .user(user)
+                .room(room)
+                .build();
+        participation.addMember(user, room);
+
+        participationRepository.save(participation);
         locationRepository.save(location);
         roomRepository.save(room);
     }
 
     @Transactional()
-    public List<Room> getRoomList(){
+    public List<Room> getRoomList() {
         return roomRepository.findAll();
     }
 
     public Room getRoom(Long roomId) {
         return roomRepository.findById(roomId).orElse(null);
-//        if(room==null){
+//        if (room == null) {
 //            throw NullPointerException("not find room");
 //        }
     }

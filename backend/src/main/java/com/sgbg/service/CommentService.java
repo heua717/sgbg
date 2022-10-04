@@ -2,11 +2,10 @@ package com.sgbg.service;
 
 import com.sgbg.api.request.CommentReq;
 import com.sgbg.api.response.CommentRes;
-import com.sgbg.domain.Auth;
+import com.sgbg.common.exception.NotFoundException;
 import com.sgbg.domain.Comment;
 import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
-import com.sgbg.repository.AuthRepository;
 import com.sgbg.repository.RoomRepository;
 import com.sgbg.repository.UserRepository;
 import com.sgbg.repository.interfaces.CommentRepository;
@@ -15,18 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
-import static java.sql.Types.TIME;
 
 @Service
-public class CommentServiceImpl implements ICommentService {
+public class CommentService implements ICommentService {
 
     @Autowired
     private CommentRepository commentRepository;
@@ -36,9 +31,6 @@ public class CommentServiceImpl implements ICommentService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private AuthRepository authRepository;
 
 
     @Override
@@ -71,30 +63,32 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional
     public String deleteComment(Long commentId) throws Exception {
 
-        if(commentRepository.existsById(commentId)){
+        if (commentRepository.existsById(commentId)) {
             commentRepository.deleteById(commentId);
             return "Success";
-        }else{
+        } else {
             return "Fail";
         }
     }
 
     @Override
     public List<CommentRes> detailComment(Long roomId) throws Exception {
-
-        List<Comment> commentList = commentRepository.findAllByRoom_RoomId(roomId);
+        List<Comment> commentList = commentRepository.findAllByRoom_id(roomId);
         List<CommentRes> commentResList = new ArrayList<>();
 
-        for(Comment comment : commentList){
+        for (Comment comment : commentList) {
 
             CommentRes commentRes = CommentRes.detailComment(comment);
 
-            Optional<User> user = userRepository.findById(comment.getUserId());
+            User user = userRepository.findById(comment.getUserId()).orElse(null);
 
+            if(user == null) {
+                throw new NotFoundException("Writer Not Found");
+            }
 
-            commentRes.setUsername(user.get().getName());
-           commentRes.setUserScore(user.get().getMemberScore());
-            commentRes.setHostScore(user.get().getHostScore());
+            commentRes.setUsername(user.getName());
+            commentRes.setUserScore(user.getMemberScore());
+            commentRes.setHostScore(user.getHostScore());
 
             Date createdDate = java.sql.Timestamp.valueOf(comment.getCreatedAt());
             long regTime = createdDate.getTime();
@@ -122,13 +116,9 @@ public class CommentServiceImpl implements ICommentService {
                 msg = (diffTime) + "년 전";
             }
             commentRes.setCreatedAt(msg);
+            commentRes.setKakaoNumber(user.getAuth().getKakaoNumber());
 
-            Optional<Auth> auth = authRepository.findByUser_userId(comment.getUserId());
-
-            commentRes.setKakaoNumber(auth.get().getKakaoNumber());
-
-
-           commentResList.add(commentRes);
+            commentResList.add(commentRes);
         }
 
         return commentResList;
