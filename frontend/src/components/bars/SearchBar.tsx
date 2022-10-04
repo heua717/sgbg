@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 type SearchBarProps = {
   handleKeyword : (e: string) => void;
+  name: string;
 }
 
 
@@ -17,8 +18,19 @@ const SearchBar = (props:SearchBarProps) => {
     setKeyword(e.target.value);
   }
   const handleSearch = () => {
-    // console.log('clicked = ', keyword);
+    console.log('clicked = ', keyword);
     props.handleKeyword(keyword);
+    if(props.name === "search") {
+      navigate({
+        pathname: 'result',
+        search: `keyword=${keyword}`,
+      })
+    } else if (props.name === "searchResult") {
+      navigate({
+        search: `keyword=${keyword}`,
+      })
+      navigate(0)
+    }
   }
 
   const navigate = useNavigate();
