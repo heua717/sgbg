@@ -46,7 +46,7 @@ services:
     server:
         container_name: sgbg-server
         depends_on:
-            - mysql
+            # - mysql
             - redis
         build:
             context: .
