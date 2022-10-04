@@ -58,7 +58,10 @@ function Router() {
       {/* 검색 페이지 */}
       <Route path="/search" element={<Search />} />
 
-      {/* 검색 결과 페이지 (ex) /search/result?childCategory=  */} 
+      {/* 
+        - 검색 결과 페이지 (ex) /search/result?childCategory=  
+        - keyword를 useParams로 읽어오기
+      */} 
       <Route path="/search/result" element={<SearchResult />} />
 
       {/* Not Found */}

@@ -1,16 +1,20 @@
 import { useNavigate } from "react-router-dom";
 
+
 const CategoriesBar = () => {
 
 
   const navigate = useNavigate()
   const onClick = (e: React.MouseEvent<HTMLDivElement>, category:string) => {
-    navigate(`search/result?pc=${category}`)
+    navigate({
+      pathname: 'search/result',
+      search: `parentCategory=${category}`,
+    })
   }
 
 
   return (
-    <div className="grid grid-cols-6 gap-1 mb-2">
+    <div className="grid grid-cols-6 gap-1 my-3 py-5 bg-gray-100">
       {/*이색놀거리 */}
       <div className="w-full flex flex-col justify-center items-center" onClick={e => onClick(e, '이색놀거리')}>
         <div className="bg-gray-300 w-10 h-10 rounded-full">
