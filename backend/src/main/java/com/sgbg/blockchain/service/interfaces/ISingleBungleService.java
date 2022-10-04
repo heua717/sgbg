@@ -10,4 +10,6 @@ public interface ISingleBungleService {
     Wallet exitRoom(long userId, long hostId, String sgbgContractAddress, long money) throws Exception;
 
     Wallet endRoom(long roomId, long hostId, String sgbgContractAddress) throws Exception;
+
+    Wallet isSuccess(long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception;
 }

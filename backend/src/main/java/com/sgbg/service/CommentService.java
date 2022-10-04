@@ -2,7 +2,7 @@ package com.sgbg.service;
 
 import com.sgbg.api.request.CommentReq;
 import com.sgbg.api.response.CommentRes;
-import com.sgbg.common.exception.NotFoundException;
+import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.domain.Comment;
 import com.sgbg.domain.Room;
 import com.sgbg.domain.User;

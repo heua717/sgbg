@@ -154,10 +154,10 @@ public class WalletService implements IWalletService {
         // get과 나눈 이유는 프론트에서 처음 화면에서 비밀번호를 띄울지 지갑생성을 띄울지 미리 알아야 하기 때문이다.
         // get에서는 password를 받고 있기 때문에 둘을 나눴다.
         Wallet wallet = walletRepository.findByOwnerId(userId).orElse(null);
-        System.out.println(wallet.getPrivateKey());
         if (wallet == null) {
             throw new NoWalletException();
         }
+//        System.out.println(wallet.getPrivateKey());
     }
 
     @Override

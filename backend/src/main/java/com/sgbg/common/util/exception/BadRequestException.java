@@ -1,4 +1,4 @@
-package com.sgbg.common.exception;
+package com.sgbg.common.util.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,6 +1,6 @@
 package com.sgbg.service;
 
-import com.sgbg.common.exception.NotFoundException;
+import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.domain.Participation;
 import com.sgbg.domain.Room;
 import com.sgbg.repository.ParticipationRepository;

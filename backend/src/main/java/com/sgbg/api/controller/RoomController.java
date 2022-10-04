@@ -5,7 +5,7 @@ import com.sgbg.api.response.BaseResponseBody;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.RoomRes;
 import com.sgbg.blockchain.service.SingleBungleService;
-import com.sgbg.common.exception.NotFoundException;
+import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.Room;
 import com.sgbg.service.RedisService;
