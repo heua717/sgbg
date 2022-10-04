@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import FilterBar from "../../components/bars/FilterBar";
+// import FilterBar from "../../components/bars/FilterBar";
 import SearchBar from "../../components/bars/SearchBar";
 import SubCategoriesBar from "../../components/bars/SubCategoriesBar";
 import MeetingCard from "../../components/cards/MeetingCard";
@@ -18,19 +18,24 @@ const SearchResult = () => {
     const params = window.location.href.split('?')[1].split('=')
     // console.log(params);
     setKey(params[0])
-    console.log(decodeURI(params[1]));
+    console.log(decodeURI(params[1]), key);
 
     // axios 요청
     // decoding을 해주지 않으면 인코딩된 형태로 나옴
     const value = decodeURI(params[1])
+    // 디코딩한 것을 저장
     setValue(value)
+
+    // axios
     getSearchCategoryResult(key, value).then((res)=>{
-      // 엑쇼스 후 결과 저장
       console.log(res);
       setResults(results.concat(res.data))
+    }).catch((err) => {
+      console.log(err);
+      // console.log(value); 
     })
 
-    if (params[0] === 'pc') {
+    if (params[0] === 'parentCategory') {
       
       data.forEach((datum) => {
         if(value === datum.parent) {
@@ -47,9 +52,9 @@ const SearchResult = () => {
   return (      
     <div>
       <SearchBar handleKeyword={() => {}}/>
+      <p className="ml-3 my-2 text-lg"><strong>{value}</strong>에 대한 검색결과</p>
       {/* 세부 카테고리 바 */} 
-      {key==='pc'? <SubCategoriesBar childCategories={childCategories} />  : ''}
-        {/* */}
+      {key==='parentCategory'? <SubCategoriesBar childCategories={childCategories} />  : ''}
 
       {/* 검색 결과 리스트 */}
       <div className="w-per95 max-h-[80vh] m-auto grid grid-cols-1 gap-1 overflow-y-auto">
