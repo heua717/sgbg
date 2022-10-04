@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 const ParticipantListTab = (props: any) => {
   const [members, setMembers] = useState([{
     name: '',
+    userId: 0,
     email: '',
     hostScore: 0,
     memberScore: 0
@@ -33,7 +34,7 @@ const ParticipantListTab = (props: any) => {
             */}
             {members.length && (
               <div>
-                <Link to={`/profile/${member.name}`}>
+                <Link to={`/profile/${member.userId}`}>
                   <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
                     <div className="w-[25px] h-[25px] mr-2">
                       <img

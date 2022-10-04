@@ -6,6 +6,14 @@ export type location = {
   roadAddress: string;
 };
 
+export type members = {
+  name: string;
+  userId: string;
+  email: string;
+  hostScore: number;
+  memberScore: number;
+}
+
 export interface room {
   title: string;
   parentCategory: string;
@@ -18,7 +26,7 @@ export interface room {
 
 export interface roomMore extends room {
   roomId?: any;
-  members? : object;
+  members? : any;
   endDate: string;
   reservationDate: string;
   price: number;
