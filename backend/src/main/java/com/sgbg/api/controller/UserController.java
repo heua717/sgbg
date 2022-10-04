@@ -2,9 +2,11 @@ package com.sgbg.api.controller;
 
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.UserRes;
+import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
 import com.sgbg.common.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.Auth;
+import com.sgbg.domain.Participation;
 import com.sgbg.domain.Room;
 import com.sgbg.domain.User;
 import com.sgbg.service.interfaces.IAuthService;
@@ -41,15 +43,20 @@ public class UserController {
     private IHostEvaluationService hostEvaluationService;
 
     private IMemberEvaluationService memberEvaluationService;
+
+    private ISingleBungleService singleBungleService;
     private CookieUtil cookieUtil;
 
     @Autowired
-    public UserController(IUserService userService, IAuthService authService, IHostEvaluationService hostEvaluationService, IMemberEvaluationService memberEvaluationService, CookieUtil cookieUtil) {
+    public UserController(IUserService userService, IAuthService authService,
+                          IHostEvaluationService hostEvaluationService, IMemberEvaluationService memberEvaluationService,
+                          ISingleBungleService singleBungleService, CookieUtil cookieUtil) {
         Assert.notNull(userService, "userService 개체가 반드시 필요!");
         this.userService = userService;
         this.authService = authService;
         this.hostEvaluationService = hostEvaluationService;
         this.memberEvaluationService = memberEvaluationService;
+        this.singleBungleService = singleBungleService;
         this.cookieUtil = cookieUtil;
     }
 
@@ -98,5 +105,46 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyRoomList(2000, "Success", rooms, hostReviews, memberReviews));
+    }
+
+    @GetMapping("/room/{roomId}/add")
+    @Operation(summary = "방 입장하기")
+    // TODO: API Response 추가
+    public void addRoom(@PathVariable String roomId, HttpServletRequest request) {
+        Long userId = cookieUtil.getUserIdByToken(request);
+        User user = userService.getUserById(userId);
+        if (user == null) {
+           throw new NotFoundException("User Not Found");
+        }
+
+        Participation participation = userService.addMyRoom(userId, Long.valueOf(roomId));
+        Room room = participation.getRoom();
+
+        try {
+            // TODO: wallet 잔액 부족한 경우
+
+            singleBungleService.enterRoom(userId, room.getHostId(), room.getContractAddress(), room.getPrice());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // TODO: 방 나가기
+    @GetMapping("/room/{roomId}/delete")
+    @Operation(summary = "방 나가기")
+    // TODO: API Response 추가
+    public void deleteRoom(@PathVariable String roomId, HttpServletRequest request) {
+        Long userId = cookieUtil.getUserIdByToken(request);
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            throw new NotFoundException("User Not Found");
+        }
+
+        try {
+            Room room = userService.deleteMyRoom(userId, Long.valueOf(roomId));
+            singleBungleService.exitRoom(userId, room.getHostId(), room.getContractAddress(), room.getPrice());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

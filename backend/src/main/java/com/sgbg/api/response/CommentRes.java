@@ -44,7 +44,4 @@ public class CommentRes extends BaseResponseBody {
         return res;
     }
 
-
-
-
 }
