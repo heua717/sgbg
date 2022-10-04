@@ -40,6 +40,8 @@ const CreateRoomMap = () => {
   useEffect(() => {
     handleSearch(keyword, page);
   }, [keyword, page])
+
+  
   const newaddr = selected.road_address.split(" ")
   console.log(newaddr);
   console.log(newaddr[0] + ' ' + newaddr[1]);
