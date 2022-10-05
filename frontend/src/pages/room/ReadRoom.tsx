@@ -162,14 +162,17 @@ const ReadRoom = () => {
               <div>
                 <img
                   className="w-5 h-5 animate-gelatine mr-1"
+                  alt="userBadge3"
                   src={process.env.PUBLIC_URL + `/img/userBadge3.png`}
                 />
                 <img
                   className="w-5 h-5 animate-gelatine mr-1"
+                  alt="userBadge2"
                   src={process.env.PUBLIC_URL + `/img/userBadge2.png`}
                 />
                 <img
                   className="w-5 h-5 animate-gelatine"
+                  alt="userBadge1"
                   src={process.env.PUBLIC_URL + `/img/userBadge1.png`}
                 />
               </div>
@@ -179,15 +182,15 @@ const ReadRoom = () => {
             <button
               type="button"
               onClick={onClickInAndOut}
-              className="w-full text-center font-bold bg-yellow-100 rounded p-1">
-              참여하기
+              className="w-full text-center text-white font-bold bg-blue-500 rounded p-1">
+              퇴장하기
             </button>
           ) : (
             <button
               type="button"
               onClick={onClickInAndOut}
               className="w-full text-center font-bold bg-yellow-100 rounded p-1">
-              퇴장하기
+              참여하기
             </button>
           )}
         </div>

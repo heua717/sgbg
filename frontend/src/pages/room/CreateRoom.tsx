@@ -65,10 +65,14 @@ const CreateRoom = (): JSX.Element => {
 
   const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const { name, value } = e.target;
+    console.log(value);
+    console.log(value.split('\n'));
+    console.log(value.split('\n').join('\n'));
+    const newValue = value.split('\n').join('\n')
 
     setRoom({
       ...room,
-      [name]: value
+      [name]: newValue
     });
     onChangeValidation();
   };

@@ -12,16 +12,16 @@ const BtnCreateRoom = () => {
 
 
   const onClick = () =>{
-    // navigate('/meeting/create')    
+    navigate('/meeting/create')    
 
-    if (userAuth.isLogined) {
-      navigate('/meeting/create')    
-    } else if (!userAuth.isLogined) {
-      Swal.fire({
-        text: '로그인 후 이용 가능합니다.',
-        icon: 'error',
-      }).then(()=> navigate('/login'))
-    }
+    // if (userAuth.isLogined) {
+    //   navigate('/meeting/create')    
+    // } else if (!userAuth.isLogined) {
+    //   Swal.fire({
+    //     text: '로그인 후 이용 가능합니다.',
+    //     icon: 'error',
+    //   }).then(()=> navigate('/login'))
+    // }
   }
 
   return (

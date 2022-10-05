@@ -15,7 +15,7 @@ const CreateRoomMore = () => {
 
   // created 될 때
   useEffect(() => {
-    // console.log(room.endDate);
+    console.log(room.description);
     
   })
 
@@ -84,7 +84,7 @@ const CreateRoomMore = () => {
     }).catch((err)=> {
       console.log(err);
       console.log(err.config.data);
-      
+      resetRecoil();
     })
   }
 
