@@ -50,6 +50,8 @@ const ReadRoom = () => {
 
   const getIsInThisRoom = () => {
     room.members.forEach((member: members) => {
+      console.log(member);
+      
       console.log('readroom kakaoid', member.kakaoId, 'readroom current user=', userAuth.userId);
       
       if (member.kakaoId === userAuth.userId) {
@@ -70,7 +72,7 @@ const ReadRoom = () => {
     }
 
     getIsInThisRoom();
-    console.log('readroommembers=',  room.members);
+    // console.log('readroommembers=',  room.members);
   }, []);
 
   const navigate = useNavigate();
