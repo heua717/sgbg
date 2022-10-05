@@ -34,11 +34,11 @@ public class WalletHistory {
 
     private long roomId;
 
-    private long roomName;
+    private String roomName;
 
     @Builder
     public WalletHistory(Wallet wallet, long totalMoneyBeforeTransaction, long money, LocalDateTime createdAt,
-                         String type, long roomId, long roomName){
+                         String type, long roomId, String roomName){
 
         this.wallet = wallet;
         this.totalMoneyBeforeTransaction = totalMoneyBeforeTransaction;

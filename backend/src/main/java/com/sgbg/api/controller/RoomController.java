@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "Room API", description = "방 생성, 카테고리별 방 목록 조회, 방 상세정보 조회 기능 제공")
@@ -144,6 +145,8 @@ public class RoomController {
         Room room = roomService.getRoom(Long.valueOf(roomId));
 
         List<Transaction> transactionsByRoom = transactionService.getTransactionsByRoom(room.getId());
+        List<String> fromNames = new ArrayList<>();
+        List<String> toNames = new ArrayList<>();
 
         for (Transaction transaction : transactionsByRoom) {
             String contractAddress = room.getContractAddress();
@@ -151,11 +154,19 @@ public class RoomController {
             String fromAddress = transaction.getFrom();
             String toAddress = transaction.getTo();
 
+
+
+            String fromName = null;
+            String toName = null;
             if (fromAddress.equals(contractAddress)) {
-
+                fromName = "스마트 컨트랙트";
+//                toName = ;
             } else {
-
+//                fromName = ;
+                toName = "스마트 컨트랙트";
             }
+            fromNames.add(fromName);
+            toNames.add(toName);
         }
 
         return null;

@@ -107,21 +107,13 @@ public class EvaluationController {
             throw new NotFoundException("Evaluation Request Not Received");
         }
 
-        double scoreSum = 0, totalScore = 0;
-        int avgEvaluateScore = evaluator.getAvgEvaluateScore();
         for (BaseMemberEvaluationReq memberEvaluation : memberEvaluations) {
             Long kakaoId = memberEvaluation.getKakaoId();
             User user = authService.isUser(String.valueOf(kakaoId)).getUser();
 
             memberEvaluationService.createEvaluation(memberEvaluation, room, evaluator, user);
-
-            scoreSum += memberEvaluation.getReview().getScore() - avgEvaluateScore;
+            userService.updateMemberScore(user.getId(), memberEvaluation.getReview().getScore());
         }
-
-        totalScore = scoreSum / memberEvaluations.size(); // 평균 점수 + avg evaluate score "나"
-
-        // TODO: 방장의 avgEvaluateScore 변경, 참여자들의 신뢰도 결과 반영
-
 
         return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseBody.of(2010, "Success"));
     }

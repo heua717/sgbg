@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface ParticipationRepository extends JpaRepository<Participation, Long>, ParticipationRepositoryCustom {
 
-    Optional<Participation> findParticipationByUser(User user);
+//    Optional<Participation> findParticipationByUser(User user);
 
     Optional<Participation> findParticipationByUserAndRoom(User user, Room room);
 

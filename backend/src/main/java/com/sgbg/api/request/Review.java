@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Review {
-    BEST(10), GOOD(5), BAD(-10);
+    BEST(10), GOOD(5), BAD(0);
 
     private final int score;
     Review(int score) {

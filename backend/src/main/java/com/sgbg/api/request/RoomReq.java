@@ -86,6 +86,7 @@ public class RoomReq {
                 .price(roomReq.price)
                 .location(roomReq.location)
                 .reservationDate(roomReq.reservationDate)
+                .createdDate(LocalDateTime.now())
                 .endDate(roomReq.endDate)
                 .minMemberScore(roomReq.minMemberScore)
                 .description(roomReq.description)

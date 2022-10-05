@@ -1,14 +1,11 @@
 package com.sgbg.service;
 
 import com.sgbg.common.util.exception.NotFoundException;
-import com.sgbg.domain.HostEvaluation;
-import com.sgbg.domain.Participation;
-import com.sgbg.domain.Room;
+import com.sgbg.domain.*;
 import com.sgbg.repository.ParticipationRepository;
 import com.sgbg.repository.RoomRepository;
 import com.sgbg.repository.UserRepository;
 import com.sgbg.service.interfaces.IUserService;
-import com.sgbg.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +34,6 @@ public class UserService implements IUserService {
                 .email(userInfo.get("email"))
                 .memberScore(50)
                 .hostScore(50)
-                .avgEvaluateScore(0)
                 .build();
 
         return userRepository.save(user);
@@ -60,7 +56,7 @@ public class UserService implements IUserService {
             throw new NotFoundException("Room Not Found");
         }
 
-        Participation participation = participationRepository.findParticipationByUser(user).orElse(null);
+        Participation participation = participationRepository.findParticipationByUserAndRoom(user, room).orElse(null);
         if (participation == null) {
             participation = Participation.builder()
                     .isParticipate(true)
@@ -122,11 +118,11 @@ public class UserService implements IUserService {
         long totalMembers = 0;
         long failReviews = 0;
 
-        for (Room room: myRooms) {
+        for (Room room : myRooms) {
             totalMembers += room.getMembers().size();
 
             List<HostEvaluation> hostEvaluations = room.getHostEvaluations();
-            for (HostEvaluation hostEvaluation: hostEvaluations) {
+            for (HostEvaluation hostEvaluation : hostEvaluations) {
                 if (!hostEvaluation.getIsSuccess()) {
                     failReviews++;
                 }
@@ -135,5 +131,30 @@ public class UserService implements IUserService {
 
         host.setHostScore((int) (failReviews / totalMembers * 100));
         userRepository.save(host);
+    }
+
+    public void updateMemberScore(Long userId, int score) {
+        User user = userRepository.findUserById(userId).orElse(null);
+        if (user == null) {
+            throw new NotFoundException("User Not Found");
+        }
+
+        // user score = (나를 평가한 점수들의 합) / (나를 평가한 사람 수 * 10)
+        List<Room> myRooms = participationRepository.findMyRoomsByUserId(userId);
+        long totalScore = 0;
+        long totalReviewers = 0;
+
+        for (Room room : myRooms) {
+            List<MemberEvaluation> memberEvaluations = room.getMemberEvaluations();
+
+            for (MemberEvaluation memberEvaluation : memberEvaluations) {
+                if (memberEvaluation.getUser().getId() == userId) {
+                    totalScore += memberEvaluation.getScore();
+                    totalReviewers++;
+                }
+            }
+        }
+
+        user.setMemberScore((int) (totalScore / (totalReviewers * 10)));
     }
 }

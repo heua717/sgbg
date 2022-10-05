@@ -30,8 +30,6 @@ public class User {
 
     private int memberScore;
 
-    private int avgEvaluateScore;
-
     @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Auth auth;
@@ -49,12 +47,11 @@ public class User {
     private List<MemberEvaluation> myMemberEvaluations = new ArrayList<>(); // 내가 참여자를 평가한 내역들
 
     @Builder
-    public User(String name, String email, int hostScore, int memberScore, int avgEvaluateScore) {
+    public User(String name, String email, int hostScore, int memberScore) {
         this.name = name;
         this.email = email;
         this.createdAt = LocalDateTime.now();
         this.hostScore = hostScore;
         this.memberScore = memberScore;
-        this.avgEvaluateScore = avgEvaluateScore;
     }
 }

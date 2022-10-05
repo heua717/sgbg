@@ -31,7 +31,7 @@ public class WalletHistoryRes extends BaseResponseBody{
     @Schema(name = "roomId", example = "방 Id")
     private long roomId;
     @Schema(name = "roomName", example = "방 이름")
-    private long roomName;
+    private String roomName;
 
     public static WalletHistoryRes getWalletHistoryRes (WalletHistory walletHistory){
         WalletHistoryRes walletHistoryRes = new WalletHistoryRes();
