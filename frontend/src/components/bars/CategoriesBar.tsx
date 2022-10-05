@@ -8,7 +8,7 @@ const CategoriesBar = () => {
   const onClick = (e: React.MouseEvent<HTMLDivElement>, category:string) => {
     navigate({
       pathname: 'search/result',
-      search: `parentCategory=${category}`,
+      search: `parentcategory=${category}`,
     })
   }
 
