@@ -15,6 +15,7 @@ import { withdrawWallet } from "../../api/profile";
 const ReadRoom = () => {
   const { meeting_id } = useParams<{ meeting_id: string }>();
   const [userAuth ] = useRecoilState(auth);
+  const [ isDone, setIsDone ] = useState(false)
 
   const [room, setRoom] = useState<roomMore>({
     roomId: 0,
@@ -74,6 +75,7 @@ const ReadRoom = () => {
         withdrawWallet(room.roomId).then(()=> {
           navigate('/wallet')
           // 해당 모임 모집 마감 처리
+          setIsDone(true)
         })
       })
     }
@@ -174,16 +176,26 @@ const ReadRoom = () => {
         <Logo />
         <div className="px-3">
           <MeetingCard name="readRoom" room={room} />
-          {isInThisRoom && (
-            <button type="button" onClick={onClickInAndOut}
-              className="w-full text-center font-bold bg-yellow-100 rounded p-1">
-              참여하기
-            </button>
+          {isDone && (
+            <div>
+              {isInThisRoom && (
+                <button type="button" onClick={onClickInAndOut}
+                  className="w-full text-center font-bold bg-yellow-100 rounded p-1">
+                  참여하기
+                </button>
+              )}
+              {!isInThisRoom && (
+                <button type="button" onClick={onClickInAndOut}
+                  className="w-full text-center font-bold bg-yellow-100 rounded p-1">
+                  퇴장하기
+              </button>
+              )}
+            </div>
           )}
-          {!isInThisRoom && (
-            <button type="button" onClick={onClickInAndOut}
-              className="w-full text-center font-bold bg-yellow-100 rounded p-1">
-              퇴장하기
+          {!isDone && (
+            <button type="button"
+            className="w-full text-center font-bold bg-gray-200 rounded p-1">
+            모집 마감
           </button>
           )}
         </div>
