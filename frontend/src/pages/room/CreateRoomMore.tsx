@@ -16,9 +16,8 @@ const CreateRoomMore = () => {
 
   // created 될 때
   useEffect(() => {
-    console.log(room.description);
-    
-  })
+    // console.log(room.endDate);
+  });
 
   // recoil에 작성한 모임 정보 저장하기 0927 임지민
   const [isValidated, setIsValidated] = useState(false);
