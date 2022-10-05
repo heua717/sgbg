@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { chargeWallet, getWalletHistory, postWallet } from "../../api/wallet";
 import Logo from "../../components/etc/Logo";
 import { auth } from "../../store/auth";
+import { formatOnlyDate } from "../../util/room";
 
 type WalletHistory = {
   id: string;
@@ -152,7 +153,7 @@ const Wallet = (): JSX.Element => {
             {walletHistories.map((history) => (
               <div className="flex justify-between border-b border-gray-100 border-solid my-2 py-2">
                 <div className="flex flex-row justify-between">
-                  <p className="mr-5 text-sm">{history.createdAt && history.createdAt}</p>
+                  <p className="mr-5 text-sm">{history.createdAt && formatOnlyDate(history.createdAt)}</p>
                   {history.roomId ? (
                     <p className="mr-5 text-sm">{history.roomName && history.roomName}</p>
                   ) : (
@@ -164,7 +165,7 @@ const Wallet = (): JSX.Element => {
                     <p className="mr-1">{history.type === "exit" ? "-" : "+"}</p>
                     {history.money && history.money} ETH
                   </div>
-                  <p className="text-xs">
+                  <p className="text-xs text-right">
                     {history.totalMoneyBeforeTransaction &&
                       history.money &&
                       history.totalMoneyBeforeTransaction + history.money}{" "}
