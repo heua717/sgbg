@@ -6,6 +6,7 @@ import MeetingCard from "../../components/cards/MeetingCard";
 import { getSearchCategoryResult } from "../../api/search";
 import data from "../../util/category";
 import { getSearchKeywordResult } from "../../api/search";
+import { roomMore } from "../../util/room";
 
 
 const SearchResult = () => {
@@ -29,12 +30,12 @@ const SearchResult = () => {
     setValue(value)
 
     // axios
-    if (params[0] === 'parentCategory' || params[0] === 'childCategory') {
+    if (params[0] === 'parentcategory' || params[0] === 'childcategory') {
       getSearchCategoryResult(params[0], value).then((res)=>{
         // console.log(res);
-        console.log('category search');
+        console.log('category search= ', res.data.roomListInfo);
         
-        setResults(res.data)
+        setResults(res.data.roomListInfo)
       }).catch((err) => {
         console.log(err);
         // console.log(value); 
@@ -81,8 +82,8 @@ const SearchResult = () => {
 
       {/* 검색 결과 리스트 */}
       <div className="w-per95 max-h-[80vh] m-auto grid grid-cols-1 gap-1 overflow-y-auto">
-        {results.map((index, room) => (
-          <MeetingCard key={index} room={room}/>
+        {results.map((room:roomMore) => (
+          <MeetingCard key={room.roomId} room={room}/>
         ))}
       </div>
     </div>

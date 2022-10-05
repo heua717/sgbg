@@ -196,14 +196,17 @@ const ReadRoom = () => {
               <div className="flex flex-row">
                 <img
                   className="w-5 h-5 animate-gelatine mr-1"
+                  alt="userBadge3"
                   src={process.env.PUBLIC_URL + `/img/userBadge3.png`}
                 />
                 <img
                   className="w-5 h-5 animate-gelatine mr-1"
+                  alt="userBadge2"
                   src={process.env.PUBLIC_URL + `/img/userBadge2.png`}
                 />
                 <img
                   className="w-5 h-5 animate-gelatine"
+                  alt="userBadge1"
                   src={process.env.PUBLIC_URL + `/img/userBadge1.png`}
                 />
               </div>
