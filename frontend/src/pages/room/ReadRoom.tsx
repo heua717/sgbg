@@ -71,7 +71,10 @@ const ReadRoom = () => {
         cancelButtonText: '취소'
       }).then(()=>{
         // axios
-        withdrawWallet(room.roomId).then(()=> navigate('/wallet'))
+        withdrawWallet(room.roomId).then(()=> {
+          navigate('/wallet')
+          // 해당 모임 모집 마감 처리
+        })
       })
     }
   }
