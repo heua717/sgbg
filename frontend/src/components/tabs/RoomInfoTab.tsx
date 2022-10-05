@@ -96,7 +96,7 @@ const RoomInfoTabs = (room: any) => {
 
       <div className="text-sm">
         <p className="font-bold">모임 설명</p>
-        <p className="mt-2">{roomInfo.description}</p>
+        <p className="mt-2 leading-6">{roomInfo.description.split('\n').join('\n')}</p>
       </div>
       <hr className="my-3" />
 
