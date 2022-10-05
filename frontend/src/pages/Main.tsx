@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { getRoomList } from "../api/main";
 import { roomMore } from "../util/room";
 
+
 // const PAGE_SIZE = 10 * Math.ceil(visualViewport.width / 100)
 
 const Main = () => {

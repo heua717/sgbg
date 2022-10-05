@@ -51,6 +51,18 @@ const CreateRoom = (): JSX.Element => {
     onChangeValidation();
   };
 
+  const onChangeNumberMin = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { value } = e.target;
+    
+    setRoom({
+      ...room,
+      minUser: Number(value),
+      maxUser: Number(value)
+    });
+    // console.log(name, typeof(value));
+    onChangeValidation();
+  };
+
   const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const { name, value } = e.target;
 
@@ -115,10 +127,10 @@ const CreateRoom = (): JSX.Element => {
         <p className="col-span-2">모집인원</p>
         {/* grid grid-cols-3 */}
         <div className="col-span-4 grid grid-cols-5">
-          <input type="number" id="minUser" onChange={onChangeNumber} name="minUser" value={room.minUser}/>
+          <input type="number" id="minUser" onChange={onChangeNumberMin} name="minUser" value={room.minUser}/>
           <label htmlFor="minUser" className="text-center">명</label>
           <span className="text-center">~</span>
-          <input type="number" id="maxUser" onChange={onChangeNumber} name="maxUser"value={room.maxUser}/>
+          <input type="number" id="maxUser" onChange={onChangeNumber} name="maxUser" value={room.maxUser}/>
           <label htmlFor="maxUser" className="text-center">명 </label>
         </div>
       </div>

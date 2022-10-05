@@ -10,6 +10,7 @@ import { getSearchKeywordResult } from "../../api/search";
 
 const SearchResult = () => {
   const [key, setKey] = useState('')
+  const [keyword, setKeyword] = useState<string>("");
   const [value, setValue] = useState('')
   const [childCategories, setChildCategories] = useState(Array<string>)
   const [results, setResults] = useState([])
@@ -19,7 +20,7 @@ const SearchResult = () => {
     const params = window.location.href.split('?')[1].split('=')
     // console.log(params);
     setKey(params[0])
-    console.log(decodeURI(params[1]), key);
+    // console.log(decodeURI(params[1]),'----', key);
 
     // axios 요청
     // decoding을 해주지 않으면 인코딩된 형태로 나옴
@@ -28,13 +29,27 @@ const SearchResult = () => {
     setValue(value)
 
     // axios
-    getSearchCategoryResult(key, value).then((res)=>{
-      console.log(res);
-      setResults(results.concat(res.data))
-    }).catch((err) => {
-      console.log(err);
-      // console.log(value); 
-    })
+    if (params[0] === 'parentCategory' || params[0] === 'childCategory') {
+      getSearchCategoryResult(params[0], value).then((res)=>{
+        // console.log(res);
+        console.log('category search');
+        
+        setResults(res.data)
+      }).catch((err) => {
+        console.log(err);
+        // console.log(value); 
+      })
+    } else if (params[0] === 'keyword') {
+      console.log('searchresult axios else if=', value);
+      
+      getSearchKeywordResult(value).then((res) => {
+        console.log(res);
+        setResults(res.data)
+      }).catch((err)=>{
+        console.log(err);
+        
+      })
+    }
 
     if (params[0] === 'parentCategory') {
       
@@ -47,32 +62,20 @@ const SearchResult = () => {
     }
   }, [])
 
-  const [keyword, setKeyword] = useState<string>("");
-
-  const handleSearch = (keyword: string) => {
-    console.log(keyword);
-    
-    getSearchKeywordResult(keyword)
-    .then((res)=>{
-      console.log('keyword search=', res.data);
-    }).catch((err)=>{
-      console.log('keyword search error=', err);
-    })    
-  };
 
   useEffect(() => {
-    console.log('search result = ', keyword);
+    // console.log('search result = ', keyword);
     
-    handleSearch(keyword);
-  }, [keyword])
+    // handleSearch(keyword);
+  }, [])
   // React Hook useEffect has missing dependencies: 'key' and 'results'. Either include them or remove the dependency array. You can also do a functional update 'setResults(r => ...)' if you only need 'results' in the 'setResults' call  react-hooks/exhaustive-deps
   // 위에 같은 에러가 떠서 key,results를 넣었더니 무한으로 업데이트가 되어서 지워줬더니 해결됨
 
   
   return (      
     <div>
-      <SearchBar handleKeyword={setKeyword}/>
-      <p className="ml-3 my-2 text-lg"><strong>{value}</strong>에 대한 검색결과</p>
+      <SearchBar name={"searchResult"} handleKeyword={setKeyword}/>
+      <p className="ml-3 my-2 text-lg"><strong className="mr-1">{value}</strong>에 대한 검색결과</p>
       {/* 세부 카테고리 바 */} 
       {key==='parentCategory'? <SubCategoriesBar childCategories={childCategories} />  : ''}
 
