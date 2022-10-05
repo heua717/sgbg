@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../store/auth";
 import { useRecoilValue } from "recoil";
 import { checkWallet } from "../../api/wallet";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const navigator = useNavigate();
@@ -18,7 +19,13 @@ const Navbar = () => {
         }
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err.response.request.status);
+        if(err.response.request.status === 500) {
+          Swal.fire({
+            icon: 'error',
+            text: '로그인 이후에 이용해주세요'
+          }).then(()=>{ navigator('/login')})
+        }
       });
   };
   return (
