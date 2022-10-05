@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface MemberEvaluationRepository extends JpaRepository<MemberEvaluation, Long>, MemberEvaluationRepositoryCustom {
 
-    List<MemberEvaluation> findMemberEvaluationByEvaluatorAndRoom(User evaluator, Room room);
+    List<MemberEvaluation> findMemberEvaluationsByEvaluatorAndRoom(User evaluator, Room room);
+
+    List<MemberEvaluation> findMemberEvaluationsByUserAndRoom(User user, Room room);
 
 }

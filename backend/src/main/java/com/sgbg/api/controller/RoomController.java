@@ -4,6 +4,7 @@ import com.sgbg.api.request.RoomReq;
 import com.sgbg.api.response.BaseResponseBody;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.RoomRes;
+import com.sgbg.api.response.TransactionRes;
 import com.sgbg.blockchain.service.SingleBungleService;
 import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
@@ -18,12 +19,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Tag(name = "Room API", description = "방 생성, 카테고리별 방 목록 조회, 방 상세정보 조회 기능 제공")
@@ -52,7 +55,7 @@ public class RoomController {
 
         try {
             String contractAddress = singleBungleService.createRoom(
-                    userId, Duration.between(LocalDateTime.now(), roomReq.getEndDate()).getSeconds(), roomReq.getPrice());
+                    userId, ChronoUnit.DAYS.between(LocalDateTime.now(), roomReq.getEndDate()), roomReq.getPrice());
 
             roomService.createRoom(roomReq, userId, contractAddress);
 
@@ -89,7 +92,6 @@ public class RoomController {
         if (room == null) {
             throw new NotFoundException("Room Not Found");
         }
-//        System.out.println(room);
 
         return ResponseEntity.status(200).body(RoomRes.of(2000, "Success", room));
 
@@ -120,11 +122,23 @@ public class RoomController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity searchRoom(@RequestParam(value="keyword") String keyword) {
-
+    public ResponseEntity searchRoom(@RequestParam(value = "keyword") String keyword) {
         List<Room> roomList = roomService.searchRoom(keyword);
 
         return ResponseEntity.status(200).body(roomList);
-       }
+    }
+
+    @Operation(summary = "")
+    @GetMapping("/{roomId}/transaction")
+    @ApiResponses({
+            @ApiResponse(responseCode = "", description = ""),
+            @ApiResponse(responseCode = "", description = "")
+    })
+    public ResponseEntity<? extends TransactionRes> getTransactions(@PathVariable String roomId) {
+
+
+        return null;
+//        return ResponseEntity.status(HttpStatus.OK).body(TransactionRes.of());
+    }
 }
 
