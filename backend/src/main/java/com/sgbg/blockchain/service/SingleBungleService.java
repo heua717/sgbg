@@ -49,7 +49,7 @@ public class SingleBungleService implements ISingleBungleService {
 
 
     @Override
-    public String createRoom(long hostId, long duration, long minimumAmount) throws Exception {
+    public String createRoom(Long roomId, long hostId, long duration, long minimumAmount) throws Exception {
 
         // 방장이 방을 만들고 SingleBungle 스마트 컨트랙트를 생성하는 함수
         Wallet wallet = walletRepository.findByOwnerId(hostId).orElse(null);
@@ -72,6 +72,7 @@ public class SingleBungleService implements ISingleBungleService {
             return null;
         }
         Transaction transaction = Transaction.builder()
+                .roomId(roomId)
                 .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
                 .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
                 .transactionIndex(receipt.getTransactionIndex().longValue())
@@ -86,7 +87,7 @@ public class SingleBungleService implements ISingleBungleService {
     }
 
     @Override
-    public Wallet enterRoom(long userId, long hostId, String sgbgContractAddress, long money) throws Exception {
+    public Wallet enterRoom(Long roomId, long userId, long hostId, String sgbgContractAddress, long money) throws Exception {
 
         // room 쪽에서 wallet api를 콜하는 게 맞는 것 같다.
         // roomApi에서 가져온 hostId를 사용하여 hostWallet을 구한다.
@@ -124,6 +125,7 @@ public class SingleBungleService implements ISingleBungleService {
 
         // transactionReceipt를 통해 엔티티 저장
         Transaction transaction = Transaction.builder()
+                .roomId(roomId)
                 .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
                 .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
                 .transactionIndex(receipt.getTransactionIndex().longValue())
@@ -149,7 +151,7 @@ public class SingleBungleService implements ISingleBungleService {
     }
 
     @Override
-    public Wallet exitRoom(long userId, long hostId, String sgbgContractAddress, long money) throws Exception {
+    public Wallet exitRoom(Long roomId, long userId, long hostId, String sgbgContractAddress, long money) throws Exception {
 
         Wallet hostWallet = walletRepository.findByOwnerId(hostId).orElse(null);
         if (hostWallet == null) {
@@ -180,6 +182,7 @@ public class SingleBungleService implements ISingleBungleService {
 
         // transaction 엔티티 저장
         Transaction transaction = Transaction.builder()
+                .roomId(roomId)
                 .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
                 .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
                 .transactionIndex(receipt.getTransactionIndex().longValue())
@@ -230,6 +233,7 @@ public class SingleBungleService implements ISingleBungleService {
 
         // transaction 엔티티 저장
         Transaction transaction = Transaction.builder()
+                .roomId(roomId)
                 .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
                 .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
                 .transactionIndex(receipt.getTransactionIndex().longValue())
@@ -254,7 +258,7 @@ public class SingleBungleService implements ISingleBungleService {
     }
 
     @Override
-    public Transaction isSuccess(long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception{
+    public Transaction isSuccess(long roomId, long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception{
 
         Wallet hostWallet = walletRepository.findByOwnerId(hostId).orElse(null);
         if (hostWallet == null) {
@@ -281,6 +285,7 @@ public class SingleBungleService implements ISingleBungleService {
         // transaction 엔티티 저장
         // TODO : transaction 종류 enum으로 생성하기
         Transaction transaction = Transaction.builder()
+                .roomId(roomId)
                 .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
                 .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
                 .transactionIndex(receipt.getTransactionIndex().longValue())
