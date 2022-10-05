@@ -117,27 +117,31 @@ const CommunityTab = (props: any) => {
             {commentList.map(comment=>
               <div className="my-5 border rounded p-2">
                 <div className="justify-between">
-                  <Link to={`/profile/${comment.username}`}>
-                    <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
-                      <div className="w-[25px] h-[25px] mr-2">
-                        <img
-                          className="w-full h-full"
-                          src={
-                            process.env.PUBLIC_URL + `/img/userBadge` + getParticipantBadge(comment.userScore) + ".png"
-                          }
-                          alt="사용자 뱃지"
-                        />
+                  <div>
+                    <Link to={`/profile/${comment.username}`}>
+                      <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
+                        <div className="w-[25px] h-[25px] mr-2">
+                          <img
+                            className="w-full h-full"
+                            src={
+                              process.env.PUBLIC_URL + `/img/userBadge` + getParticipantBadge(comment.userScore) + ".png"
+                            }
+                            alt="사용자 뱃지"
+                          />
+                        </div>
+                        <span className="font-semibold leading-tightl">{comment.username}</span>
                       </div>
-                      <span className="font-semibold leading-tightl">{comment.username}</span>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                   {/* 현재 유저와 작성한 유저가 같으면 삭제되도록 */}
-                  {Number(userAuth.userId) === comment.kakaoNumber && (
-                    <div>
-                      {/* <button onClick={onClickUpdate(comment.commentId)}>수정하기</button> */}
-                      <button onClick={onClickDelete(comment.commentId)}>삭제하기</button>
-                    </div>
-                  )}
+                  <div>
+                    {Number(userAuth.userId) === comment.kakaoNumber && (
+                      <div>
+                        {/* <button onClick={onClickUpdate(comment.commentId)}>수정하기</button> */}
+                        <button onClick={onClickDelete(comment.commentId)} className="bg-red-500 font-semibold">삭제하기</button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="rounded p-2">
