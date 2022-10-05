@@ -48,17 +48,18 @@ const Wallet = (): JSX.Element => {
       showCancelButton: false,
       confirmButtonText: "제출",
       showLoaderOnConfirm: true,
-      preConfirm: (pw) => {
+      preConfirm: (pw: string) => {
         return postWallet(pw)
           .then(({ data }) => {
             if (data.statusCode === 2000) {
               setCash(data.cash);
               getWalletHistory()
                 .then(({ data }) => {
-                  if (data.statusCode !== 2000) {
+                  if (data.statusCode === 2000) {
+                    setWalletHistoies([...data.walletHistoryList]);
+                  } else {
                     throw new Error(data.message);
                   }
-                  setWalletHistoies([...data.walletHistorys]);
                 })
                 .catch((error) => {
                   Swal.showValidationMessage(`Request failed: ${error}`);
@@ -123,7 +124,7 @@ const Wallet = (): JSX.Element => {
       },
       allowOutsideClick: false,
     });
-  }
+  };
 
   return (
     <div>
@@ -136,7 +137,10 @@ const Wallet = (): JSX.Element => {
             <p className="font-semibold text-right mr-5">ETH</p>
           </div>
           <div className="grid grid-cols-1 mt-2">
-            <button type="button" className="bg-blue-200 py-1 text-white rounded" onClick={handleCharge}>
+            <button
+              type="button"
+              className="bg-blue-200 py-1 text-white rounded"
+              onClick={handleCharge}>
               충전하기
             </button>
           </div>

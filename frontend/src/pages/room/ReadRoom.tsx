@@ -159,7 +159,7 @@ const ReadRoom = () => {
           <MeetingCard name="readRoom" room={room} />
           {islogining ? (
             <div className="w-full flex flex-col justify-center items-center">
-              <div>
+              <div className="flex flex-row">
                 <img
                   className="w-5 h-5 animate-gelatine mr-1"
                   src={process.env.PUBLIC_URL + `/img/userBadge3.png`}
