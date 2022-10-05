@@ -4,13 +4,14 @@ import com.sgbg.blockchain.domain.Transaction;
 import com.sgbg.blockchain.domain.Wallet;
 
 public interface ISingleBungleService {
-    String createRoom(long hostId, long duration, long minimumAmount) throws Exception;
 
-    Wallet enterRoom(long userId, long hostId, String sgbgContractAddress, long money) throws Exception;
+    String createRoom(Long roomId, long hostId, long duration, long minimumAmount) throws Exception;
 
-    Wallet exitRoom(long userId, long hostId, String sgbgContractAddress, long money) throws Exception;
+    Wallet enterRoom(Long roomId, long userId, long hostId, String sgbgContractAddress, long money) throws Exception;
+
+    Wallet exitRoom(Long roomId, long userId, long hostId, String sgbgContractAddress, long money) throws Exception;
 
     Wallet endRoom(long roomId, long hostId, String sgbgContractAddress) throws Exception;
 
-    Transaction isSuccess(long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception;
+    Transaction isSuccess(long roomId, long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception;
 }

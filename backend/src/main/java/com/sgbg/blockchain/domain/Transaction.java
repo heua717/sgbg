@@ -19,6 +19,8 @@ public class Transaction {
     @Column(name = "transaction_id")
     private long id;
 
+    private Long roomId;
+
     private String hash;
 
     private String contractAddress;
@@ -44,8 +46,9 @@ public class Transaction {
     private Boolean relatedToMoney;
 
     @Builder
-    public Transaction(long id, String hash, String contractAddress, String blockHash, long blockNumber, long transactionIndex, String from, String to, long money, long gas, LocalDateTime storedAt, Boolean relatedToMoney) {
+    public Transaction(long id, Long roomId, String hash, String contractAddress, String blockHash, long blockNumber, long transactionIndex, String from, String to, long money, long gas, LocalDateTime storedAt, Boolean relatedToMoney) {
         this.id = id;
+        this.roomId = roomId;
         this.hash = hash;
         this.contractAddress = contractAddress;
         this.blockHash = blockHash;
