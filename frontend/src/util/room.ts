@@ -8,7 +8,7 @@ export type location = {
 
 export type members = {
   name: string;
-  userId: string;
+  kakaoId: string;
   email: string;
   hostScore: number;
   memberScore: number;

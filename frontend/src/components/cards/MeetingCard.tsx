@@ -65,7 +65,7 @@ const MeetingCard = (props:any): JSX.Element => {
           alt="소분류 카테고리 사진"></img>
 
         <div className={`absolute bottom-0 right-0 rounded ${getMemberBadgeColor()} text-sm font-semibold px-2`}>
-          {props.room.minUser? props.room.minUser : ''} / {props.room.maxUser? props.room.maxUser : ''}
+          {props.room.members? props.room.members.length : ''} / {props.room.maxUser? props.room.maxUser : ''}
         </div>
       </div>
       {/* 모임 설명 */}

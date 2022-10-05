@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 const ParticipantListTab = (props: any) => {
   const [members, setMembers] = useState([{
     name: '',
-    userId: 0,
+    kakaoId: 0,
     email: '',
     hostScore: 0,
     memberScore: 0
@@ -23,19 +23,19 @@ const ParticipantListTab = (props: any) => {
 
   return (  
     <div className="ml-3">
-      <p className="text-lg font-semibold mb-4">참여자 ({members.length + 1})</p>
+      <p className="text-lg font-semibold mb-4">참여자 ({members.length})</p>
 
         {members.map((member) => 
-          <div className="grid grid-cols-2 my-3">
+          <div className="my-1 pb-2 border-b border-gray-300 ">
 
             {/* 
               유저 뱃지, 아이디 
               - 클릭하면 마이페이지로 이동할 수 있도록 연결해두었음 0922 임지민
             */}
             {members.length && (
-              <div>
-                <Link to={`/profile/${member.userId}`}>
-                  <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
+              <div className="grid grid-cols-2">
+                <Link to={`/profile/${member.kakaoId}`}>
+                  <div className="flex flex-row justify-start pb-1">
                     <div className="w-[25px] h-[25px] mr-2">
                       <img
                         className="w-full h-full"
@@ -45,7 +45,7 @@ const ParticipantListTab = (props: any) => {
                         alt="사용자 뱃지"
                       />
                     </div>
-                    <span className="font-semibold leading-tightl">{member.memberScore}</span>
+                    <span className="font-semibold leading-tightl">{member.name}</span>
                   </div>
                 </Link>
 
@@ -53,7 +53,7 @@ const ParticipantListTab = (props: any) => {
                   태도 점수 바 
                   - progress bar가 차오르는 효과 넣기(priority low) 0922 임지민
                 */}
-                <div>
+                <div className="">
                   <div className="w-full bg-gray-300 rounded-full">
                     <div
                       className={`${getProgressColor(member.memberScore)} text-xs font-medium text-white text-right p-0.5 leading-none rounded-full py-1`}

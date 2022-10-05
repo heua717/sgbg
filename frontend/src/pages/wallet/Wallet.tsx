@@ -133,9 +133,9 @@ const Wallet = (): JSX.Element => {
       <div className="ml-5">
         <div className="mr-5">
           <p className="text-xl font-semibold mx-2">나의 지갑</p>
-          <div className="flex flex-row justify-between border border-solid border-blue-200 rounded mt-3 p-6">
-            <p className="font-semibold">{cash}</p>
-            <p className="font-semibold text-right mr-5">SBTKN</p>
+          <div className="flex flex-row justify-end border border-solid border-blue-200 rounded mt-3 p-6">
+            <p className="font-semibold text-lg">{cash}</p>
+            <p className="font-semibold text-right mx-3">SBTKN</p>
           </div>
           <div className="grid grid-cols-1 mt-2">
             <button
@@ -169,7 +169,7 @@ const Wallet = (): JSX.Element => {
                     {history.totalMoneyBeforeTransaction &&
                       history.money &&
                       history.totalMoneyBeforeTransaction + history.money}{" "}
-                    ETH
+                    SBTKN
                   </p>
                 </div>
               </div>
