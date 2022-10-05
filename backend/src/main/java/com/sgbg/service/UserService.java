@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -79,19 +80,29 @@ public class UserService implements IUserService {
         }
 
         List<Room> myRoomsByUserId = participationRepository.findMyRoomsByUserId(userId);
+        List<Room> getRooms = new ArrayList<>();
 
         for (Room room: myRoomsByUserId) {
-            System.out.println(room.getTitle());
+            if (isHost) {
+                if (room.getHostId().equals(userId)) {
+                    getRooms.add(room);
+                }
+            } else {
+                if (!room.getHostId().equals(userId)) {
+                    getRooms.add(room);
+                }
+            }
         }
+        return getRooms;
 
-        if (isHost) { // host = true
-            return myRoomsByUserId
-                    .stream().filter(room -> room.getHostId().equals(userId))
-                    .collect(Collectors.toList());
-        }
-        return myRoomsByUserId
-                .stream().filter(room -> !room.getHostId().equals(userId))
-                .collect(Collectors.toList());
+//        if (isHost) { // host = true
+//            return myRoomsByUserId
+//                    .stream().filter(room -> room.getHostId().equals(userId))
+//                    .collect(Collectors.toList());
+//        }
+//        return myRoomsByUserId
+//                .stream().filter(room -> !room.getHostId().equals(userId))
+//                .collect(Collectors.toList());
     }
 
     @Override
