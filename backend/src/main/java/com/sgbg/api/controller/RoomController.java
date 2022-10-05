@@ -145,11 +145,18 @@ public class RoomController {
 
         List<Transaction> transactionsByRoom = transactionService.getTransactionsByRoom(room.getId());
 
-        // roomId로 transaction들을 갖고 오고,
-        // from, to 중에서 무엇이 contract 주소인지 모름
+        for (Transaction transaction : transactionsByRoom) {
+            String contractAddress = room.getContractAddress();
 
-        // from address ->
-        // to address ->
+            String fromAddress = transaction.getFrom();
+            String toAddress = transaction.getTo();
+
+            if (fromAddress.equals(contractAddress)) {
+
+            } else {
+
+            }
+        }
 
         return null;
 //        return ResponseEntity.status(HttpStatus.OK).body(TransactionRes.of());
