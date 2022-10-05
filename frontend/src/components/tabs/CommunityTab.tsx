@@ -18,8 +18,9 @@ const CommunityTab = (props: any) => {
     content: '',
     commentId: 0,
     createdAt: '',
+    hostScore: 0,
+    kakaoNumber: 0,
     username: '',
-    userId: '',
     userScore: 0,
     }])
 
@@ -131,7 +132,7 @@ const CommunityTab = (props: any) => {
                     </div>
                   </Link>
                   {/* 현재 유저와 작성한 유저가 같으면 삭제되도록 */}
-                  {userAuth.userId === comment.userId && (
+                  {Number(userAuth.userId) === comment.kakaoNumber && (
                     <div>
                       {/* <button onClick={onClickUpdate(comment.commentId)}>수정하기</button> */}
                       <button onClick={onClickDelete(comment.commentId)}>삭제하기</button>
