@@ -1,14 +1,15 @@
 package com.sgbg.api.controller;
 
+import com.sgbg.api.request.Review;
+import com.sgbg.api.response.BaseResponseBody;
+import com.sgbg.api.response.ReviewRes;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.UserRes;
 import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
 import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
-import com.sgbg.domain.Auth;
-import com.sgbg.domain.Participation;
-import com.sgbg.domain.Room;
-import com.sgbg.domain.User;
+import com.sgbg.domain.*;
+import com.sgbg.service.RoomService;
 import com.sgbg.service.interfaces.IAuthService;
 import com.sgbg.service.interfaces.IHostEvaluationService;
 import com.sgbg.service.interfaces.IMemberEvaluationService;
@@ -19,46 +20,36 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "User API", description = "회원 등록, 회원 정보 조회 등의 기능 제공")
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private IUserService userService;
-    private IAuthService authService;
+    private final IUserService userService;
+    private final IAuthService authService;
 
-    private IHostEvaluationService hostEvaluationService;
+    private final RoomService roomService;
 
-    private IMemberEvaluationService memberEvaluationService;
+    private final IHostEvaluationService hostEvaluationService;
 
-    private ISingleBungleService singleBungleService;
-    private CookieUtil cookieUtil;
+    private final IMemberEvaluationService memberEvaluationService;
 
-    @Autowired
-    public UserController(IUserService userService, IAuthService authService,
-                          IHostEvaluationService hostEvaluationService, IMemberEvaluationService memberEvaluationService,
-                          ISingleBungleService singleBungleService, CookieUtil cookieUtil) {
-        Assert.notNull(userService, "userService 개체가 반드시 필요!");
-        this.userService = userService;
-        this.authService = authService;
-        this.hostEvaluationService = hostEvaluationService;
-        this.memberEvaluationService = memberEvaluationService;
-        this.singleBungleService = singleBungleService;
-        this.cookieUtil = cookieUtil;
-    }
+    private final ISingleBungleService singleBungleService;
+    private final CookieUtil cookieUtil;
 
     @GetMapping("/{kakaoId}")
     @Operation(summary = "회원 정보 조회")
@@ -94,27 +85,36 @@ public class UserController {
         List<Room> rooms = userService.getMyRooms(userId, Boolean.parseBoolean(host));
 
         User user = userService.getUserById(userId);
+        List<Room> myRooms = new ArrayList<>();
         List<Boolean> hostReviews = new ArrayList<>();
         List<Boolean> memberReviews = new ArrayList<>();
 
-        for (Room room: rooms) {
-            Boolean hostReview = hostEvaluationService.checkHostEvaluation(user, room);
-            Boolean memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
-            hostReviews.add(hostReview);
-            memberReviews.add(memberReview);
+        for (Room room : rooms) {
+            if (room.getReservationDate().compareTo(LocalDateTime.now()) < 0) {
+                Boolean hostReview = hostEvaluationService.checkHostEvaluation(user, room);
+                Boolean memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
+
+                myRooms.add(room);
+                hostReviews.add(hostReview);
+                memberReviews.add(memberReview);
+            }
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyRoomList(2000, "Success", rooms, hostReviews, memberReviews));
+        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyRoomList(2000, "Success", myRooms, hostReviews, memberReviews));
     }
 
     @GetMapping("/room/{roomId}/add")
     @Operation(summary = "방 입장하기")
-    // TODO: API Response 추가
-    public void addRoom(@PathVariable String roomId, HttpServletRequest request) {
+    @ApiResponses({
+            @ApiResponse(responseCode = "202", description = "방 입장 성공",
+                    content = @Content(schema = @Schema(implementation = BaseResponseBody.class))),
+            @ApiResponse(responseCode = "500", description = "방 입장 실패")
+    })
+    public ResponseEntity<? extends BaseResponseBody> addRoom(@PathVariable String roomId, HttpServletRequest request) {
         Long userId = cookieUtil.getUserIdByToken(request);
         User user = userService.getUserById(userId);
         if (user == null) {
-           throw new NotFoundException("User Not Found");
+            throw new NotFoundException("User Not Found");
         }
 
         Participation participation = userService.addMyRoom(userId, Long.valueOf(roomId));
@@ -122,18 +122,21 @@ public class UserController {
 
         try {
             // TODO: wallet 잔액 부족한 경우
-
             singleBungleService.enterRoom(userId, room.getHostId(), room.getContractAddress(), room.getPrice());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BaseResponseBody.of(2020, "Success"));
     }
 
-    // TODO: 방 나가기
     @GetMapping("/room/{roomId}/delete")
     @Operation(summary = "방 나가기")
-    // TODO: API Response 추가
-    public void deleteRoom(@PathVariable String roomId, HttpServletRequest request) {
+    @ApiResponses({
+            @ApiResponse(responseCode = "202", description = "방 나가기 성공"),
+            @ApiResponse(responseCode = "500", description = "방 나가기 실패")
+    })
+    public ResponseEntity<? extends BaseResponseBody> deleteRoom(@PathVariable String roomId, HttpServletRequest request) {
         Long userId = cookieUtil.getUserIdByToken(request);
         User user = userService.getUserById(userId);
         if (user == null) {
@@ -146,5 +149,87 @@ public class UserController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BaseResponseBody.of(2020, "Success"));
     }
+
+    @GetMapping("/room/{roomId}/withdraw")
+    @Operation(summary = "방장이 출금하기")
+    @ApiResponses({
+            @ApiResponse(responseCode = "202", description = "출금 성공"),
+            @ApiResponse(responseCode = "401", description = "호스트가 아닙니다."),
+            @ApiResponse(responseCode = "500", description = "출금 실패")
+    })
+    public ResponseEntity<? extends BaseResponseBody> withdraw(@PathVariable String roomId, HttpServletRequest request) {
+        Room room = roomService.getRoom(Long.valueOf(roomId));
+        if (room == null) {
+            throw new NotFoundException("Room Not Found");
+        }
+
+        Long userId = cookieUtil.getUserIdByToken(request);
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            throw new NotFoundException("User Not Found");
+        }
+        if (!room.getHostId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponseBody.of(4010, "Fail"));
+        }
+
+        try {
+            singleBungleService.endRoom(room.getId(), room.getHostId(), room.getContractAddress());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BaseResponseBody.of(2020, "Success"));
+    }
+
+    @GetMapping("/{kakaoId}/room")
+    @Operation(summary = "완료된 모임 조회")
+    public ResponseEntity<? extends RoomListRes> getMyCompleteRooms(
+            @PathVariable String kakaoId,
+            @RequestParam(value = "host") String host,
+            HttpServletRequest request
+    ) {
+        User user = authService.isUser(kakaoId).getUser();
+        if (user == null) {
+            throw new NotFoundException("User Not Found");
+        }
+
+        List<Room> myRooms = userService.getMyRooms(user.getId(), Boolean.parseBoolean(host));
+        List<Room> myCompleteRooms = new ArrayList<>();
+        List<Integer> hostReviewResults = new ArrayList<>();
+        List<ReviewRes> memberReviewResults = new ArrayList<>();
+
+        for (Room room : myRooms) {
+            if (room.getReservationDate().compareTo(LocalDateTime.now()) < 0) { // 예약일 다음날
+                Boolean hostReview = hostEvaluationService.checkHostEvaluation(user, room);
+                Boolean memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
+
+                if (hostReview && memberReview) { // 방장, 참여자 평가가 완료된 경우
+                    int best = 0, good = 0, bad = 0;
+
+                    myCompleteRooms.add(room);
+                    hostReviewResults.add(hostEvaluationService.getSuccessEvaluation(room));
+
+                    List<MemberEvaluation> memberEvaluations = memberEvaluationService.getMemberEvaluations(user, room);
+                    for (MemberEvaluation memberEvaluation : memberEvaluations) {
+                        Review review = memberEvaluation.getReview();
+                        if (review.equals(Review.BEST)) {
+                            best++;
+                        } else if (review.equals(Review.GOOD)) {
+                            good++;
+                        } else if (review.equals(Review.BAD)) {
+                            bad++;
+                        }
+                    }
+                    memberReviewResults.add(ReviewRes.of(best, good, bad));
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyCompleteRoomList(
+                2000, "Success", myCompleteRooms, hostReviewResults, memberReviewResults));
+    }
+
 }

@@ -10,4 +10,13 @@ public enum Review {
     Review(int score) {
         this.score = score;
     }
+
+    public static Review valueOfReview(int score) {
+        for (Review r : values()) {
+            if(r.score == score) {
+                return r;
+            }
+        }
+        return null;
+    }
 }
