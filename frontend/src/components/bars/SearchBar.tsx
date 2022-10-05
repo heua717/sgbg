@@ -10,10 +10,14 @@ type SearchBarProps = {
 
 const SearchBar = (props:SearchBarProps) => {
   const [keyword, setKeyword] = useState<string>("");
+
+
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    // console.log(e.target.value);
     setKeyword(e.target.value);
   }
   const handleSearch = () => {
+    // console.log('clicked = ', keyword);
     props.handleKeyword(keyword);
   }
 
@@ -25,7 +29,7 @@ const SearchBar = (props:SearchBarProps) => {
 
   return (
     <div className="w-full flex flex-row justify-between items-center p-2 mt-3">
-      <button 
+      <button
         className="text-2xl mr-3"
         onClick={toPageBefore}        
       >&lt;</button>

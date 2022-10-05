@@ -41,7 +41,7 @@ const CreateWallet = () => {
       return;
     } else {
       checkWallet().then(({data}) => {
-        if (!(data.statusCode === 2000)) {
+        if (data.statusCode === 2000) {
           Swal.fire({
             position: 'center',
             icon: 'warning',
