@@ -9,14 +9,18 @@ import com.sgbg.blockchain.common.exception.NoWalletException;
 import com.sgbg.blockchain.common.exception.WrongPasswordException;
 import com.sgbg.blockchain.domain.Wallet;
 import com.sgbg.blockchain.domain.WalletHistory;
+import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
 import com.sgbg.blockchain.service.interfaces.IWalletService;
 import com.sgbg.common.util.CookieUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.web3j.crypto.Keys;
+import org.web3j.protocol.Web3j;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -31,6 +35,15 @@ public class WalletController {
 
     @Autowired
     private CookieUtil cookieUtil;
+
+    @Autowired
+    private ISingleBungleService singleBungleService;
+
+    @Value("${eth.admin.private}")
+    private String adminPrivate;
+
+//    @Value("${eth.admin.address}")
+//    private String adminAddress;
 
     @GetMapping
     public ResponseEntity<? extends BaseResponseBody> checkWallet(HttpServletRequest request) {
@@ -72,7 +85,7 @@ public class WalletController {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
 //        long userId = cookieUtil.getUserIdByToken(request);
-        long userId = 4L;
+        long userId = 6L;
 
         Wallet wallet = null;
         try {
@@ -93,7 +106,7 @@ public class WalletController {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
 //        long userId = cookieUtil.getUserIdByToken(request);
-        long userId = 4L;
+        long userId = 6L;
 
         try {
             Wallet wallet = walletService.charge(userId, money);
@@ -123,22 +136,47 @@ public class WalletController {
 
     }
 
-//    // test용
-//    @PostMapping("/createroom")
-//    public ResponseEntity<? extends BaseResponseBody> rooms(HttpServletRequest request){
-//
-//        long userId = 4L;
-//
-//        try {
-//            String contractAddress = walletService.createRoom(userId, 7, 100);
-//            System.out.println("controller : " + contractAddress);
-//            return ResponseEntity.status(HttpStatus.OK).build();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new RuntimeException(e);
-//        }
-//
-//    }
+
+    @PostMapping("/adminadminadminrealkiki")
+    public ResponseEntity<String> deployAdminCash() throws Exception {
+
+        String contract = walletService.deployAdminCash();
+        return ResponseEntity.status(HttpStatus.OK).body(contract);
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<String> makeAdmin() throws Exception{
+        walletService.makeAdmin();
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    // test용
+    @PostMapping("/createroom")
+    public ResponseEntity<? extends BaseResponseBody> rooms(HttpServletRequest request){
+
+        long userId = 4L;
+
+        try {
+            String contractAddress = singleBungleService.createRoom(userId, 7, 100);
+            System.out.println("controller : " + contractAddress);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/enterroom")
+    public ResponseEntity<? extends BaseResponseBody> enterroom(){
+        long userId = 2L;
+
+        try{
+            singleBungleService.enterRoom(userId, 4L, "0x2ab6e06b5b10da7f8b3d23063f05c9649179843f", 100);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 
 }
 
