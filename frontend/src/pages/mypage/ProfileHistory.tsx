@@ -12,12 +12,6 @@ const ProfileHistory = () => {
     userId: "namm",
   };
 
-  useEffect(() => {
-    
-  });
-
-  const list = [1, 2, 3, 4, 5, 6, 7];
-
   const data = [
     {
       id: 0,
