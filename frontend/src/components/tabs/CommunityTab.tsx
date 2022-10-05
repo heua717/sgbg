@@ -55,8 +55,8 @@ const CommunityTab = (props: any) => {
   const readCommentList = () => {
     readComment(Number(meeting_id))
     .then(({data})=> {
-      // console.log(data);
-      data.length? setIsEmpty(true) : setIsEmpty(false)
+      console.log(data);
+      data.length!== 0? setIsEmpty(false) : setIsEmpty(true)
       // 저장해주고
       setCommentList(data)
       // navigate(0)
