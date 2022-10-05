@@ -5,16 +5,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomMore } from "../../util/room";
 import { inputRoomInfo } from "../../store/room";
-import MeetingCard from "../../components/cards/MeetingCard";;
+import MeetingCard from "../../components/cards/MeetingCard";
+import BtnExitToHome from "../../components/buttons/BtnExitToHome";
+import { useEffect, useState } from "react";
+import { createRoom } from "../../api/room";
 
 const CreateRoomMore = () => {
   const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo);;
   const [roomList, setRoomList] = useState([]);;
   const resetRecoil = useResetRecoilState(inputRoomInfo);
-  const [isloading, setLoading] = useState<boolean>(false);
+  const [isloading, setLoading] = useState<boolean>(false);;
+
 
   // created 될 때
   useEffect(() => {
+
     // console.log(room.endDate);
   });
 
