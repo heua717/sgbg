@@ -173,7 +173,7 @@ const ReadRoom = () => {
                   src={process.env.PUBLIC_URL + `/img/userBadge1.png`}
                 />
               </div>
-              <span className="font-semibold text-xl">...</span>
+              <span className="font-semibold text-xl">처리중...</span>
             </div>
           ) : isInThisRoom ? (
             <button
