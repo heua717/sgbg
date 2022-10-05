@@ -20,4 +20,4 @@ COPY --from=builder app/build/libs/*.jar ./app.jar
 EXPOSE 8080
 
 #ENTRYPOINT 명령을 지정, app.war 실행
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["nohup","java","-jar","/app.jar","--logging.file.path=/home/ubuntu/java-logs/","--logging.level.org.hibernate.SQL=DEBUG",">>","/home/ubuntu/java-logs/deploy.log","2>/home/ubuntu/java-logs/deploy_err.log","&"]
