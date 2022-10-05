@@ -135,47 +135,47 @@ public class WalletController {
 
     }
 
-
-    @PostMapping("/adminadminadminrealkiki")
-    public ResponseEntity<String> deployAdminCash() throws Exception {
-
-        String contract = walletService.deployAdminCash();
-        return ResponseEntity.status(HttpStatus.OK).body(contract);
-    }
-
-    @PostMapping("/admin")
-    public ResponseEntity<String> makeAdmin() throws Exception{
-        walletService.makeAdmin();
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
+//
+//    @PostMapping("/adminadminadminrealkiki")
+//    public ResponseEntity<String> deployAdminCash() throws Exception {
+//
+//        String contract = walletService.deployAdminCash();
+//        return ResponseEntity.status(HttpStatus.OK).body(contract);
+//    }
+//
+//    @PostMapping("/admin")
+//    public ResponseEntity<String> makeAdmin() throws Exception{
+////        walletService.makeAdmin();
+//        return ResponseEntity.status(HttpStatus.OK).build();
+//    }
 
     // test용
-    @PostMapping("/createroom")
-    public ResponseEntity<? extends BaseResponseBody> rooms(HttpServletRequest request){
+//    @PostMapping("/createroom")
+//    public ResponseEntity<? extends BaseResponseBody> rooms(HttpServletRequest request){
+//
+//        long userId = 4L;
+//
+//        try {
+//            String contractAddress = singleBungleService.createRoom(userId, 7, 100);
+//            System.out.println("controller : " + contractAddress);
+//            return ResponseEntity.status(HttpStatus.OK).build();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
+//    }
 
-        long userId = 4L;
-
-        try {
-            String contractAddress = singleBungleService.createRoom(userId, 7, 100);
-            System.out.println("controller : " + contractAddress);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PostMapping("/enterroom")
-    public ResponseEntity<? extends BaseResponseBody> enterroom(){
-        long userId = 2L;
-
-        try{
-            singleBungleService.enterRoom(userId, 4L, "0x2ab6e06b5b10da7f8b3d23063f05c9649179843f", 100);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
+//    @PostMapping("/enterroom")
+//    public ResponseEntity<? extends BaseResponseBody> enterroom(){
+//        long userId = 2L;
+//
+//        try{
+//            singleBungleService.enterRoom(userId, 4L, "0x2ab6e06b5b10da7f8b3d23063f05c9649179843f", 100);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//        return null;
+//    }
 
 }
 
