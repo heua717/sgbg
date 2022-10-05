@@ -1,15 +1,32 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import BigLogo from "./BigLogo";
+import SmallLogo from "./SmallLogo";
+
 
 const Logo = () => {
+  const [ isOpen, setIsOpen ] = useState(false)
+  const navigate = useNavigate()
+
+  const onClickLogo = () => {
+    const url = window.location.href
+    // console.log(url);
+    
+    if (url === 'http://localhost:3000/' || url === 'http://j7a707.p.ssafy.io/') {
+      // console.log('open drawer');
+      !isOpen? setIsOpen(true) : setIsOpen(false)
+    } else {
+      navigate('/')
+    }
+  }
+
+  useEffect(()=>{
+    // setIsOpen(false)
+  })
+
   return (
-    <div className="w-full h-[55px] my-2">
-      <Link to="/">
-        <img
-          className="max-h-full mx-auto"
-          src={process.env.PUBLIC_URL + `/img/sgbg-logo.png`}
-          alt="SgBg 로고"
-        />
-      </Link>
+    <div onClick={onClickLogo}>
+      {isOpen? <BigLogo/> : <SmallLogo />}
     </div>
   );
 };
