@@ -26,6 +26,7 @@ const CommunityTab = (props: any) => {
 
   const [ comment, setComment ] = useState('')
   const [userAuth] = useRecoilState(auth);
+  const [ isEmpty, setIsEmpty] = useState(false)
 
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -46,7 +47,7 @@ const CommunityTab = (props: any) => {
       roomId: Number(meeting_id)
     }).then((res)=>{
       console.log(res);
-      // 다 되면 현재 페에지 리다이렉트
+      // 다 되면 현재 페이지 리다이렉트
       readCommentList();
     })    
   }
@@ -54,7 +55,8 @@ const CommunityTab = (props: any) => {
   const readCommentList = () => {
     readComment(Number(meeting_id))
     .then(({data})=> {
-      console.log(data);
+      // console.log(data);
+      data.length? setIsEmpty(true) : setIsEmpty(false)
       // 저장해주고
       setCommentList(data)
       // navigate(0)
@@ -112,7 +114,7 @@ const CommunityTab = (props: any) => {
             </button>
           </div>
           {/* 작성된 게시글 */}
-        {commentList.length && (
+        {!isEmpty && (
           <div className="h-[75vh]">
             {commentList.map(comment=>
               <div className="my-5 border rounded p-2">
