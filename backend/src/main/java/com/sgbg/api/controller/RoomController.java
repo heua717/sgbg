@@ -129,10 +129,10 @@ public class RoomController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity searchRoom(@RequestParam(value = "keyword") String keyword) {
+    public ResponseEntity searchRoom(@RequestParam String keyword) {
         List<Room> roomList = roomService.searchRoom(keyword);
-
-        return ResponseEntity.status(200).body(roomList);
+        System.out.println("키워드" + keyword);
+        return ResponseEntity.status(200).body(RoomListRes.of(2000, "Success", roomList));
     }
 
     @Operation(summary = "방 별 돈 관련 트랜잭션 조회")
