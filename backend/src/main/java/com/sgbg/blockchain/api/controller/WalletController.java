@@ -1,6 +1,8 @@
 package com.sgbg.blockchain.api.controller;
 
 import com.google.api.Http;
+import com.sgbg.blockchain.api.request.WalletChargeReq;
+import com.sgbg.blockchain.api.request.WalletReq;
 import com.sgbg.blockchain.api.response.BaseResponseBody;
 import com.sgbg.blockchain.api.response.WalletHistoryListRes;
 import com.sgbg.blockchain.api.response.WalletHistoryRes;
@@ -64,12 +66,11 @@ public class WalletController {
     }
 
     @PostMapping
-    public ResponseEntity<? extends BaseResponseBody> getWallet(@RequestBody String password, HttpServletRequest request) {
-
+    public ResponseEntity<? extends BaseResponseBody> getWallet(@RequestBody WalletReq walletReq, HttpServletRequest request) {
         long userId = cookieUtil.getUserIdByToken(request);
 
         try {
-            Wallet wallet = walletService.getWallet(userId, password);
+            Wallet wallet = walletService.getWallet(userId, walletReq.getPassword());
             return ResponseEntity.status(HttpStatus.OK).body(WalletRes.of(2000, "Success", wallet));
         } catch (WrongPasswordException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseResponseBody.of(4010, "Wrong Password"));
@@ -80,7 +81,7 @@ public class WalletController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestBody String password, HttpServletRequest request) {
+    public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestBody WalletReq walletReq, HttpServletRequest request) {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
 //        long userId = cookieUtil.getUserIdByToken(request);
@@ -88,7 +89,7 @@ public class WalletController {
 
         Wallet wallet = null;
         try {
-            wallet = walletService.createWallet(userId, password);
+            wallet = walletService.createWallet(userId, walletReq.getPassword());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -101,14 +102,14 @@ public class WalletController {
     }
 
     @PostMapping("/charge")
-    public ResponseEntity<? extends BaseResponseBody> charge(@RequestBody long money, HttpServletRequest request){
+    public ResponseEntity<? extends BaseResponseBody> charge(@RequestBody WalletChargeReq walletChargeReq, HttpServletRequest request){
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
         long userId = cookieUtil.getUserIdByToken(request);
 //        long userId = 4L;
 
         try {
-            Wallet wallet = walletService.charge(userId, money);
+            Wallet wallet = walletService.charge(userId, walletChargeReq.getMoney());
             return ResponseEntity.status(HttpStatus.OK).body(WalletRes.of(2010, "Accepted", wallet));
         } catch (NoWalletException e){
             return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(4020, "No Wallet"));
