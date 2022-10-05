@@ -35,7 +35,7 @@ const AllCatetoryList = (props: any) => {
     } else if (props.name === "search") {
       navigate({
         pathname: 'result',
-        search: `childCategory=${child}`,
+        search: `childcategory=${child}`,
       })
     }
   };

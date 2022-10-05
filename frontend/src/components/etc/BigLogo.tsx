@@ -1,3 +1,6 @@
+import React from "react";
+
+
 const BigLogo = () => {
   return (
     // 도로록 열리게  bg-blue-600
