@@ -9,9 +9,11 @@ import { auth } from "../../store/auth";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import { members } from "../../util/room";
+import { withdrawWallet } from "../../api/profile";
 
 const ReadRoom = () => {
   const { meeting_id } = useParams<{ meeting_id: string }>();
+  const [ isDone, setIsDone ] = useState(false)
   const [userAuth] = useRecoilState(auth);
   const [islogining, setLogining] = useState<boolean>(false);
 
@@ -34,15 +36,15 @@ const ReadRoom = () => {
     reservationDate: "",
     price: 0,
     minMemberScore: 0,
-    members: [
-      {
-        name: "",
-        userId: 0,
-        email: "",
-        hostScore: 0,
-        memberScore: 0,
-      },
-    ],
+    hostId: '',
+    hostName: '',
+    members: [{
+      name: '',
+      userId: 0,
+      email: '',
+      hostScore: 0,
+      memberScore: 0
+    }]
   });
 
   // 현재 유저가 이 모임 참여자 목록에 있는 지 없는 지 판단
@@ -55,8 +57,29 @@ const ReadRoom = () => {
       } else {
         setIsInThisRoom(false);
       }
-    });
-  };
+    })
+  }
+
+  // 출금 
+  const getWithdraw = () => {
+    if ((userAuth.userId === room.hostId )&& (room.members.length >= room.minUser)) {
+      Swal.fire({
+        title: "더 이상 모집하지 않고 마감하시겠습니까?",
+        text:"마감하시면 스마트 컨트랙트가 체결되고, 모인 돈이 내 지갑으로 들어옵니다.",
+        icon: 'info',
+        showCancelButton: true,
+        cancelButtonText: '취소'
+      }).then(()=>{
+        // axios
+        withdrawWallet(room.roomId).then(()=> {
+          navigate('/wallet')
+          // 해당 모임 모집 마감 처리
+          setIsDone(true)
+        })
+      })
+    }
+  }
+
 
   useEffect(() => {
     if (meeting_id) {
@@ -64,10 +87,20 @@ const ReadRoom = () => {
         .then(({ data }) => {
           setRoom({ ...data.roomInfo });
         })
-        .catch((e) => {});
-    }
+        .catch((e) => {
+        });
+    };
+    // 2. create될 때 한 번만 현재 유저가 이 방에 참여하고 있는 지 판별
+      getIsInThisRoom();
 
-    getIsInThisRoom();
+    /* 3. 출금 
+      - 현재 유저 === 방 호스트 && 오늘이 모집 마감일 && 전체 참여자 수가 최소 모집 인원 이상
+      - alert(더 이상 모집하지 않고 마감하시겠습니까? 마감하시면 스마트 컨트랙트가 체결되고, 모인 돈이 내 지갑으로 들어옵니다)
+      - ok 누르면 돈 출금 axios + 내 지갑으로 redirect 
+      - 모집 마감 처리(변수 하나 만들어서, 방장이 출금했을 때, 인원이 다 찼을 때, 모집 마감일이 지났을 때 true이도록 )
+    */
+    getWithdraw();
+
   }, []);
 
   const navigate = useNavigate();
@@ -87,7 +120,7 @@ const ReadRoom = () => {
       }).then(() => {
         navigate("/login");
       });
-    } // 퇴징: 로그인은 되어 있지만 이미 참여하고 있는 경우
+    } // 퇴장: 로그인은 되어 있지만 이미 참여하고 있는 경우
     else if (userAuth.isLogined && isInThisRoom) {
       Swal.fire({
         position: "center",
@@ -157,9 +190,10 @@ const ReadRoom = () => {
         <Logo />
         <div className="px-3">
           <MeetingCard name="readRoom" room={room} />
+
           {islogining ? (
             <div className="w-full flex flex-col justify-center items-center">
-              <div>
+              <div className="flex flex-row">
                 <img
                   className="w-5 h-5 animate-gelatine mr-1"
                   alt="userBadge3"
@@ -176,7 +210,7 @@ const ReadRoom = () => {
                   src={process.env.PUBLIC_URL + `/img/userBadge1.png`}
                 />
               </div>
-              <span className="font-semibold text-xl">...</span>
+              <span className="font-semibold text-xl">처리중...</span>
             </div>
           ) : isInThisRoom ? (
             <button
