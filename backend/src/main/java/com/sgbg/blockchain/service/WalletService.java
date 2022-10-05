@@ -10,7 +10,6 @@ import com.sgbg.blockchain.repository.WalletRepository;
 import com.sgbg.blockchain.service.interfaces.IWalletService;
 import com.sgbg.blockchain.domain.Wallet;
 import com.sgbg.blockchain.wrapper.Cash_sol_Cash;
-import com.sgbg.blockchain.wrapper.Contracts_SingleBungle_sol_SingleBungle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
-
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -76,6 +74,7 @@ public class WalletService implements IWalletService {
         // Credentials 테스트
         Credentials credentials = Credentials.create(ecKeyPair);
         Credentials credentials1 = Credentials.create(privateKey, publicKey);
+        Credentials credentials2 = Credentials.create(privateKey);
         if (credentials1.getAddress().equals(credentials.getAddress())) {
             System.out.println("true");
         } else {
@@ -86,6 +85,8 @@ public class WalletService implements IWalletService {
         System.out.println(privateKey);
         System.out.println(address); // 지갑 address
         System.out.println(credentials.getAddress());
+        System.out.println(credentials1.getAddress());
+        System.out.println(credentials2.getAddress());
         System.out.println("===================");
         // --------------- 개발 하면 지울 부분 end -------------------
 
@@ -115,10 +116,6 @@ public class WalletService implements IWalletService {
 
         cashContract.approve(admin, BigInteger.valueOf(money)).send();
         TransactionReceipt receipt = cashContract.transferFrom(admin, address, BigInteger.valueOf(money)).send();
-        System.out.println("컨트랙트 주소: " + cashContract.getContractAddress());
-        System.out.println("충전 balance: " + cashContract.balanceOf(address).send());
-        System.out.println("admin balance: " + cashContract.balanceOf(admin).send());
-        System.out.println("receipt: " + receipt.getTransactionHash());
 
         // TransactionReceipt를 가지고 Transaction 엔티티만들어서 저장한다.
         Transaction transaction = Transaction.builder()
@@ -157,7 +154,6 @@ public class WalletService implements IWalletService {
         if (wallet == null) {
             throw new NoWalletException();
         }
-//        System.out.println(wallet.getPrivateKey());
     }
 
     @Override
@@ -182,5 +178,43 @@ public class WalletService implements IWalletService {
 
         return walletHistoryRepository.findAllByWallet(wallet);
     }
+
+    // 오직 Cash.sol 한번 배포할때만 잠시 사용하기
+    @Override
+    public String deployAdminCash() throws Exception {
+
+        Wallet wallet = walletRepository.findByOwnerId(1L).orElse(null);
+        if(wallet == null){
+            return null;
+        }
+        String privateKey = wallet.getPrivateKey();
+        String publicKey = wallet.getPublicKey();
+        Credentials credentials = Credentials.create(privateKey, publicKey);
+        ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
+        Cash_sol_Cash cash_sol_cash = Cash_sol_Cash.deploy(web3j, credentials, contractGasProvider, BigInteger.valueOf(10000000000L)).send();
+        return cash_sol_cash.getContractAddress();
+    }
+
+//    @Override
+//    public void makeAdmin() throws Exception{
+//        long userId = 1;
+//        ECKeyPair ecKeyPair = Keys.createEcKeyPair();
+//        String privateKey = ecKeyPair.getPrivateKey().toString(16);
+//        String publicKey = ecKeyPair.getPublicKey().toString(16);
+//
+//
+//        WalletFile walletFile = org.web3j.crypto.Wallet.createLight("ssafy" , ecKeyPair);
+//        String address = walletFile.getAddress();
+//
+//        Wallet wallet = Wallet.builder()
+//                .ownerId(userId)
+//                .password("ssafy")
+//                .publicKey(publicKey)
+//                .privateKey(privateKey)
+//                .address(address)
+//                .build();
+//        walletRepository.save(wallet);
+//
+//    }
 
 }
