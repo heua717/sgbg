@@ -50,6 +50,7 @@ const ReadRoom = () => {
 
   const getIsInThisRoom = () => {
     room.members.forEach((member: members) => {
+      console.log('readroom kakaoid', member.kakaoId, 'readroom current user=', userAuth.userId);
       
       if (member.kakaoId === userAuth.userId) {
         setIsInThisRoom(true);
