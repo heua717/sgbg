@@ -27,6 +27,8 @@ export interface room {
 export interface roomMore extends room {
   roomId?: any;
   members? : any;
+  hostId? : any;
+  hostName? : any;
   endDate: string;
   reservationDate: string;
   price: number;

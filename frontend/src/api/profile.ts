@@ -14,3 +14,7 @@ export const getMyPageHostList = () => {
     return api.get("/user/room?host=true");
 
 }
+
+export const withdrawWallet = (roomId: number) => {
+    return api.get(`/user/room/${roomId}/withdraw`)
+  }
