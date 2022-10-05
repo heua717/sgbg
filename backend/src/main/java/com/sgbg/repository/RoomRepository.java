@@ -10,6 +10,9 @@ import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<Room> findById(Long roomId);
+
+    List<Room> findAllByOrderByCreatedDateDesc();
+    
     List<Room> findAllByParentCategory(String parentCategory);
 
     List<Room> findAllByChildCategory(String childCategory);

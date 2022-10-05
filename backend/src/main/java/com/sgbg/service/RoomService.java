@@ -70,7 +70,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public List<Room> getRoomList() {
-        return roomRepository.findAll();
+        return roomRepository.findAllByOrderByCreatedDateDesc();
     }
 
     @Override

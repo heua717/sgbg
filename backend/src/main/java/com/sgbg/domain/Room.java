@@ -58,6 +58,9 @@ public class Room {
     @Column(name = "reservation_date")
     private LocalDateTime reservationDate;
 
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
@@ -82,7 +85,7 @@ public class Room {
     @Builder
     public Room(String parentCategory, String childCategory,
                 Long hostId, String hostName, String title, Long minUser, Long maxUser,
-                Long price, Location location, LocalDateTime reservationDate,
+                Long price, Location location, LocalDateTime reservationDate, LocalDateTime createdDate,
                 LocalDateTime endDate, Double minMemberScore, String description, String contractAddress) {
 
         this.parentCategory = parentCategory;
@@ -95,6 +98,7 @@ public class Room {
         this.price = price;
         this.location = location;
         this.reservationDate = reservationDate;
+        this.createdDate = createdDate;
         this.endDate = endDate;
         this.minMemberScore = minMemberScore;
         this.description = description;

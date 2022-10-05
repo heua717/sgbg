@@ -195,6 +195,8 @@ public class WalletService implements IWalletService {
         return cash_sol_cash.getContractAddress();
     }
 
+//    public
+
 //    @Override
 //    public void makeAdmin() throws Exception{
 //        long userId = 1;
