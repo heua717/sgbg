@@ -1,7 +1,6 @@
 import React from "react";
 
 
-
 const SmallLogo = () => {
   return (
     <div className="w-full h-[55px] my-2">

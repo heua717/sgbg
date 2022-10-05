@@ -5,16 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomMore } from "../../util/room";
 import { inputRoomInfo } from "../../store/room";
-import MeetingCard from "../../components/cards/MeetingCard";;
+import MeetingCard from "../../components/cards/MeetingCard";
+
 
 const CreateRoomMore = () => {
   const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo);;
   const [roomList, setRoomList] = useState([]);;
   const resetRecoil = useResetRecoilState(inputRoomInfo);
-  const [isloading, setLoading] = useState<boolean>(false);
+  const [isloading, setLoading] = useState<boolean>(false);;
+
 
   // created 될 때
   useEffect(() => {
+
     // console.log(room.endDate);
   });
 
@@ -114,23 +117,23 @@ const CreateRoomMore = () => {
         <div className="w-full flex flex-col justify-center items-center">
           <div className="flex flex-row">
             <img
-              className="w-8 h-8 animate-gelatine mr-1"
+              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge5"
               src={process.env.PUBLIC_URL + `/img/userBadge5.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine mr-1"
+              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge4"
               src={process.env.PUBLIC_URL + `/img/userBadge4.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine mr-1"
+              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge3"
               src={process.env.PUBLIC_URL + `/img/userBadge3.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine mr-1"
+              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge2"
               src={process.env.PUBLIC_URL + `/img/userBadge2.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine"
+              className="w-8 h-8 animate-gelatine" alt="userBadge1"
               src={process.env.PUBLIC_URL + `/img/userBadge1.png`}
             />
           </div>
