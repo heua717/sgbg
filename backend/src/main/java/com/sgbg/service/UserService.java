@@ -1,6 +1,7 @@
 package com.sgbg.service;
 
 import com.sgbg.common.util.exception.NotFoundException;
+import com.sgbg.domain.HostEvaluation;
 import com.sgbg.domain.Participation;
 import com.sgbg.domain.Room;
 import com.sgbg.repository.ParticipationRepository;
@@ -52,7 +53,7 @@ public class UserService implements IUserService {
     public Participation addMyRoom(Long userId, Long roomId) {
         User user = getUserById(userId);
         if (user == null) {
-            throw new NotFoundException("회원 정보를 찾을 수 없습니다.");
+            throw new NotFoundException("User Not Found");
         }
         Room room = roomRepository.findById(roomId).orElse(null);
         if (room == null) {
@@ -78,7 +79,7 @@ public class UserService implements IUserService {
     public List<Room> getMyRooms(Long userId, Boolean isHost) {
         User user = getUserById(userId);
         if (user == null) {
-            throw new NotFoundException("회원 정보를 찾을 수 없습니다.");
+            throw new NotFoundException("User Not Found");
         }
 
         List<Room> myRoomsByUserId = participationRepository.findMyRoomsByUserId(userId);
@@ -96,7 +97,7 @@ public class UserService implements IUserService {
     public Room deleteMyRoom(Long userId, Long roomId) {
         User user = getUserById(userId);
         if (user == null) {
-            throw new NotFoundException("회원 정보를 찾을 수 없습니다.");
+            throw new NotFoundException("User Not Found");
         }
 
         Room room = roomRepository.findById(roomId).orElse(null);
@@ -109,5 +110,30 @@ public class UserService implements IUserService {
         }
 
         return room;
+    }
+
+    public void updateHostScore(Long hostId) {
+        User host = userRepository.findUserById(hostId).orElse(null);
+        if (host == null) {
+            throw new NotFoundException("User Not Found");
+        }
+
+        List<Room> myRooms = getMyRooms(hostId, true);
+        long totalMembers = 0;
+        long failReviews = 0;
+
+        for (Room room: myRooms) {
+            totalMembers += room.getMembers().size();
+
+            List<HostEvaluation> hostEvaluations = room.getHostEvaluations();
+            for (HostEvaluation hostEvaluation: hostEvaluations) {
+                if (!hostEvaluation.getIsSuccess()) {
+                    failReviews++;
+                }
+            }
+        }
+
+        host.setHostScore((int) (failReviews / totalMembers * 100));
+        userRepository.save(host);
     }
 }

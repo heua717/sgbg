@@ -5,7 +5,9 @@ import com.sgbg.api.response.BaseResponseBody;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.RoomRes;
 import com.sgbg.api.response.TransactionRes;
+import com.sgbg.blockchain.domain.Transaction;
 import com.sgbg.blockchain.service.SingleBungleService;
+import com.sgbg.blockchain.service.TransactionService;
 import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.Room;
@@ -44,22 +46,26 @@ public class RoomController {
     SingleBungleService singleBungleService;
 
     @Autowired
+    TransactionService transactionService;
+
+    @Autowired
     CookieUtil cookieUtil;
 
 
     @Operation(summary = "방 생성 메서드")
     @Parameters()
     @PostMapping("/create")
-    public ResponseEntity createRoom(@RequestBody RoomReq roomReq, HttpServletRequest request) {
+    public ResponseEntity<? extends BaseResponseBody> createRoom(@RequestBody RoomReq roomReq, HttpServletRequest request) {
         Long userId = cookieUtil.getUserIdByToken(request);
 
         try {
-            String contractAddress = singleBungleService.createRoom(
-                    userId, ChronoUnit.DAYS.between(LocalDateTime.now(), roomReq.getEndDate()), roomReq.getPrice());
-
-            roomService.createRoom(roomReq, userId, contractAddress);
+            Room room = roomService.createRoom(roomReq, userId);
 
             // TODO: wallet 잔액 부족한 경우
+            String contractAddress = singleBungleService.createRoom(
+                    room.getId(), userId, ChronoUnit.DAYS.between(LocalDateTime.now(), roomReq.getEndDate()), roomReq.getPrice());
+
+            roomService.setRoomContactAddress(room, contractAddress);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -128,14 +134,22 @@ public class RoomController {
         return ResponseEntity.status(200).body(roomList);
     }
 
-    @Operation(summary = "")
+    @Operation(summary = "방 별 돈 관련 트랜잭션 조회")
     @GetMapping("/{roomId}/transaction")
     @ApiResponses({
             @ApiResponse(responseCode = "", description = ""),
             @ApiResponse(responseCode = "", description = "")
     })
     public ResponseEntity<? extends TransactionRes> getTransactions(@PathVariable String roomId) {
+        Room room = roomService.getRoom(Long.valueOf(roomId));
 
+        List<Transaction> transactionsByRoom = transactionService.getTransactionsByRoom(room.getId());
+
+        // roomId로 transaction들을 갖고 오고,
+        // from, to 중에서 무엇이 contract 주소인지 모름
+
+        // from address ->
+        // to address ->
 
         return null;
 //        return ResponseEntity.status(HttpStatus.OK).body(TransactionRes.of());

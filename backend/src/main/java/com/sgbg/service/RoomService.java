@@ -10,6 +10,7 @@ import com.sgbg.repository.LocationRepository;
 import com.sgbg.repository.ParticipationRepository;
 import com.sgbg.repository.RoomRepository;
 import com.sgbg.repository.UserRepository;
+import com.sgbg.service.interfaces.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class RoomService {
+public class RoomService implements IRoomService {
 
     @Autowired
     private RoomRepository roomRepository;
@@ -29,8 +30,9 @@ public class RoomService {
     @Autowired
     private ParticipationRepository participationRepository;
 
+    @Override
     @Transactional
-    public void createRoom(RoomReq roomReq, Long userId, String contractAddress) {
+    public Room createRoom(RoomReq roomReq, Long userId) {
         // Room 생성
         Room room = roomReq.toEntity(roomReq);
         Location location = roomReq.getLocation();
@@ -39,7 +41,6 @@ public class RoomService {
         if (user == null) {
             throw new NotFoundException("User Not Found");
         }
-        room.setContractAddress(contractAddress);
         room.setHostId(user.getId());
         room.setHostName(user.getName());
 
@@ -57,14 +58,22 @@ public class RoomService {
 
         participationRepository.save(participation);
         locationRepository.save(location);
-        roomRepository.save(room);
+        return roomRepository.save(room);
     }
 
-    @Transactional()
+    @Override
+    @Transactional
+    public Room setRoomContactAddress(Room room, String contactAddress) {
+        room.setContractAddress(contactAddress);
+        return roomRepository.save(room);
+    }
+
+    @Override
     public List<Room> getRoomList() {
         return roomRepository.findAll();
     }
 
+    @Override
     public Room getRoom(Long roomId) {
         return roomRepository.findById(roomId).orElse(null);
 //        if (room == null) {
@@ -72,6 +81,7 @@ public class RoomService {
 //        }
     }
 
+    @Override
     public List<Room> getParentRoomList(String parentCategory) {
 //        List<RoomRes> roomResList = new ArrayList<>();
 //        for(Room room : roomList){
@@ -82,6 +92,7 @@ public class RoomService {
         return roomRepository.findAllByParentCategory(parentCategory);
     }
 
+    @Override
     public List<Room> getChildRoomList(String childCategory) {
 //        List<RoomRes> roomResList = new ArrayList<>();
 //        for(Room room : roomList){
@@ -92,6 +103,7 @@ public class RoomService {
         return roomRepository.findAllByChildCategory(childCategory);
     }
 
+    @Override
     public List<Room> searchRoom(String keyword) {
         List<Room> rooms = roomRepository.findByTitleContaining(keyword);
         return rooms;
