@@ -28,8 +28,7 @@ public class ParticipationRepositoryImpl implements ParticipationRepositoryCusto
                 .join(participation.room, room)
                 .where(participation.user.id.eq(userId))
                 .orderBy(
-                        participation.room.endDate.desc(),
-                        participation.room.reservationDate.desc()
+                        participation.room.createdDate.desc()
                 )
                 .fetch();
     }
