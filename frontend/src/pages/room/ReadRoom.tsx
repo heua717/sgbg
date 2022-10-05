@@ -37,7 +37,7 @@ const ReadRoom = () => {
     members: [
       {
         name: "",
-        userId: 0,
+        kakaoId: 0,
         email: "",
         hostScore: 0,
         memberScore: 0,
@@ -50,7 +50,8 @@ const ReadRoom = () => {
 
   const getIsInThisRoom = () => {
     room.members.forEach((member: members) => {
-      if (member.userId === userAuth.userId) {
+      
+      if (member.kakaoId === userAuth.userId) {
         setIsInThisRoom(true);
       } else {
         setIsInThisRoom(false);
@@ -68,6 +69,7 @@ const ReadRoom = () => {
     }
 
     getIsInThisRoom();
+    console.log('readroommembers=',  room.members);
   }, []);
 
   const navigate = useNavigate();
@@ -182,15 +184,15 @@ const ReadRoom = () => {
             <button
               type="button"
               onClick={onClickInAndOut}
-              className="w-full text-center font-bold bg-yellow-100 rounded p-1">
-              참여하기
+              className="w-full text-center text-white font-bold bg-blue-500 rounded p-1">
+              퇴장하기
             </button>
           ) : (
             <button
               type="button"
               onClick={onClickInAndOut}
               className="w-full text-center font-bold bg-yellow-100 rounded p-1">
-              퇴장하기
+              입장하기
             </button>
           )}
         </div>
