@@ -94,14 +94,18 @@ const RoomInfoTabs = (room: any) => {
       </div>
       <hr className="my-2" />
 
-      <div className="text-sm">
-        <p className="font-bold">모임 설명</p>
-        <p className="mt-2 leading-6">{roomInfo.description.split('\n').join('\n')}</p>
-      </div>
+        <div className="text-sm mt-5">
+          <p className="font-bold mb-5">모임 설명</p>
+          {roomInfo.description.split('\n').map((line: string)=>(
+            <div className="mt-2 leading-6">
+              <p>{line}</p>
+            </div>
+          ))}
+        </div>
       <hr className="my-3" />
 
       <div className="text-sm">
-        <p className="font-bold">모임 위치</p>
+        <p className="font-bold my-5">모임 위치</p>
         <div className="mt-2">
           <Map // 지도를 표시할 Container
             center={{

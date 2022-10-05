@@ -13,7 +13,7 @@ const AllCatetoryList = (props: any) => {
     if (props.name !== 'createRoom' ) {
       navigate({
         pathname: 'result',
-        search: `parentCategory=${parent}`
+        search: `parentcategory=${parent}`
       })
     }
   }

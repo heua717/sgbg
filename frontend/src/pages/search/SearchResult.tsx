@@ -7,6 +7,7 @@ import { getSearchCategoryResult } from "../../api/search";
 import data from "../../util/category";
 import { getSearchKeywordResult } from "../../api/search";
 import { roomMore } from "../../util/room";
+import { useLocation } from 'react-router-dom'
 
 
 const SearchResult = () => {
@@ -15,9 +16,11 @@ const SearchResult = () => {
   const [value, setValue] = useState('')
   const [childCategories, setChildCategories] = useState(Array<string>)
   const [results, setResults] = useState([])
+  const location = useLocation()
 
-  // key 종류: pc/cc/q
-  useEffect(() => {
+  useEffect(() => {    
+    console.log('changed');
+    
     const params = window.location.href.split('?')[1].split('=')
     // console.log(params);
     setKey(params[0])
@@ -44,15 +47,15 @@ const SearchResult = () => {
       console.log('searchresult axios else if=', value);
       
       getSearchKeywordResult(value).then((res) => {
-        console.log(res);
-        setResults(res.data)
+        console.log(res.data);
+        setResults((res.data))
       }).catch((err)=>{
         console.log(err);
         
       })
     }
 
-    if (params[0] === 'parentCategory') {
+    if (params[0] === 'parentcategory') {
       
       data.forEach((datum) => {
         if(value === datum.parent) {
@@ -61,7 +64,7 @@ const SearchResult = () => {
         }
       })
     }
-  }, [])
+  }, [location])
 
 
   useEffect(() => {
@@ -78,13 +81,21 @@ const SearchResult = () => {
       <SearchBar name={"searchResult"} handleKeyword={setKeyword}/>
       <p className="ml-3 my-2 text-lg"><strong className="mr-1">{value}</strong>에 대한 검색결과</p>
       {/* 세부 카테고리 바 */} 
-      {key==='parentCategory'? <SubCategoriesBar childCategories={childCategories} />  : ''}
+      {key==='parentcategory'? <SubCategoriesBar childCategories={childCategories} />  : ''}
 
       {/* 검색 결과 리스트 */}
       <div className="w-per95 max-h-[80vh] m-auto grid grid-cols-1 gap-1 overflow-y-auto">
-        {results.map((room:roomMore) => (
-          <MeetingCard key={room.roomId} room={room}/>
-        ))}
+        {!results.length && (
+          <p className="mt-10 text-lg text-center font-semibold">검색 결과가 없습니다.</p>
+        )}
+        {results.length && (
+          <div>
+            {/* <p>{results.length}</p> */}
+            {results.map((room:roomMore) => (
+              <MeetingCard key={room.roomId} room={room}/>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
