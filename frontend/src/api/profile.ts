@@ -12,7 +12,14 @@ export const getMyPageParticipantList = () => {
 
 export const getMyPageHostList = () => {
     return api.get("/user/room?host=true");
+}
 
+export const getFinishedParticipantList = (kakaoId:string) => {
+    return api.get(`/user/${kakaoId}/room?host=false`);
+}
+ 
+export const getFinishedHostList = (kakaoId:string) => {
+    return api.get(`/user/${kakaoId}/room?host=true`);
 }
 
 export const withdrawWallet = (roomId: number) => {
