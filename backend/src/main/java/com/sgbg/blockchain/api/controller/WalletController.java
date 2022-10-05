@@ -64,7 +64,7 @@ public class WalletController {
     }
 
     @PostMapping
-    public ResponseEntity<? extends BaseResponseBody> getWallet(@RequestParam String password, HttpServletRequest request) {
+    public ResponseEntity<? extends BaseResponseBody> getWallet(@RequestBody String password, HttpServletRequest request) {
 
         long userId = cookieUtil.getUserIdByToken(request);
 
@@ -80,11 +80,11 @@ public class WalletController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestParam String password, HttpServletRequest request) {
+    public ResponseEntity<? extends BaseResponseBody> createWallet(@RequestBody String password, HttpServletRequest request) {
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
-        long userId = cookieUtil.getUserIdByToken(request);
-//        long userId = 4L;
+//        long userId = cookieUtil.getUserIdByToken(request);
+        long userId = 1L;
 
         Wallet wallet = null;
         try {
@@ -101,7 +101,7 @@ public class WalletController {
     }
 
     @PostMapping("/charge")
-    public ResponseEntity<? extends BaseResponseBody> charge(@RequestParam long money, HttpServletRequest request){
+    public ResponseEntity<? extends BaseResponseBody> charge(@RequestBody long money, HttpServletRequest request){
 
         // CookieUtil의 getUserIdByToken을 사용하여 userId를 받기
         long userId = cookieUtil.getUserIdByToken(request);
