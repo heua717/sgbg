@@ -21,3 +21,7 @@ export const getFinishedParticipantList = (kakaoId:string) => {
 export const getFinishedHostList = (kakaoId:string) => {
     return api.get(`/user/${kakaoId}/room?host=true`);
 }
+
+export const withdrawWallet = (roomId: number) => {
+    return api.get(`/user/room/${roomId}/withdraw`)
+  }

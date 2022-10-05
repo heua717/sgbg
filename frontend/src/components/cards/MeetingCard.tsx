@@ -1,16 +1,15 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../util/room";
-// import { useEffect } from "react";
-// import { useRecoilState } from "recoil";
-// import { roomMore } from "../../util/room";
-// import { inputRoomInfo } from "../../store/room";
-// import { useState } from "react";
 
 
 const MeetingCard = (props:any): JSX.Element => {
   const [meetingText, setMeetingText] = useState('모집 중')
+  const navigate = useNavigate()
+  // 인원이 다 찼을 때, 모집 마감일이 지났을 때 true이도록 
+  const [ isDone, setIsDone ] = useState(false)
 
   const getStateBadgeColor = () => {
     return 'bg-yellow-100';
@@ -20,37 +19,43 @@ const MeetingCard = (props:any): JSX.Element => {
   }
 
   const getIsImminent = () =>{
-    const monthNow = new Date().getMonth() + 1
-    const dateNow = new Date().getDate()
-
-    const endDate = props.room.endDate.split('T')[0]
-    const endDateSplited = endDate.split('-')
-    const endDateMonth = Number(endDateSplited[1])
-    const endDateDate = Number(endDateSplited[2])
     
-    // console.log(endDateMonth, endDateDate );
+    const today = new Date().getTime()
+    const endDate = new Date(props.room.endDate).getTime()
+    // console.log('into isimminent= ', endDate-today);
     
-    
-    // 달이 같고, 일의 차이가 1 이하이면 마감 임박
-    if (monthNow === endDateMonth && (endDateDate - dateNow) <= 1) {
-      // console.log(monthNow, endDateMonth, endDateDate, dateNow);
-      
+    // 모집 마감일과 오늘 날짜의 차이가 24시간 이내일때
+    if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
       setMeetingText('마감 임박')
-    } else {
+    } else if ((endDate - today) < 0) {
+      setIsDone(true)
+      setMeetingText('모집 마감')
+    } else{
       setMeetingText('모집 중')
     }
     // 아니면 모집 중    
   }
 
+  // onClick하면 navigate
+  // isDone=== true이면 클릭 안되게 
+  // prop 이름이 createRoom이면 클릭 안되게 
+  const onClick = () => {
+    if (!isDone && props.name !== 'createRoom' && props.name !== 'readRoom') {
+      navigate(`/meeting/${props.room.roomId}`)
+    } else {
+      console.log('unclickable');
+    }
+  } 
+
   useEffect(()=>{
-    // console.log('hi');
-    
+    console.log('hi meetingcard');
     getIsImminent();
   }, [props.room.endDate])
 
+
   return (
     // w-per100 h-per100 
-    <div className="flex flex-row border rounded-lg p-2 mb-2">
+    <div className="flex flex-row border rounded-lg p-2 mb-2" onClick={onClick}>
       {/* 모임 이미지, 뱃지 */}
       <div className="w-per45 mr-5 relative">
         <div className={`absolute top-0 left-0 rounded ${getStateBadgeColor()} text-sm font-semibold px-2 py-1`}>{meetingText}</div>
@@ -88,7 +93,7 @@ const MeetingCard = (props:any): JSX.Element => {
         {/* 모임일자, 가격 */}
         <div className="flex justify-between">
           <div >
-            <p className="text-sm">{props.room.reservationDate? formatDate(props.room.reservationDate).split('  ')[0] : '모이는 날'}</p>
+            <p className="text-sm">{props.room.reservationDate? formatDate(props.room.reservationDate).split('  ')[0] : '만나는 날'}</p>
             <p className="text-sm">{props.room.reservationDate? formatDate(props.room.reservationDate).split('  ')[1] : ''}</p>
           </div>
 
