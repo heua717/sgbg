@@ -79,6 +79,11 @@ public class UserService implements IUserService {
         }
 
         List<Room> myRoomsByUserId = participationRepository.findMyRoomsByUserId(userId);
+
+        for (Room room: myRoomsByUserId) {
+            System.out.println(room.getTitle());
+        }
+
         if (isHost) { // host = true
             return myRoomsByUserId
                     .stream().filter(room -> room.getHostId().equals(userId))
