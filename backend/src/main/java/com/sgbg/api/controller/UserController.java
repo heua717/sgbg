@@ -85,22 +85,21 @@ public class UserController {
         List<Room> rooms = userService.getMyRooms(userId, Boolean.parseBoolean(host));
 
         User user = userService.getUserById(userId);
-        List<Room> myRooms = new ArrayList<>();
         List<Boolean> hostReviews = new ArrayList<>();
         List<Boolean> memberReviews = new ArrayList<>();
 
         for (Room room : rooms) {
-            if (room.getReservationDate().compareTo(LocalDateTime.now()) < 0) {
-                Boolean hostReview = hostEvaluationService.checkHostEvaluation(user, room);
-                Boolean memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
-
-                myRooms.add(room);
-                hostReviews.add(hostReview);
-                memberReviews.add(memberReview);
+            Boolean hostReview = null;
+            Boolean memberReview = null;
+            if (room.getReservationDate().compareTo(LocalDateTime.now()) < 0) { // 다음날인 경우
+                hostReview = hostEvaluationService.checkHostEvaluation(user, room);
+                memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
             }
+            hostReviews.add(hostReview);
+            memberReviews.add(memberReview);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyRoomList(2000, "Success", myRooms, hostReviews, memberReviews));
+        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyRoomList(2000, "Success", rooms, hostReviews, memberReviews));
     }
 
     @GetMapping("/room/{roomId}/add")
