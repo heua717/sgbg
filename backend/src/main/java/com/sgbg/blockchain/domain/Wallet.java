@@ -22,6 +22,7 @@ public class Wallet {
 	private String publicKey;
 	private String privateKey;
 	private String address;
+
 	private long cash = 0;
 
 	// 우리는 이더를 사용하지 않을 것인데 이것들을 저장해야 하나??
@@ -36,9 +37,4 @@ public class Wallet {
 		this.address = address;
 	}
 
-//	private int receivingCount = 0;
-
-//	public boolean canRequestEth(){
-//		return this.receivingCount < 10;
-//	}
 }
