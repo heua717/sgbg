@@ -34,8 +34,9 @@ const CommunityTab = (props: any) => {
     setComment(value)
   };
 
-
+  
   const onClickSubmit = (e: React.MouseEvent) => {
+    const textArea:any = document.querySelector('#community')
     // 버튼을 누르면 usestate content에 작성한 내용이 저장됨
     // const value = e.target
     // console.log(comment); // ok
@@ -47,6 +48,7 @@ const CommunityTab = (props: any) => {
       roomId: Number(meeting_id)
     }).then((res)=>{
       console.log(res);
+      textArea.value = ''
       // 다 되면 현재 페이지 리다이렉트
       readCommentList();
     })    
@@ -141,7 +143,7 @@ const CommunityTab = (props: any) => {
                       <div>
                         {/* <button onClick={onClickUpdate(comment.commentId)}>수정하기</button> */}
                         <button onClick={onClickDelete(comment.commentId)} 
-                          className="bg-red-500 font-semibold text-white px-1"
+                          className="bg-yellow-100 font-semibold px-1 rounded"
                         >삭제하기</button>
                       </div>
                     )}
