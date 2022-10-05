@@ -118,7 +118,7 @@ const CommunityTab = (props: any) => {
           <div className="h-[75vh]">
             {commentList.map(comment=>
               <div className="my-5 border rounded p-2">
-                <div className="justify-between">
+                <div className="flex justify-between">
                   <div>
                     <Link to={`/profile/${comment.username}`}>
                       <div className="flex flex-row justify-start border-b border-gray-300 pb-1">
@@ -140,7 +140,9 @@ const CommunityTab = (props: any) => {
                     {Number(userAuth.userId) === comment.kakaoNumber && (
                       <div>
                         {/* <button onClick={onClickUpdate(comment.commentId)}>수정하기</button> */}
-                        <button onClick={onClickDelete(comment.commentId)} className="bg-red-500 font-semibold">삭제하기</button>
+                        <button onClick={onClickDelete(comment.commentId)} 
+                          className="bg-red-500 font-semibold text-white px-1"
+                        >삭제하기</button>
                       </div>
                     )}
                   </div>
