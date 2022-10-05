@@ -20,12 +20,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,34 +35,21 @@ import java.util.List;
 @Tag(name = "User API", description = "회원 등록, 회원 정보 조회 등의 기능 제공")
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private IUserService userService;
-    private IAuthService authService;
+    private final IUserService userService;
+    private final IAuthService authService;
 
-    private RoomService roomService;
+    private final RoomService roomService;
 
-    private IHostEvaluationService hostEvaluationService;
+    private final IHostEvaluationService hostEvaluationService;
 
-    private IMemberEvaluationService memberEvaluationService;
+    private final IMemberEvaluationService memberEvaluationService;
 
-    private ISingleBungleService singleBungleService;
-    private CookieUtil cookieUtil;
-
-    @Autowired
-    public UserController(IUserService userService, IAuthService authService, RoomService roomService,
-                          IHostEvaluationService hostEvaluationService, IMemberEvaluationService memberEvaluationService,
-                          ISingleBungleService singleBungleService, CookieUtil cookieUtil) {
-        Assert.notNull(userService, "userService 개체가 반드시 필요!");
-        this.userService = userService;
-        this.authService = authService;
-        this.roomService = roomService;
-        this.hostEvaluationService = hostEvaluationService;
-        this.memberEvaluationService = memberEvaluationService;
-        this.singleBungleService = singleBungleService;
-        this.cookieUtil = cookieUtil;
-    }
+    private final ISingleBungleService singleBungleService;
+    private final CookieUtil cookieUtil;
 
     @GetMapping("/{kakaoId}")
     @Operation(summary = "회원 정보 조회")
@@ -146,8 +132,11 @@ public class UserController {
 
     @GetMapping("/room/{roomId}/delete")
     @Operation(summary = "방 나가기")
-    // TODO: API Response 추가
-    public void deleteRoom(@PathVariable String roomId, HttpServletRequest request) {
+    @ApiResponses({
+            @ApiResponse(responseCode = "202", description = "방 나가기 성공"),
+            @ApiResponse(responseCode = "500", description = "방 나가기 실패")
+    })
+    public ResponseEntity<? extends BaseResponseBody> deleteRoom(@PathVariable String roomId, HttpServletRequest request) {
         Long userId = cookieUtil.getUserIdByToken(request);
         User user = userService.getUserById(userId);
         if (user == null) {
@@ -160,6 +149,8 @@ public class UserController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BaseResponseBody.of(2020, "Success"));
     }
 
     @GetMapping("/room/{roomId}/withdraw")
