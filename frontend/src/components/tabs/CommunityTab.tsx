@@ -87,6 +87,8 @@ const CommunityTab = (props: any) => {
 
   // 삭제하기
   const onClickDelete = (commentId: number):any => {
+    console.log('hello delete');
+    
     deleteComment(commentId)
     .then(({data})=> {
       console.log(data);
