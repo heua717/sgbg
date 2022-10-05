@@ -4,6 +4,8 @@ import com.sgbg.api.request.BaseMemberEvaluationReq;
 import com.sgbg.api.request.HostEvalutionReq;
 import com.sgbg.api.request.MemberEvaluationReq;
 import com.sgbg.api.response.BaseResponseBody;
+import com.sgbg.blockchain.domain.Transaction;
+import com.sgbg.blockchain.domain.Wallet;
 import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
 import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
@@ -71,14 +73,12 @@ public class EvaluationController {
 
         Boolean isSuccess = hostEvaluation.getIsSuccess();
 
-        // TODO: 스마트 컨트랙트 - 성공/실패 평가 메서드 호출
-        // TODO: create transaction and get transaction id
-
-//        singleBungleService.
-
-        // TODO: transaction id 갖고 오기
-        Long transactionId = null;
-        hostEvaluationService.createEvaluation(user, room, isSuccess, transactionId);
+        try {
+            Transaction transaction = singleBungleService.isSuccess(userId, isSuccess, room.getHostId(), room.getContractAddress());
+            hostEvaluationService.createEvaluation(user, room, isSuccess, transaction.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(2010, "Success"));
     }

@@ -1,7 +1,6 @@
 package com.sgbg.blockchain.service;
 
 import com.sgbg.blockchain.common.exception.NoWalletException;
-import com.sgbg.blockchain.common.exception.NotEnoughMoneyException;
 import com.sgbg.blockchain.domain.Transaction;
 import com.sgbg.blockchain.domain.Wallet;
 import com.sgbg.blockchain.domain.WalletHistory;
@@ -255,7 +254,7 @@ public class SingleBungleService implements ISingleBungleService {
     }
 
     @Override
-    public Wallet isSuccess(long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception{
+    public Transaction isSuccess(long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception{
 
         Wallet hostWallet = walletRepository.findByOwnerId(hostId).orElse(null);
         if (hostWallet == null) {
@@ -290,7 +289,7 @@ public class SingleBungleService implements ISingleBungleService {
                 .storedAt(LocalDateTime.now()).relatedToMoney(false).build();
         transactionRepository.save(transaction);
 
-        return userWallet;
+        return transaction;
     }
 
 }

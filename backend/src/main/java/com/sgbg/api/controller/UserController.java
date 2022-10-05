@@ -1,6 +1,7 @@
 package com.sgbg.api.controller;
 
 import com.sgbg.api.request.Review;
+import com.sgbg.api.response.BaseResponseBody;
 import com.sgbg.api.response.ReviewRes;
 import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.UserRes;
@@ -8,6 +9,7 @@ import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
 import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.common.util.CookieUtil;
 import com.sgbg.domain.*;
+import com.sgbg.service.RoomService;
 import com.sgbg.service.interfaces.IAuthService;
 import com.sgbg.service.interfaces.IHostEvaluationService;
 import com.sgbg.service.interfaces.IMemberEvaluationService;
@@ -40,6 +42,8 @@ public class UserController {
     private IUserService userService;
     private IAuthService authService;
 
+    private RoomService roomService;
+
     private IHostEvaluationService hostEvaluationService;
 
     private IMemberEvaluationService memberEvaluationService;
@@ -48,12 +52,13 @@ public class UserController {
     private CookieUtil cookieUtil;
 
     @Autowired
-    public UserController(IUserService userService, IAuthService authService,
+    public UserController(IUserService userService, IAuthService authService, RoomService roomService,
                           IHostEvaluationService hostEvaluationService, IMemberEvaluationService memberEvaluationService,
                           ISingleBungleService singleBungleService, CookieUtil cookieUtil) {
         Assert.notNull(userService, "userService 개체가 반드시 필요!");
         this.userService = userService;
         this.authService = authService;
+        this.roomService = roomService;
         this.hostEvaluationService = hostEvaluationService;
         this.memberEvaluationService = memberEvaluationService;
         this.singleBungleService = singleBungleService;
@@ -94,23 +99,32 @@ public class UserController {
         List<Room> rooms = userService.getMyRooms(userId, Boolean.parseBoolean(host));
 
         User user = userService.getUserById(userId);
+        List<Room> myRooms = new ArrayList<>();
         List<Boolean> hostReviews = new ArrayList<>();
         List<Boolean> memberReviews = new ArrayList<>();
 
         for (Room room : rooms) {
-            Boolean hostReview = hostEvaluationService.checkHostEvaluation(user, room);
-            Boolean memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
-            hostReviews.add(hostReview);
-            memberReviews.add(memberReview);
+            if (room.getReservationDate().compareTo(LocalDateTime.now()) < 0) {
+                Boolean hostReview = hostEvaluationService.checkHostEvaluation(user, room);
+                Boolean memberReview = memberEvaluationService.checkMemberEvaluation(user, room);
+
+                myRooms.add(room);
+                hostReviews.add(hostReview);
+                memberReviews.add(memberReview);
+            }
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyRoomList(2000, "Success", rooms, hostReviews, memberReviews));
+        return ResponseEntity.status(HttpStatus.OK).body(RoomListRes.createMyRoomList(2000, "Success", myRooms, hostReviews, memberReviews));
     }
 
     @GetMapping("/room/{roomId}/add")
     @Operation(summary = "방 입장하기")
-    // TODO: API Response 추가
-    public void addRoom(@PathVariable String roomId, HttpServletRequest request) {
+    @ApiResponses({
+            @ApiResponse(responseCode = "202", description = "방 입장 성공",
+                    content = @Content(schema = @Schema(implementation = BaseResponseBody.class))),
+            @ApiResponse(responseCode = "500", description = "방 입장 실패")
+    })
+    public ResponseEntity<? extends BaseResponseBody> addRoom(@PathVariable String roomId, HttpServletRequest request) {
         Long userId = cookieUtil.getUserIdByToken(request);
         User user = userService.getUserById(userId);
         if (user == null) {
@@ -122,11 +136,12 @@ public class UserController {
 
         try {
             // TODO: wallet 잔액 부족한 경우
-
             singleBungleService.enterRoom(userId, room.getHostId(), room.getContractAddress(), room.getPrice());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BaseResponseBody.of(2020, "Success"));
     }
 
     @GetMapping("/room/{roomId}/delete")
@@ -145,6 +160,37 @@ public class UserController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/room/{roomId}/withdraw")
+    @Operation(summary = "방장이 출금하기")
+    @ApiResponses({
+            @ApiResponse(responseCode = "202", description = "출금 성공"),
+            @ApiResponse(responseCode = "401", description = "호스트가 아닙니다."),
+            @ApiResponse(responseCode = "500", description = "출금 실패")
+    })
+    public ResponseEntity<? extends BaseResponseBody> withdraw(@PathVariable String roomId, HttpServletRequest request) {
+        Room room = roomService.getRoom(Long.valueOf(roomId));
+        if (room == null) {
+            throw new NotFoundException("Room Not Found");
+        }
+
+        Long userId = cookieUtil.getUserIdByToken(request);
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            throw new NotFoundException("User Not Found");
+        }
+        if (!room.getHostId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponseBody.of(4010, "Fail"));
+        }
+
+        try {
+            singleBungleService.endRoom(room.getId(), room.getHostId(), room.getContractAddress());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BaseResponseBody.of(2020, "Success"));
     }
 
     @GetMapping("/{kakaoId}/room")
