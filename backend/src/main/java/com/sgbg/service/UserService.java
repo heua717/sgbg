@@ -67,9 +67,8 @@ public class UserService implements IUserService {
             participation.setParticipate(true);
         }
 
+        participation.addMember(user, room);
         return participationRepository.save(participation);
-//        participation.addMember(user, room);
-//        return newParticipation;
     }
 
     @Override

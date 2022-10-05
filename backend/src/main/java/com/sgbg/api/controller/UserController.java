@@ -118,7 +118,7 @@ public class UserController {
         }
 
         Participation participation = userService.addMyRoom(userId, Long.valueOf(roomId));
-        Room room = participation.getRoom();
+        Room room = roomService.getRoom(Long.valueOf(roomId));
 
         try {
             // TODO: wallet 잔액 부족한 경우
