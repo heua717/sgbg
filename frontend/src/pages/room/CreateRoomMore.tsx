@@ -117,23 +117,23 @@ const CreateRoomMore = () => {
         <div className="w-full flex flex-col justify-center items-center">
           <div className="flex flex-row">
             <img
-              className="w-8 h-8 animate-gelatine mr-1"
+              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge5"
               src={process.env.PUBLIC_URL + `/img/userBadge5.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine mr-1"
+              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge4"
               src={process.env.PUBLIC_URL + `/img/userBadge4.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine mr-1"
+              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge3"
               src={process.env.PUBLIC_URL + `/img/userBadge3.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine mr-1"
+              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge2"
               src={process.env.PUBLIC_URL + `/img/userBadge2.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine"
+              className="w-8 h-8 animate-gelatine" alt="userBadge1"
               src={process.env.PUBLIC_URL + `/img/userBadge1.png`}
             />
           </div>
