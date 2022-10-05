@@ -1,5 +1,6 @@
 package com.sgbg.blockchain.service.interfaces;
 
+import com.sgbg.blockchain.domain.Transaction;
 import com.sgbg.blockchain.domain.Wallet;
 
 public interface ISingleBungleService {
@@ -11,5 +12,5 @@ public interface ISingleBungleService {
 
     Wallet endRoom(long roomId, long hostId, String sgbgContractAddress) throws Exception;
 
-    Wallet isSuccess(long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception;
+    Transaction isSuccess(long userId, boolean isSuccess, long hostId, String sgbgContractAddress) throws Exception;
 }
