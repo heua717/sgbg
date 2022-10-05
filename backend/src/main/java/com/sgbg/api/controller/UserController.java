@@ -61,11 +61,11 @@ public class UserController {
     public ResponseEntity<? extends UserRes> getUser(@PathVariable String kakaoId) {
         Auth auth = authService.isUser(kakaoId);
         if (auth == null) {
-            throw new NotFoundException(kakaoId + " 회원 정보를 찾을 수 없습니다.");
+            throw new NotFoundException(kakaoId + " User Not Found");
         }
         User user = auth.getUser();
         if (user == null) {
-            throw new NotFoundException(kakaoId + " 회원 정보를 찾을 수 없습니다.");
+            throw new NotFoundException(kakaoId + " User Not Found");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(UserRes.of(2000, "Success", kakaoId, user));
@@ -122,7 +122,7 @@ public class UserController {
 
         try {
             // TODO: wallet 잔액 부족한 경우
-            singleBungleService.enterRoom(userId, room.getHostId(), room.getContractAddress(), room.getPrice());
+            singleBungleService.enterRoom(room.getId(), userId, room.getHostId(), room.getContractAddress(), room.getPrice());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -145,7 +145,7 @@ public class UserController {
 
         try {
             Room room = userService.deleteMyRoom(userId, Long.valueOf(roomId));
-            singleBungleService.exitRoom(userId, room.getHostId(), room.getContractAddress(), room.getPrice());
+            singleBungleService.exitRoom(room.getId(), userId, room.getHostId(), room.getContractAddress(), room.getPrice());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

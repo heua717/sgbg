@@ -74,8 +74,12 @@ public class EvaluationController {
         Boolean isSuccess = hostEvaluation.getIsSuccess();
 
         try {
-            Transaction transaction = singleBungleService.isSuccess(userId, isSuccess, room.getHostId(), room.getContractAddress());
+            Transaction transaction = singleBungleService.isSuccess(room.getId(), userId, isSuccess, room.getHostId(), room.getContractAddress());
             hostEvaluationService.createEvaluation(user, room, isSuccess, transaction.getId());
+
+            if(!isSuccess) { // 실패 시, host의 hostScore 변경
+                userService.updateHostScore(room.getHostId());
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
