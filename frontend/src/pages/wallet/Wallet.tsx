@@ -55,6 +55,8 @@ const Wallet = (): JSX.Element => {
               setCash(data.cash);
               getWalletHistory()
                 .then(({ data }) => {
+                  console.log(data);
+
                   if (data.statusCode === 2000) {
                     setWalletHistoies([...data.walletHistoryList]);
                   } else {
