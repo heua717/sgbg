@@ -6,9 +6,7 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomMore } from "../../util/room";
 import { inputRoomInfo } from "../../store/room";
 import MeetingCard from "../../components/cards/MeetingCard";
-import BtnExitToHome from "../../components/buttons/BtnExitToHome";
-import { useEffect, useState } from "react";
-import { createRoom } from "../../api/room";
+
 
 const CreateRoomMore = () => {
   const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo);;
