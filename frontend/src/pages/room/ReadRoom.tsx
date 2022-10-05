@@ -59,6 +59,7 @@ const ReadRoom = () => {
       
       if (member.kakaoId === userAuth.userId) {
         setIsInThisRoom(true);
+        return false
       } else {
         setIsInThisRoom(false);
       }
