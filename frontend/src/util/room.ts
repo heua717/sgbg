@@ -39,3 +39,10 @@ export const formatDate = (date: string): string => {
   let newTime = tmp[1].split(":");
   return `${newDate[0]}.${newDate[1]}.${newDate[2]}  ${newTime[0]}시 ${newTime[1]}분`;
 };
+
+export const formatOnlyDate = (date: string): string => {
+  let tmp = date.split("T");
+  let newDate = tmp[0].split("-");
+  return `${newDate[0]}.${newDate[1]}.${newDate[2]}`;
+};
+
