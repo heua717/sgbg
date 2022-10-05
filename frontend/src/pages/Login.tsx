@@ -40,7 +40,7 @@ const Login = () => {
           toast: true,
           position: "center",
           showConfirmButton: true,
-          title: `로그인 실패`,
+          title: `로그인 실패하였습니다.`,
         });
       }
     }
