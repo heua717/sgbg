@@ -77,6 +77,17 @@ module.exports = {
         "gray-200": "#F5F5F5",
         "gray-300": "#E7E7E7",
       },
+      animation: {
+        gelatine: "gelatine 0.5s infinite",
+      },
+      keyframes: {
+        gelatine: {
+          "from, to": { transform: "scale(1, 1)" },
+          "25%": { transform: "scale(0.9, 1.1)" },
+          "50%": { transform: "scale(1.1, 0.9)" },
+          "75%": { transform: "scale(0.95, 1.05)" },
+        },
+      },
     },
   },
   plugins: [],
