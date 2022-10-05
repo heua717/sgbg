@@ -2,27 +2,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomMore } from "../../util/room";
 import { inputRoomInfo } from "../../store/room";
-import MeetingCard from "../../components/cards/MeetingCard";
+import MeetingCard from "../../components/cards/MeetingCard";;
 import BtnExitToHome from "../../components/buttons/BtnExitToHome";
 import { useEffect, useState } from "react";
 import { createRoom } from "../../api/room";
 
 const CreateRoomMore = () => {
-  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo);
-  const [roomList, setRoomList] = useState([]);
+  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo);;
+  const [roomList, setRoomList] = useState([]);;
   const resetRecoil = useResetRecoilState(inputRoomInfo);
+  const [isloading, setLoading] = useState<boolean>(false);;
   const [isloading, setLoading] = useState<boolean>(false);
 
   // created 될 때
   useEffect(() => {
-<<<<<<< HEAD
     console.log(room.description);
     
   })
-=======
-    // console.log(room.endDate);
-  });
->>>>>>> c1b642565ab9f7bd5948dde53597bb912c7d4582
 
   // recoil에 작성한 모임 정보 저장하기 0927 임지민
   const [isValidated, setIsValidated] = useState(false);
@@ -76,9 +72,7 @@ const CreateRoomMore = () => {
   const navigate = useNavigate();
   const onClicktoSubmit = () => {
     // params로 recoil에 저장된 room을 보냄 0930 임지민
-    // console.log(room);
-<<<<<<< HEAD
-    
+    // console.log(room)
     createRoom(room).then(({data})=> {
       console.log(data);
       setRoomList(roomList.concat(data))
@@ -92,7 +86,6 @@ const CreateRoomMore = () => {
       resetRecoil();
     })
   }
-=======
     try {
       setLoading(true);
       createRoom(room)
@@ -114,7 +107,7 @@ const CreateRoomMore = () => {
       setLoading(false);
     }
   };
->>>>>>> c1b642565ab9f7bd5948dde53597bb912c7d4582
+
 
   return (
     // markup 0915 임지민

@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 import React from "react";
 
-=======
->>>>>>> c1b642565ab9f7bd5948dde53597bb912c7d4582
+
 
 const SmallLogo = () => {
   return (

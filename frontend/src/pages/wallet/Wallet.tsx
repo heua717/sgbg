@@ -10,7 +10,7 @@ type WalletHistory = {
   id: string;
   totalMoneyBeforeTransaction: number;
   money: number;
-  date: string;
+  createdAt: string;
   type: "charge" | "enter" | "exit";
   roomId: string;
   roomName: string;
@@ -55,8 +55,6 @@ const Wallet = (): JSX.Element => {
               setCash(data.cash);
               getWalletHistory()
                 .then(({ data }) => {
-                  console.log(data);
-
                   if (data.statusCode === 2000) {
                     setWalletHistoies([...data.walletHistoryList]);
                   } else {
@@ -134,7 +132,7 @@ const Wallet = (): JSX.Element => {
       <div className="ml-5">
         <div className="mr-5">
           <p className="text-xl font-semibold mx-2">나의 지갑</p>
-          <div className="flex flex-row justify-between border border-solid border-blue-200 rounded mt-3 py-6">
+          <div className="flex flex-row justify-between border border-solid border-blue-200 rounded mt-3 p-6">
             <p className="font-semibold">{cash}</p>
             <p className="font-semibold text-right mr-5">ETH</p>
           </div>
@@ -152,9 +150,9 @@ const Wallet = (): JSX.Element => {
           <p className="font-semibold">충전 내역</p>
           <div className="overflow-scroll max-h-[100vh]">
             {walletHistories.map((history) => (
-              <div className="flex justify-between border-b border-solid my-2 py-2">
+              <div className="flex justify-between border-b border-gray-100 border-solid my-2 py-2">
                 <div className="flex flex-row justify-between">
-                  <p className="mr-5 text-sm">{history.date && history.date}</p>
+                  <p className="mr-5 text-sm">{history.createdAt && history.createdAt}</p>
                   {history.roomId ? (
                     <p className="mr-5 text-sm">{history.roomName && history.roomName}</p>
                   ) : (
@@ -162,10 +160,10 @@ const Wallet = (): JSX.Element => {
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <p>
-                    <p>{history.type === "exit" ? "-" : "+"}</p>
+                  <div className="flex flex-row mb-1">
+                    <p className="mr-1">{history.type === "exit" ? "-" : "+"}</p>
                     {history.money && history.money} ETH
-                  </p>
+                  </div>
                   <p className="text-xs">
                     {history.totalMoneyBeforeTransaction &&
                       history.money &&
