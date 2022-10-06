@@ -2,9 +2,11 @@ import { useState } from "react";
 import { getParticipantBadge } from "../../util/profile";
 
 const UserReviewCard = (props: any) => {
-  const [selected, setSelected] = useState<"BEST" | "GOOD" | "BAD">();
+  const [selected, setSelected] = useState<"BEST" | "GOOD" | "BAD">("GOOD");
   const handleClick = (event: any) => {
     const { name } = event.target;
+    console.log(name);
+
     props.handleEvalMember(props.member.kakaoId, name);
     setSelected(name);
   };
