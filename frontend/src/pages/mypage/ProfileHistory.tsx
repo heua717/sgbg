@@ -21,6 +21,8 @@ const ProfileHistory = () => {
       getMypage(user_id).then(({ data }) => {
         if (data.statusCode === 2000) {
           setUser({ ...data.user });
+          console.log(data.user);
+          
         }
       });
     }
