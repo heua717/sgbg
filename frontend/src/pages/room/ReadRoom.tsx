@@ -189,7 +189,10 @@ const ReadRoom = () => {
           setRoom(data.roomInfo);
           getIsInThisRoom(data.roomInfo.members);
           // 방장인 경우에만 출금 로직 진행
-          if (isHost) { getWithdraw(data.roomInfo.roomId) }
+          if (isHost) { 
+            console.log('출금해라 ishost=', isHost);
+            
+            getWithdraw(data.roomInfo.roomId) }
         })
         .catch((e) => {});
     }
