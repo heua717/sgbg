@@ -40,11 +40,11 @@ const FinishedMeetingCard = (props: any) => {
         <UserReviewResultCard result={props.room.memberReviewResult} />
         <div className="text-end">
           <p className="text-sm font-semibold">
-            성공률 {props.room.hostReviewResult && props.room.hostReviewResult}%
+            {`성공률 ${getSuccess()}%`}
           </p>
           <p className="text-xs">{`${
             props.room.members.length && props.room.members.length
-          }명 중 ${getSuccess()}명이 성공을 선택했습니다.`}</p>
+          }명 중 ${props.room.hostReviewResult && props.room.hostReviewResult}명이 성공을 선택했습니다.`}</p>
         </div>
       </div>
 

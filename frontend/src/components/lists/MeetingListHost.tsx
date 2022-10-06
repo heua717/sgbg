@@ -66,6 +66,12 @@ const MeetingListHost = () => {
   return (
     <div className="w-full">
       {roomList.map((room) => {
+        /* 
+        hostReview == null && memberReview == null : review하는 날이 아닌 경우
+        hostReview == false && memberReview == false : review하는 날이고, review를 해야 하는 경우
+        hostReview == true && memberReview == false : hostReview만 한 경우
+        hostReview == true && memberReview == true : hostReview, memberReview 모두 한 경우 
+        */
         if (room.hostReview === null) {
           return (
             <MeetingCard
