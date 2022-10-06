@@ -14,6 +14,7 @@ const SearchResult = () => {
   const [key, setKey] = useState('')
   const [keyword, setKeyword] = useState<string>("");
   const [value, setValue] = useState('')
+  const [isEmpty, setIsEmpty] = useState(false)
   const [childCategories, setChildCategories] = useState(Array<string>)
   const [results, setResults] = useState([])
   const location = useLocation()
@@ -37,7 +38,7 @@ const SearchResult = () => {
       getSearchCategoryResult(params[0], value).then((res)=>{
         // console.log(res);
         console.log('category search= ', res.data.roomListInfo);
-        
+        res.data.roomListInfo.length? setIsEmpty(true): setIsEmpty(false)
         setResults(res.data.roomListInfo)
       }).catch((err) => {
         console.log(err);
@@ -48,6 +49,7 @@ const SearchResult = () => {
       
       getSearchKeywordResult(value).then((res) => {
         console.log(res.data.roomListInfo);
+        res.data.roomListInfo.length? setIsEmpty(true): setIsEmpty(false)
         setResults((res.data.roomListInfo))
       }).catch((err)=>{
         console.log(err);
@@ -85,10 +87,10 @@ const SearchResult = () => {
 
       {/* 검색 결과 리스트 */}
       <div className="w-per95 max-h-[80vh] m-auto grid grid-cols-1 gap-1 overflow-y-auto">
-        {!results.length && (
+        {!isEmpty && (
           <p className="mt-10 text-lg text-center font-semibold">검색 결과가 없습니다.</p>
         )}
-        {results.length && (
+        {isEmpty && (
           <div>
             {/* <p>{results.length}</p> */}
             {results.map((room:roomMore) => (
