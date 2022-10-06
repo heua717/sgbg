@@ -93,14 +93,10 @@ const CommunityTab = (props: any) => {
         navigate(0);
       }) 
       // || (!props.isInThisRoom) || (!props.isHost) 
-    } else if (props.isHost) {
+    } else if (props.isHost || props.isInThisRoom) {
       console.log('host다=', props.isHost);
-      
-      // readCommentList();
-    } else if (props.isInThisRoom){
       console.log('이 방에 있다=', props.isInThisRoom);
       
-    }else { 
       readCommentList();
     }
     
