@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { auth } from "../../store/auth";
 import Swal from "sweetalert2";
+import { read } from "fs";
 
 
 const CommunityTab = (props: any) => {
@@ -83,7 +84,7 @@ const CommunityTab = (props: any) => {
   useEffect(()=>{
     // 만약 로그인이 안되어 있거나, 이 모임의 참여자가 아니면 리다이렉트 시키기
     console.log('useeffect userauth=', userAuth);
-    if (!userAuth.isLogined || !props.isInThisRoom){
+    if (!userAuth.isLogined || (!props.isInThisRoom) || (!props.isHost) ){
       Swal.fire({
         title: '모임에 참여한 사용자만 접근 가능합니다.',
         icon: 'error',
@@ -91,6 +92,8 @@ const CommunityTab = (props: any) => {
       }).then(()=>{
         navigate(0);
       })
+    } else if (props.isHost) {
+      readCommentList();
     } else { 
       readCommentList();
     }

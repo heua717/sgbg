@@ -19,7 +19,7 @@ const RoomTabs = (props: any) => {
     {
       id: 2,
       title: "커뮤니티",
-      component: <CommunityTab room={props.room} isInThisRoom={props.isInThisRoom}/>,
+      component: <CommunityTab room={props.room} isInThisRoom={props.isInThisRoom} isHost={props.isHost}/>,
     },
   ];
   useEffect(()=> {
