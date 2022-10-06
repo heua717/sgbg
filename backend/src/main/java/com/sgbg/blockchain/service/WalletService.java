@@ -178,7 +178,7 @@ public class WalletService implements IWalletService {
             throw new NoWalletException();
         }
 
-        return walletHistoryRepository.findAllByWallet(wallet);
+        return walletHistoryRepository.findAllByWalletOrderByCreatedAtDesc(wallet);
     }
 
     // 오직 Cash.sol 한번 배포할때만 잠시 사용하기
