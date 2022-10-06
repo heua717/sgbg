@@ -6,6 +6,7 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomMore } from "../../util/room";
 import { inputRoomInfo } from "../../store/room";
 import MeetingCard from "../../components/cards/MeetingCard";
+import Swal from "sweetalert2";
 
 const CreateRoomMore = () => {
   const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo);
@@ -98,8 +99,23 @@ const CreateRoomMore = () => {
         })
         .catch((err) => {
           setLoading(false);
-          console.log(err);
-          console.log(err.config.data);
+          // console.log(err);
+          // console.log(err.config.data);
+          if (err.statusCode === 4010) {
+            Swal.fire({
+              icon: 'error',
+              text: '잔액이 부족합니다. 충전 후에 모임을 생성해주세요'
+            }).then(()=>{
+              navigate('/wallet')
+            })
+          } else if (err.statusCode === 4020) {
+            Swal.fire({
+              icon: 'error',
+              text: '지갑이 존재하지 않습니다.',
+            }).then(()=>{
+              navigate('/wallet/create')
+            })
+          }
         });
     } catch {
       setLoading(false);
