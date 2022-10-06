@@ -30,11 +30,12 @@ const RoomInfoTabs = (room: any) => {
   
   useEffect(() => {
     //axios
-    console.log(meeting_id); // ok
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
           setRoomInfo({ ...data.roomInfo });
+          console.log(data.roomInfo);
+          
         })
         .catch((e) => {
           Swal.fire({
