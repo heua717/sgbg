@@ -16,8 +16,6 @@ public class Participation {
     @Column(name = "participation_id")
     private Long id;
 
-    private boolean isParticipate;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -27,8 +25,7 @@ public class Participation {
     private Room room;
 
     @Builder
-    public Participation(Boolean isParticipate, Room room, User user) {
-        this.isParticipate = isParticipate;
+    public Participation(Room room, User user) {
         this.room = room;
         this.user = user;
     }
@@ -38,8 +35,8 @@ public class Participation {
         room.getMembers().add(this);
     }
 
-    public void deleteMember() {
-        this.isParticipate = false;
+    public void deleteMember(User user, Room room) {
+        user.getMyRooms().remove(this);
         room.getMembers().remove(this);
     }
 }
