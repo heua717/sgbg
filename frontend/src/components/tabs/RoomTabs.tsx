@@ -23,7 +23,7 @@ const RoomTabs = (props: any) => {
     },
   ];
   useEffect(()=> {
-    console.log('create room tabs=', props.room.description.split('\n'));
+    // console.log('create room tabs=', props.room.description.split('\n'));
     
   })
   const [index, setIndex] = useState(0);
