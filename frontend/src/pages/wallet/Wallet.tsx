@@ -47,6 +47,7 @@ const Wallet = (): JSX.Element => {
         autocapitalize: "off",
       },
       showCancelButton: true,
+      cancelButtonText: '취소',
       confirmButtonText: "제출",
       showLoaderOnConfirm: true,
       preConfirm: (pw: string) => {
