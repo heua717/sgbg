@@ -43,11 +43,15 @@ const MeetingListParticipant = () => {
   const navigator = useNavigate();
   const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
   const [selectedRoomId, setSelectedRoomId] = useState<number>(-1);
+  const [ isEmpty, setIsEmpty ] = useState<boolean>(false)
   const [roomList, setRoomList] = useState<room[]>([]);
+
+
   useEffect(() => {
     getMyPageParticipantList()
       .then(({ data }) => {
         setRoomList([...data.roomListInfo]);
+        data.roomListInfo.length === 0? setIsEmpty(true):setIsEmpty(false)
       })
       .catch();
   }, []);
@@ -62,6 +66,9 @@ const MeetingListParticipant = () => {
   };
   return (
     <div className="w-full">
+      {isEmpty && (
+          <p className="mt-10 text-lg text-center font-semibold">참여한 모임이 없습니다.</p>
+          )}
       {roomList.map((room) => {
         if (room.hostReview === null) {
           return (
