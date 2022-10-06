@@ -233,7 +233,7 @@ const CreateRoomMore = () => {
                 placeholder="0"
                 onChange={onChangeNumber}
               />
-              <p className="text-center">원</p>
+              <p className="text-center">SB</p>
             </div>
             <hr className="my-5" />
 
