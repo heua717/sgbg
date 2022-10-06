@@ -108,6 +108,7 @@ public class WalletService implements IWalletService {
         String address = credentials.getAddress();
         System.out.println(address);
 
+
         // -------------- 스마트 컨트랙트 함수 ---------------
         // 지갑 address와 money를 통해 우리가 만든 토큰을 충전한다.
         Credentials credentialsAdmin = Credentials.create(adminPrivateKey);

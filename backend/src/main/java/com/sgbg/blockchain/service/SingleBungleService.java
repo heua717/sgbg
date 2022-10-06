@@ -64,7 +64,7 @@ public class SingleBungleService implements ISingleBungleService {
 
         Credentials credentials = Credentials.create(wallet.getPrivateKey(), wallet.getPublicKey());
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
-        Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.deploy(web3j, credentials, contractGasProvider, cashContractAddress, credentials.getAddress(), BigInteger.valueOf(duration), BigInteger.valueOf(minimumAmount)).send();
+        Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.deploy(web3j, credentials, contractGasProvider, cashContractAddress, admin, credentials.getAddress(), BigInteger.valueOf(duration), BigInteger.valueOf(minimumAmount)).send();
         wallet.setCash(hostMoney-minimumAmount);
         WalletHistory userWalletHistory = WalletHistory.builder()
                 .wallet(wallet)
@@ -129,7 +129,8 @@ public class SingleBungleService implements ISingleBungleService {
         // 지갑 address를 가지고 private network에 가서 작업을 수행하도록 스마트 컨트랙트 실행
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
-        TransactionReceipt receipt = contract.enterRoom(userAddress, BigInteger.valueOf(money)).send();
+
+        TransactionReceipt receipt = contract.enterRoom(admin, userAddress, BigInteger.valueOf(money)).send();
 
 
         // transactionReceipt를 통해 엔티티 저장
