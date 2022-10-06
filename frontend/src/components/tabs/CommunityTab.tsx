@@ -54,6 +54,17 @@ const CommunityTab = (props: any) => {
     })    
   }
 
+  // 삭제하기
+  const onClickDelete = (commentId: number):any => {
+    console.log('hello delete');
+    
+    deleteComment(commentId)
+    .then(({data})=> {
+      console.log(data);
+    })
+  };
+
+
   const readCommentList = () => {
     readComment(Number(meeting_id))
     .then(({data})=> {
@@ -63,9 +74,9 @@ const CommunityTab = (props: any) => {
       setCommentList(data)
       // navigate(0)
     })
-    // console.log(commentList.length);
-    
+    console.log('read comment length=', commentList.length);
   }
+
   // 컴포넌트 create될 때 axios
   useEffect(()=>{
     // 만약 로그인이 안되어 있거나, 이 모임의 참여자가 아니면 리다이렉트 시키기
@@ -84,16 +95,6 @@ const CommunityTab = (props: any) => {
     
     // 전체 커뮤니티 글 읽어오기
   }, [])
-
-  // 삭제하기
-  const onClickDelete = (commentId: number):any => {
-    console.log('hello delete');
-    
-    deleteComment(commentId)
-    .then(({data})=> {
-      console.log(data);
-    })
-  }
 
   // const onClickUpdate = (commentId: number): any => {
 
@@ -144,8 +145,8 @@ const CommunityTab = (props: any) => {
                     {Number(userAuth.userId) === comment.kakaoNumber && (
                       <div>
                         {/* <button onClick={onClickUpdate(comment.commentId)}>수정하기</button> */}
-                        <button onClick={onClickDelete(comment.commentId)} 
-                          className="bg-yellow-100 font-semibold px-1 rounded"
+                        <button
+                          className="bg-yellow-100 font-semibold text-sm px-1 rounded"
                         >삭제하기</button>
                       </div>
                     )}
