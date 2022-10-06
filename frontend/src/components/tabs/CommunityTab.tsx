@@ -93,11 +93,21 @@ const CommunityTab = (props: any) => {
         navigate('/login');
       }) 
       // || (!props.isInThisRoom) || (!props.isHost) 
-    } else if (userAuth.isLogined && (props.isHost || props.isInThisRoom)) {
-      console.log('host다=', props.isHost);
-      console.log('이 방에 있다=', props.isInThisRoom);
-      
-      readCommentList();
+    } else {
+      if (props.isHost || props.isInThisRoom){
+        console.log('host다=', props.isHost);
+        console.log('이 방에 있다=', props.isInThisRoom);
+        
+        readCommentList();
+      } else {
+        Swal.fire({
+          text: '모임에 참가한 사용자만 볼 수 있습니다.',
+          icon: 'error',
+          timer: 5000,
+        }).then(()=>{
+          navigate(0);
+        }) 
+      }
     }
     
     // 전체 커뮤니티 글 읽어오기
