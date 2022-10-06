@@ -30,15 +30,19 @@ const Profile = () => {
   const navigator = useNavigate();
 
   useEffect(() => {
-    if (userAuth.userId !== user_id) {
-      navigator("/");
-      return;
+    if (userAuth.isLogined) {
+      if (userAuth.userId !== user_id) {
+        navigator("/");
+        return;
+      }
+      getMypage(user_id)
+        .then(({ data }) => {
+          setUser({ ...data.user });
+        })
+        .catch(() => {});
+    } else {
+      navigator('/login')
     }
-    getMypage(user_id)
-      .then(({ data }) => {
-        setUser({ ...data.user });
-      })
-      .catch(() => {});
   }, []);
 
   const handleLogout = () => {
