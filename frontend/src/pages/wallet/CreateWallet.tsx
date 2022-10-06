@@ -12,24 +12,7 @@ const CreateWallet = () => {
   const navigator = useNavigate();
   const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8}/;
   const userAuth = useRecoilValue(auth);
-  const warning = [
-    {
-      order: 1,
-      accent: '지갑 비밀키',
-      content: '를 잃어버리지 마세요! 한 번 잃어버리면 복구 할 수 없습니다.'
-    },
-    {
-      order: 2,
-      accent: '공유하지 마세요!',
-      content: ' 비밀키가 악위적인 사이트에 노출되면 당신의 자산이 유실될 수 있습니다.'
-    },
-    {
-      order: 3,
-      accent: '백업',
-      content: '을 만들어 두세요! 종이에 적어서 오프라인으로 관리하세요.'
-    }
-  ];
-
+  
   useEffect(() => {
     if (!userAuth.isLogined) {
       Swal.fire({
@@ -78,7 +61,7 @@ const CreateWallet = () => {
               Swal.showValidationMessage(`지갑 생성에 성공했습니다.`);
               navigator("/wallet");
             } else {
-              throw new Error(data.message);
+              // throw new Error(data.message);
             }
           }).catch((error) => {
             console.log('wallet error= ', error);
