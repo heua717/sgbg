@@ -3,7 +3,7 @@ import { api } from "./API";
 type Eval = {
   kakaoId: number;
   review: "BEST" | "GOOD" | "BAD";
-}
+};
 
 export const postEvalHost = (roomId: string, value: boolean) => {
   const url = `/eval/host/${roomId}`;
@@ -11,6 +11,6 @@ export const postEvalHost = (roomId: string, value: boolean) => {
 };
 
 export const postEvalMember = (roomId: string, values: Eval[]) => {
-  const url = `/eval/host/${roomId}`;
+  const url = `/eval/member/${roomId}`;
   return api.post(url, { evaluations: values });
 };
