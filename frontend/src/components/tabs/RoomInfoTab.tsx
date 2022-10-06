@@ -62,7 +62,7 @@ const RoomInfoTabs = (room: any) => {
         parseFloat(roomInfo.location.latitude),
         parseFloat(roomInfo.location.hardness)
       ),
-      level: 13,
+      level: 3,
     };
     if (container) {
       let map = new window.kakao.maps.Map(container, options);
@@ -133,9 +133,13 @@ const RoomInfoTabs = (room: any) => {
             }}
             level={3} // 지도의 확대 레벨
           ></Map> */}
-          <div className="w-full h-[200px]">
-            <div className="w-full h-full" id="map"></div>
-          </div>
+          {roomInfo.location.latitude ? (
+            <div className="w-full h-[200px]">
+              <div className="w-full h-full" id="map"></div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>
