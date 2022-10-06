@@ -19,14 +19,24 @@ type Member = {
   memberScore: number;
 };
 
+type Room = {
+  parentCategory: string;
+  title: string;
+};
+
 const UserReview = () => {
   const navigator = useNavigate();
   const { meeting_id } = useParams<{ meeting_id: string }>();
+  const [room, setRoom] = useState<Room>({ parentCategory: "", title: "" });
   const [members, setMembers] = useState<Member[]>([]);
   const [evals, setEvals] = useState<EvalMember[]>([]);
   useEffect(() => {
     if (meeting_id) {
       readRoom(meeting_id).then(({ data }) => {
+        setRoom({
+          parentCategory: data.roomInfo.parentCategory,
+          title: data.roomInfo.title,
+        });
         setMembers([...data.roomInfo.members]);
         setEvals(
           data.roomInfo.members.map((member: any) => {
@@ -37,7 +47,10 @@ const UserReview = () => {
     }
   }, []);
 
-  const handleEvalMember = (kakaoId: number, value: "BEST" | "GOOD" | "BAD") => {
+  const handleEvalMember = (
+    kakaoId: number,
+    value: "BEST" | "GOOD" | "BAD"
+  ) => {
     const newEvals = evals.map((eva) => {
       if (eva.kakaoId === kakaoId) {
         return { kakaoId: kakaoId, review: value };
@@ -81,7 +94,8 @@ const UserReview = () => {
         <div className="flex justify-end px-2 mb-1">
           <button
             className=" bg-blue-300 text-white text-sm rounded-xl py-1 px-3"
-            onClick={handleSubmit}>
+            onClick={handleSubmit}
+          >
             제출하기
           </button>
         </div>
