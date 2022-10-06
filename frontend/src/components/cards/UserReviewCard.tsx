@@ -2,21 +2,11 @@ import { useEffect, useState } from "react";
 import { getParticipantBadge } from "../../util/profile";
 
 const UserReviewCard = (props: any) => {
-  const [selected, setSelected] = useState<"BEST" | "GOOD" | "BAD">("GOOD");
-  const handleClick = (event: any) => {
-    const name = event.target.name;
-    console.log(event.target);
-
-    console.log(name);
-
+  const [selected, setSelected] = useState<string>("GOOD");
+  const handleClick = (name: string) => {
     props.handleEvalMember(props.member.kakaoId, name);
     setSelected(name);
   };
-
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
-
   return (
     <div className="w-full flex flex-row justify-between items-center border rounded-lg p-2 mb-1">
       {/* 피평가자 정보 */}
@@ -43,7 +33,7 @@ const UserReviewCard = (props: any) => {
           className={`${
             selected === "BEST" ? "bg-yellow-100" : "bg-gray-300"
           } rounded-lg p-1 font-light text-xs mr-1`}
-          onClick={handleClick}
+          onClick={() => handleClick("BEST")}
         >
           <span className="mr-1">😍</span>
           <span className="mr-1">최고에요!</span>
@@ -53,7 +43,7 @@ const UserReviewCard = (props: any) => {
           className={`${
             selected === "GOOD" ? "bg-yellow-100" : "bg-gray-300"
           } rounded-lg p-1 font-light text-xs mr-1`}
-          onClick={handleClick}
+          onClick={() => handleClick("GOOD")}
         >
           <span className="mr-1">😁</span>
           <span className="mr-1">좋아요!</span>
@@ -63,7 +53,7 @@ const UserReviewCard = (props: any) => {
           className={`${
             selected === "BAD" ? "bg-yellow-100" : "bg-gray-300"
           } rounded-lg p-1 font-light text-xs mr-1`}
-          onClick={handleClick}
+          onClick={() => handleClick("BAD")}
         >
           <span className="mr-1">😑</span>
           <span className="mr-1">별로에요</span>
