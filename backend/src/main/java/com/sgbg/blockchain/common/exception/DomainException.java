@@ -1,4 +1,4 @@
-package com.sgbg.common.util.exception;
+package com.sgbg.blockchain.common.exception;
 
 public class DomainException extends RuntimeException {
     static final long serialVersionUID = 1;
