@@ -27,7 +27,7 @@ const RoomInfoTabs = (room: any) => {
     price: 0,
     minMemberScore: 0,
   });
-  
+
   useEffect(() => {
     //axios
     if (meeting_id) {
@@ -35,7 +35,6 @@ const RoomInfoTabs = (room: any) => {
         .then(({ data }) => {
           setRoomInfo({ ...data.roomInfo });
           console.log(data.roomInfo);
-          
         })
         .catch((e) => {
           Swal.fire({
@@ -52,12 +51,16 @@ const RoomInfoTabs = (room: any) => {
   }, []);
 
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
-  
-  useEffect(() => {
-    setPosition({ lat: parseFloat(roomInfo.location.latitude), lng: parseFloat(roomInfo.location.hardness)})
-  },[roomInfo])
-  
 
+  useEffect(() => {
+    console.log("FLOAT lat : " + parseFloat(roomInfo.location.latitude));
+    console.log("FLOAT hardness : " + parseFloat(roomInfo.location.hardness));
+
+    setPosition({
+      lat: parseFloat(roomInfo.location.latitude),
+      lng: parseFloat(roomInfo.location.hardness),
+    });
+  }, [roomInfo]);
 
   return (
     <div>
@@ -77,7 +80,9 @@ const RoomInfoTabs = (room: any) => {
 
       <div className="text-sm grid grid-cols-10">
         <p className="col-span-4 font-bold">모집 마감일</p>
-        <p className="col-start-5 col-end-10">{roomInfo.endDate && formatDate(roomInfo.endDate)}</p>
+        <p className="col-start-5 col-end-10">
+          {roomInfo.endDate && formatDate(roomInfo.endDate)}
+        </p>
       </div>
       <hr className="my-2" />
 
@@ -95,14 +100,14 @@ const RoomInfoTabs = (room: any) => {
       </div>
       <hr className="my-2" />
 
-        <div className="text-sm mt-5">
-          <p className="font-bold mb-5">모임 설명</p>
-          {roomInfo.description.split('\n').map((line: string)=>(
-            <div className="mt-2 leading-6">
-              <p>{line}</p>
-            </div>
-          ))}
-        </div>
+      <div className="text-sm mt-5">
+        <p className="font-bold mb-5">모임 설명</p>
+        {roomInfo.description.split("\n").map((line: string) => (
+          <div className="mt-2 leading-6">
+            <p>{line}</p>
+          </div>
+        ))}
+      </div>
       <hr className="my-3" />
 
       <div className="text-sm">

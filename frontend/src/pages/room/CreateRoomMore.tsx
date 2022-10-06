@@ -7,17 +7,14 @@ import { roomMore } from "../../util/room";
 import { inputRoomInfo } from "../../store/room";
 import MeetingCard from "../../components/cards/MeetingCard";
 
-
 const CreateRoomMore = () => {
-  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo);;
-  const [roomList, setRoomList] = useState([]);;
+  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo);
+  const [roomList, setRoomList] = useState([]);
   const resetRecoil = useResetRecoilState(inputRoomInfo);
-  const [isloading, setLoading] = useState<boolean>(false);;
-
+  const [isloading, setLoading] = useState<boolean>(false);
 
   // created 될 때
   useEffect(() => {
-
     // console.log(room.endDate);
   });
 
@@ -74,19 +71,19 @@ const CreateRoomMore = () => {
   const onClicktoSubmit = () => {
     // params로 recoil에 저장된 room을 보냄 0930 임지민
     // console.log(room)
-  //   createRoom(room).then(({data})=> {
-  //     console.log(data);
-  //     setRoomList(roomList.concat(data))
-  //     // 상세 페이지로 리다이렉트
-  //     navigate('/')
-  //     // recoil 초기화
-  //     resetRecoil();
-  //   }).catch((err)=> {
-  //     console.log(err);
-  //     console.log(err.config.data);
-  //     resetRecoil();
-  //   })
-  // }
+    //   createRoom(room).then(({data})=> {
+    //     console.log(data);
+    //     setRoomList(roomList.concat(data))
+    //     // 상세 페이지로 리다이렉트
+    //     navigate('/')
+    //     // recoil 초기화
+    //     resetRecoil();
+    //   }).catch((err)=> {
+    //     console.log(err);
+    //     console.log(err.config.data);
+    //     resetRecoil();
+    //   })
+    // }
     try {
       setLoading(true);
       createRoom(room)
@@ -109,31 +106,35 @@ const CreateRoomMore = () => {
     }
   };
 
-
   return (
     // markup 0915 임지민
     <div>
       {isloading ? (
-        <div className="w-full flex flex-col justify-center items-center">
+        <div className="w-full h-[100vh] flex flex-col justify-center items-center">
           <div className="flex flex-row">
             <img
-              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge5"
+              className="w-8 h-8 animate-gelatine mr-1"
+              alt="userBadge5"
               src={process.env.PUBLIC_URL + `/img/userBadge5.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge4"
+              className="w-8 h-8 animate-gelatine mr-1"
+              alt="userBadge4"
               src={process.env.PUBLIC_URL + `/img/userBadge4.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge3"
+              className="w-8 h-8 animate-gelatine mr-1"
+              alt="userBadge3"
               src={process.env.PUBLIC_URL + `/img/userBadge3.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine mr-1" alt="userBadge2"
+              className="w-8 h-8 animate-gelatine mr-1"
+              alt="userBadge2"
               src={process.env.PUBLIC_URL + `/img/userBadge2.png`}
             />
             <img
-              className="w-8 h-8 animate-gelatine" alt="userBadge1"
+              className="w-8 h-8 animate-gelatine"
+              alt="userBadge1"
               src={process.env.PUBLIC_URL + `/img/userBadge1.png`}
             />
           </div>
@@ -148,7 +149,9 @@ const CreateRoomMore = () => {
         - 클릭하면 회색 그림자?가 나오도록
       */}
             <BtnExitToHome></BtnExitToHome>
-            <h2 className="inline-block text-xl font-black ml-5">모임 만들기</h2>
+            <h2 className="inline-block text-xl font-black ml-5">
+              모임 만들기
+            </h2>
           </div>
           <div className="mt-5">
             <div className="flex justify-between">
@@ -162,7 +165,8 @@ const CreateRoomMore = () => {
               */}
                   <button
                     type="button"
-                    className="text-white text-xs bg-gray-400 px-2 py-1 rounded-xl">
+                    className="text-white text-xs bg-gray-400 px-2 py-1 rounded-xl"
+                  >
                     다시 작성하기
                   </button>
                 </div>
@@ -178,8 +182,8 @@ const CreateRoomMore = () => {
 
             {/* 경고 문구 */}
             <p className="text-red-600 text-sm">
-              ⚠ 모집 마감일, 예약 날짜, 최소 태도 점수는(은) 수정이 불가하니 신중하게 작성해주시기
-              바랍니다.{" "}
+              ⚠ 모집 마감일, 예약 날짜, 최소 태도 점수는(은) 수정이 불가하니
+              신중하게 작성해주시기 바랍니다.{" "}
             </p>
             <hr className="my-5" />
 
@@ -260,7 +264,8 @@ const CreateRoomMore = () => {
                 <button
                   type="button"
                   onClick={onClicktoSubmit}
-                  className="text-center text-white font-semibold bg-blue-200 rounded py-1">
+                  className="text-center text-white font-semibold bg-blue-200 rounded py-1"
+                >
                   모임 만들기
                 </button>
               </div>
@@ -269,7 +274,10 @@ const CreateRoomMore = () => {
           {/* 한 칸이라도 빈 경우 0927 임지민 */}
           {!isValidated && (
             <div className="grid grid-cols-1 mt-3">
-              <button type="button" className="text-center bg-gray-200 rounded py-1">
+              <button
+                type="button"
+                className="text-center bg-gray-200 rounded py-1"
+              >
                 모임 만들기
               </button>
             </div>
