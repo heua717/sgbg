@@ -55,7 +55,7 @@ const CommunityTab = (props: any) => {
   }
 
   // 삭제하기
-  const onClickDelete = (commentId: number) => {
+  const onClickDelete = (e:React.MouseEvent<HTMLButtonElement>, commentId: number):any => {
     console.log('hello delete');
     
     deleteComment(commentId)
@@ -145,7 +145,7 @@ const CommunityTab = (props: any) => {
                     {Number(userAuth.userId) === comment.kakaoNumber && (
                       <div>
                         {/* <button onClick={onClickUpdate(comment.commentId)}>수정하기</button> */}
-                        <button onClick={onClickDelete(comment.commentId)}
+                        <button onClick={e=> onClickDelete(e, comment.commentId)}
                           className="bg-yellow-100 font-semibold text-sm px-1 rounded"
                         >삭제하기</button>
                       </div>
