@@ -188,8 +188,8 @@ public class WalletService implements IWalletService {
             return null;
         }
         String privateKey = wallet.getPrivateKey();
-        String publicKey = wallet.getPublicKey();
-        Credentials credentials = Credentials.create(privateKey, publicKey);
+//        String publicKey = wallet.getPublicKey();
+        Credentials credentials = Credentials.create(privateKey);
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Cash_sol_Cash cash_sol_cash = Cash_sol_Cash.deploy(web3j, credentials, contractGasProvider, BigInteger.valueOf(10000000000L)).send();
         return cash_sol_cash.getContractAddress();
