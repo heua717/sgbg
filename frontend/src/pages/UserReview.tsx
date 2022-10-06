@@ -86,7 +86,7 @@ const UserReview = () => {
         <Logo />
         {/* 멘트 */}
         <div className="flex flex-col justify-center items-center">
-          <span>{`[이색놀거리] 블루 하와이안 만들기 모임에서`}</span>
+          <span>{`[${room.parentCategory}] ${room.title}에서`}</span>
           <span>{`다른 사람들과 즐거우셨나요?`} </span>
           <span>{`의견을 남겨주세요! 🙂`}</span>
         </div>
