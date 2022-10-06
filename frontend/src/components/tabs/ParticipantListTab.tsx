@@ -17,7 +17,9 @@ const ParticipantListTab = (props: any) => {
   }])
 
   useEffect(()=>{
+    
     console.log("participants list tab = ",props.room.members);
+    console.log(props.room);
     setMembers(props.room.members)
   }, [])
 
