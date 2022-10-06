@@ -160,6 +160,8 @@ const ReadRoom = () => {
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
+          console.log('read room data=', data);
+          
           setRoom(data.roomInfo);
           getIsInThisRoom(data.roomInfo.members);
         })
