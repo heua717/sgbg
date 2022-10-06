@@ -15,10 +15,10 @@ const Navbar = () => {
     checkWallet()
       .then(({ data }) => {
         if (data.statusCode === 2000) {
-          console.log('there is wallet');
-          navigator("/wallet/create");
-        } else {
+          // console.log('there is wallet');
           navigator("/wallet");
+        } else {
+          navigator("/wallet/create");
         }
       })
       .catch((err) => {
