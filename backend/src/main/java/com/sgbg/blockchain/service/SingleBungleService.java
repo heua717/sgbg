@@ -1,6 +1,7 @@
 package com.sgbg.blockchain.service;
 
 import com.sgbg.blockchain.common.exception.NoWalletException;
+import com.sgbg.blockchain.common.exception.NotEnoughMoneyException;
 import com.sgbg.blockchain.domain.Transaction;
 import com.sgbg.blockchain.domain.Wallet;
 import com.sgbg.blockchain.domain.WalletHistory;
@@ -58,8 +59,7 @@ public class SingleBungleService implements ISingleBungleService {
         }
         long hostMoney = wallet.getCash();
         if(hostMoney < minimumAmount){
-            return null;
-//            throw new NotEnoughMoneyException();
+            throw new NotEnoughMoneyException();
         }
 
         Credentials credentials = Credentials.create(wallet.getPrivateKey(), wallet.getPublicKey());

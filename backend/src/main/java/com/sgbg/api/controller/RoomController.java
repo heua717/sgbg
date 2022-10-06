@@ -6,6 +6,7 @@ import com.sgbg.api.response.RoomListRes;
 import com.sgbg.api.response.RoomRes;
 import com.sgbg.api.response.TransactionRes;
 import com.sgbg.blockchain.common.exception.NoWalletException;
+import com.sgbg.blockchain.common.exception.NotEnoughMoneyException;
 import com.sgbg.blockchain.domain.Transaction;
 import com.sgbg.blockchain.service.SingleBungleService;
 import com.sgbg.blockchain.service.TransactionService;
@@ -61,15 +62,15 @@ public class RoomController {
         Long userId = cookieUtil.getUserIdByToken(request);
 
         try {
-            Room room = roomService.createRoom(roomReq, userId);
 
+            Room room = roomService.createRoom(roomReq, userId);
             String contractAddress = singleBungleService.createRoom(
                     room.getId(), userId, ChronoUnit.DAYS.between(LocalDateTime.now(), roomReq.getEndDate()), roomReq.getPrice());
-            if(contractAddress == null){
-                return ResponseEntity.status(200).body(BaseResponseBody.of(4010, "No Enough Money"));
-            }
 
             roomService.setRoomContactAddress(room, contractAddress);
+        } catch (NotEnoughMoneyException e){
+            return ResponseEntity.status(200).body(BaseResponseBody.of(4010, "No Enough Money"));
+
         } catch (NoWalletException e){
             return ResponseEntity.status(200).body(BaseResponseBody.of(4020,"No Wallet"));
 

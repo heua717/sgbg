@@ -1,6 +1,11 @@
 package com.sgbg.service;
 
 import com.sgbg.api.request.RoomReq;
+import com.sgbg.blockchain.common.exception.NoWalletException;
+import com.sgbg.blockchain.common.exception.NotEnoughMoneyException;
+import com.sgbg.blockchain.domain.Wallet;
+import com.sgbg.blockchain.repository.WalletRepository;
+import com.sgbg.blockchain.service.SingleBungleService;
 import com.sgbg.common.util.exception.NotFoundException;
 import com.sgbg.domain.Location;
 import com.sgbg.domain.Participation;
@@ -21,6 +26,9 @@ import java.util.List;
 public class RoomService implements IRoomService {
 
     @Autowired
+    private WalletRepository walletRepository;
+
+    @Autowired
     private RoomRepository roomRepository;
     @Autowired
     private LocationRepository locationRepository;
@@ -32,7 +40,15 @@ public class RoomService implements IRoomService {
 
     @Override
     @Transactional
-    public Room createRoom(RoomReq roomReq, Long userId) {
+    public Room createRoom(RoomReq roomReq, Long userId) throws NoWalletException, NotEnoughMoneyException {
+
+        Wallet wallet = walletRepository.findByOwnerId(userId).orElse(null);
+        if(wallet == null){
+            throw new NoWalletException();
+        }
+        if(wallet.getCash() < roomReq.getPrice()){
+            throw new NotEnoughMoneyException();
+        }
         // Room 생성
         Room room = roomReq.toEntity(roomReq);
         Location location = roomReq.getLocation();
