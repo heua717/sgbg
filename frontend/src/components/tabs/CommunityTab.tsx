@@ -84,17 +84,23 @@ const CommunityTab = (props: any) => {
   useEffect(()=>{
     // 만약 로그인이 안되어 있거나, 이 모임의 참여자가 아니면 리다이렉트 시키기
     console.log('useeffect userauth=', userAuth);
-    if (!userAuth.isLogined || (!props.isInThisRoom) || (!props.isHost) ){
+    if (!userAuth.isLogined ){
       Swal.fire({
         title: '모임에 참여한 사용자만 접근 가능합니다.',
         icon: 'error',
         timer: 5000,
       }).then(()=>{
         navigate(0);
-      })
+      }) 
+      // || (!props.isInThisRoom) || (!props.isHost) 
     } else if (props.isHost) {
-      readCommentList();
-    } else { 
+      console.log('host다=', props.isHost);
+      
+      // readCommentList();
+    } else if (props.isInThisRoom){
+      console.log('이 방에 있다=', props.isInThisRoom);
+      
+    }else { 
       readCommentList();
     }
     
