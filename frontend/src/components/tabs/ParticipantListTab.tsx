@@ -2,9 +2,11 @@ import {
   getParticipantBadge,
   getProgressColor,
 } from "../../util/profile";
-import { Link } from "react-router-dom";
-// import { roomMore } from "../../util/room";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { readRoom } from "../../api/room";
+import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 // host가 무조건 0번째에 오도록 하고, 나머지는 뒤에 concat하기
 const ParticipantListTab = (props: any) => {
@@ -15,13 +17,31 @@ const ParticipantListTab = (props: any) => {
     hostScore: 0,
     memberScore: 0
   }])
+  const { meeting_id } = useParams<{ meeting_id: string }>();
+  const navigator = useNavigate()
 
-  useEffect(()=>{
-    
-    console.log("participants list tab = ",props.room.members);
-    console.log(props.room);
-    setMembers(props.room.members)
-  }, [])
+
+  useEffect(() => {
+    //axios
+    if(meeting_id) {
+      readRoom(meeting_id)
+        .then(({ data }) => {
+          setMembers(data.roomInfo.members);
+          console.log(data.roomInfo.members);
+        })
+        .catch((e) => {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "참여자 목록을 불러올 수 없습니다.",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigator(-1);
+          });
+        });
+      }
+  }, []);
 
   return (  
     <div className="ml-3">
