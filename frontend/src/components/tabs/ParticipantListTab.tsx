@@ -34,7 +34,7 @@ const ParticipantListTab = (props: any) => {
             */}
             {members.length && (
               <div className="grid grid-cols-2">
-                <Link to={`/profile/${member.kakaoId}`}>
+                <Link to={`/profile/history/${member.kakaoId}`}>
                   <div className="flex flex-row justify-start pb-1">
                     <div className="w-[25px] h-[25px] mr-2">
                       <img

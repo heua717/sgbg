@@ -7,13 +7,12 @@ import { formatDate } from "../../util/room";
 
 const MeetingCard = (props:any): JSX.Element => {
   const [meetingText, setMeetingText] = useState('모집 중')
+  const [bgColor, setBgColor] = useState('')
+  const [divBgColor, setDivBgcolor] = useState('')
   const navigate = useNavigate()
   // 인원이 다 찼을 때, 모집 마감일이 지났을 때 true이도록 
   const [ isDone, setIsDone ] = useState(false)
 
-  const getStateBadgeColor = () => {
-    return 'bg-yellow-100';
-  }
   const getMemberBadgeColor = () => {
     return 'bg-gray-100';
   }
@@ -27,11 +26,17 @@ const MeetingCard = (props:any): JSX.Element => {
     // 모집 마감일과 오늘 날짜의 차이가 24시간 이내일때
     if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
       setMeetingText('마감 임박')
+      setBgColor('bg-red-100 text-white')
+      setDivBgcolor('')
     } else if ((endDate - today) < 0) {
       setIsDone(true)
       setMeetingText('모집 마감')
+      setBgColor('bg-gray-400')
+      setDivBgcolor('bg-gray-300 opacity-50')
     } else{
       setMeetingText('모집 중')
+      setBgColor('bg-yellow-100')
+      setDivBgcolor('')
     }
     // 아니면 모집 중    
   }
@@ -40,7 +45,7 @@ const MeetingCard = (props:any): JSX.Element => {
   // isDone=== true이면 클릭 안되게 
   // prop 이름이 createRoom이면 클릭 안되게 
   const onClick = () => {
-    if (!isDone && props.name !== 'createRoom' && props.name !== 'readRoom') {
+    if (props.name !== 'createRoom' && props.name !== 'readRoom') {
       navigate(`/meeting/${props.room.roomId}`)
     } else {
       console.log('unclickable');
@@ -55,10 +60,10 @@ const MeetingCard = (props:any): JSX.Element => {
 
   return (
     // w-per100 h-per100 
-    <div className="flex flex-row border rounded-lg p-2 mb-2" onClick={onClick}>
+    <div className={`flex flex-row border rounded-lg p-2 mb-2 ${divBgColor}`} onClick={onClick}>
       {/* 모임 이미지, 뱃지 */}
-      <div className="w-per45 mr-5 relative">
-        <div className={`absolute top-0 left-0 rounded ${getStateBadgeColor()} text-sm font-semibold px-2 py-1`}>{meetingText}</div>
+      <div className="w-per45 mr-5 relative ">
+        <div className={`absolute top-0 left-0 rounded ${bgColor} text-sm font-semibold px-2 py-1`}>{meetingText}</div>
         <img
           className="w-full h-full rounded"
           src={process.env.PUBLIC_URL + `/img/${props.room.parentCategory}_${props.room.childCategory.replace('/', '')}.jpg`}
