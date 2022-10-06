@@ -47,7 +47,7 @@ const CommunityTab = (props: any) => {
       content: comment,
       roomId: Number(meeting_id)
     }).then((res)=>{
-      console.log(res);
+      console.log('create comment res=', res);
       textArea.value = ''
       // 다 되면 현재 페이지 리다이렉트
       readCommentList();
@@ -57,19 +57,19 @@ const CommunityTab = (props: any) => {
   const readCommentList = () => {
     readComment(Number(meeting_id))
     .then(({data})=> {
-      console.log(data);
+      console.log('read comment res.data= ', data);
       data.length!== 0? setIsEmpty(false) : setIsEmpty(true)
       // 저장해주고
       setCommentList(data)
       // navigate(0)
     })
-    console.log(commentList.length);
+    // console.log(commentList.length);
     
   }
   // 컴포넌트 create될 때 axios
   useEffect(()=>{
     // 만약 로그인이 안되어 있거나, 이 모임의 참여자가 아니면 리다이렉트 시키기
-    console.log(userAuth);
+    console.log('useeffect userauth=', userAuth);
     if (!userAuth.isLogined || !props.isInThisRoom){
       Swal.fire({
         title: '모임에 참여한 사용자만 접근 가능합니다.',

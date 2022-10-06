@@ -11,7 +11,7 @@ const Logo = () => {
   const onClickLogo = () => {
     const url = window.location.href
     // console.log(url);
-    
+    //url === 'http://localhost:3000/' || 
     if (url === 'http://localhost:3000/' || url === 'https://j7a707.p.ssafy.io/') {
       console.log('open drawer');
       !isOpen? setIsOpen(true) : setIsOpen(false)
