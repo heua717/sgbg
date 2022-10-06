@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import Swal from "sweetalert2";
 import { postEvalMember } from "../api/eval";
 import { readRoom } from "../api/room";
 import UserReviewCard from "../components/cards/UserReviewCard";
 import Logo from "../components/etc/Logo";
+import { auth } from "../store/auth";
 
 type EvalMember = {
   kakaoId: number;
@@ -13,7 +15,7 @@ type EvalMember = {
 
 type Member = {
   name: string;
-  kakaoId: number;
+  kakaoId: string;
   email: string;
   hostScore: number;
   memberScore: number;
@@ -27,6 +29,7 @@ type Room = {
 const UserReview = () => {
   const navigator = useNavigate();
   const { meeting_id } = useParams<{ meeting_id: string }>();
+  const userAuth = useRecoilValue(auth);
   const [room, setRoom] = useState<Room>({ parentCategory: "", title: "" });
   const [members, setMembers] = useState<Member[]>([]);
   const [evals, setEvals] = useState<EvalMember[]>([]);
@@ -37,7 +40,11 @@ const UserReview = () => {
           parentCategory: data.roomInfo.parentCategory,
           title: data.roomInfo.title,
         });
-        setMembers([...data.roomInfo.members]);
+        setMembers(
+          data.roomInfo.members.filter(
+            (member: Member) => member.kakaoId === userAuth.userId
+          )
+        );
         setEvals(
           data.roomInfo.members.map((member: any) => {
             return { kakaoId: member.kakaoId, review: "GOOD" };
