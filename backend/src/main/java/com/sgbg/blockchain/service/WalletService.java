@@ -115,6 +115,8 @@ public class WalletService implements IWalletService {
         Cash_sol_Cash cashContract = Cash_sol_Cash.load(cashContractAddress, web3j, credentialsAdmin, contractGasProvider);
 
         cashContract.approve(admin, BigInteger.valueOf(money)).send();
+        BigInteger num = cashContract.balanceOf(address).send();
+        System.out.println(num);
         TransactionReceipt receipt = cashContract.transferFrom(admin, address, BigInteger.valueOf(money)).send();
 
         // TransactionReceipt를 가지고 Transaction 엔티티만들어서 저장한다.
