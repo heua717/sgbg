@@ -48,11 +48,20 @@ const ReadRoom = () => {
 
   // 현재 유저가 이 모임 참여자 목록에 있는 지 없는 지 판단
   const [isInThisRoom, setIsInThisRoom] = useState(false);
+  const [isHost, setIsHost] = useState(false)
+
 
   const getIsInThisRoom = (members:members[]) => {
     console.log('members= ', members);
+    // ishost; 현재 유저가 호스트이면
+    if (members[0].kakaoId === userAuth.userId) {
+      setIsHost(true)
+    } else {
+      setIsHost(false)
+    }
     
-    members.forEach((member: members) => {
+    const newMembers = members.splice(1)
+    newMembers.forEach((member: members) => {
       console.log(member);
       
       console.log('readroom kakaoid', member.kakaoId, 'readroom current user=', userAuth.userId);
@@ -247,47 +256,50 @@ const ReadRoom = () => {
         <div className="px-3">
           <MeetingCard name="readRoom" room={room} />
           {/* <BtnAddOrDelete room={room}/> */}
-          {islogining ? (
-            <div className="w-full flex flex-col justify-center items-center">
-              <div className="flex flex-row">
-                <img
-                  className="w-5 h-5 animate-gelatine mr-1"
-                  alt="userBadge3"
-                  src={process.env.PUBLIC_URL + `/img/userBadge3.png`}
-                />
-                <img
-                  className="w-5 h-5 animate-gelatine mr-1"
-                  alt="userBadge2"
-                  src={process.env.PUBLIC_URL + `/img/userBadge2.png`}
-                />
-                <img
-                  className="w-5 h-5 animate-gelatine"
-                  alt="userBadge1"
-                  src={process.env.PUBLIC_URL + `/img/userBadge1.png`}
-                />
+          {!isHost && (
+            <div>
+            {islogining ? (
+              <div className="w-full flex flex-col justify-center items-center">
+                <div className="flex flex-row">
+                  <img
+                    className="w-5 h-5 animate-gelatine mr-1"
+                    alt="userBadge3"
+                    src={process.env.PUBLIC_URL + `/img/userBadge3.png`}
+                  />
+                  <img
+                    className="w-5 h-5 animate-gelatine mr-1"
+                    alt="userBadge2"
+                    src={process.env.PUBLIC_URL + `/img/userBadge2.png`}
+                  />
+                  <img
+                    className="w-5 h-5 animate-gelatine"
+                    alt="userBadge1"
+                    src={process.env.PUBLIC_URL + `/img/userBadge1.png`}
+                  />
+                </div>
+                <span className="font-semibold text-xl">처리중...</span>
               </div>
-              <span className="font-semibold text-xl">처리중...</span>
-            </div>
-          ) : isInThisRoom ? (
-            <button
-              type="button"
-              onClick={onClickInAndOut}
-              className="w-full text-center text-white font-bold bg-blue-500 rounded p-1">
-              퇴장하기
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={onClickInAndOut}
-              className="w-full text-center font-bold bg-yellow-100 rounded p-1">
-              입장하기
-            </button>
-          )}
+            ) : isInThisRoom ? (
+              <button
+                type="button"
+                onClick={onClickInAndOut}
+                className="w-full text-center text-white font-bold bg-blue-500 rounded p-1">
+                퇴장하기
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={onClickInAndOut}
+                className="w-full text-center font-bold bg-yellow-100 rounded p-1">
+                입장하기
+              </button>
+          )} 
+        </div>)}
         </div>
       </div>
       {/* 탭 구현 */}
       <div>
-        <RoomTabs room={room} isInThisRoom={isInThisRoom} />
+        <RoomTabs room={room} isInThisRoom={isInThisRoom} isHost={isHost} />
       </div>
     </div>
   );
