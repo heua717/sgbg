@@ -17,6 +17,7 @@ const ParticipantListTab = (props: any) => {
     hostScore: 0,
     memberScore: 0
   }])
+  const [hostName, setHostName] = useState('')
   const { meeting_id } = useParams<{ meeting_id: string }>();
   const navigator = useNavigate()
 
@@ -27,6 +28,7 @@ const ParticipantListTab = (props: any) => {
       readRoom(meeting_id)
         .then(({ data }) => {
           setMembers(data.roomInfo.members);
+          setHostName(data.roomInfo.hostName)
           console.log(data.roomInfo.members);
         })
         .catch((e) => {
@@ -67,7 +69,12 @@ const ParticipantListTab = (props: any) => {
                         alt="사용자 뱃지"
                       />
                     </div>
-                    <span className="font-semibold leading-tightl">{member.name}</span>
+                    {(member.name === hostName) && (
+                      <span className="font-semibold leading-tightl">{member.name} 👑</span>
+                    )}
+                    {(member.name !== hostName) && (
+                      <span className="font-semibold leading-tightl">{member.name}</span>
+                    )} 
                   </div>
                 </Link>
 
