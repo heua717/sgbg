@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import BtnProfileInfo from "../../components/buttons/BtnProfileInfo";
-import FinishedMeetingCard from "../../components/cards/FinishedMeetingCard";
 import Logo from "../../components/etc/Logo";
 import FinishedMeetingListHost from "../../components/lists/FinishedMeetingListHost";
 import FinishedMeetingListParticipant from "../../components/lists/FinishedMeetingListParticipant";
@@ -21,7 +20,7 @@ const ProfileHistory = () => {
     if (user_id) {
       getMypage(user_id).then(({ data }) => {
         if (data.statusCode === 2000) {
-          setUser(data.user);
+          setUser({ ...data.user });
         }
       });
     }
@@ -44,7 +43,7 @@ const ProfileHistory = () => {
       {/* 유저 프로필(아이디, 매너온도, 모임 성공률) */}
       <div className="h-per25 flex flex-col px-2 mx-2 mb-1">
         <span className="border-b border-gray-200 pb-2 font-bold text-lg leading-tight">
-          {user?.name}님의 완료한 모임 이력
+          {user.name}님의 완료한 모임 이력
         </span>
         <ul className="grid grid-cols-2 gap-2">
           <li onClick={() => setIndex(0)}>
