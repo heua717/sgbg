@@ -183,7 +183,7 @@ public class WalletService implements IWalletService {
     @Override
     public String deployAdminCash() throws Exception {
 
-        Wallet wallet = walletRepository.findByOwnerId(1L).orElse(null);
+        Wallet wallet = walletRepository.findByOwnerId(4L).orElse(null);
         if(wallet == null){
             return null;
         }
