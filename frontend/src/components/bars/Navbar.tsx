@@ -15,9 +15,9 @@ const Navbar = () => {
     checkWallet()
       .then(({ data }) => {
         if (data.statusCode === 2000) {
-          navigator("/wallet");
-        } else {
           navigator("/wallet/create");
+        } else {
+          navigator("/wallet");
         }
       })
       .catch((err) => {
