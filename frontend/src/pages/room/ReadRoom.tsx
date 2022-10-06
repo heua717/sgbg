@@ -160,13 +160,13 @@ const ReadRoom = () => {
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
-          setRoom({ ...data.roomInfo });
+          setRoom(data.roomInfo);
           getIsInThisRoom(data.roomInfo.members);
         })
         .catch((e) => {});
     }
     console.log('readroommembers=',  room.members);
-  }, []);
+  }, [])
 
   const navigate = useNavigate();
 
