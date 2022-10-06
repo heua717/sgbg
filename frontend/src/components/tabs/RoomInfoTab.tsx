@@ -53,9 +53,6 @@ const RoomInfoTabs = (room: any) => {
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
 
   useEffect(() => {
-    console.log("FLOAT lat : " + parseFloat(roomInfo.location.latitude));
-    console.log("FLOAT hardness : " + parseFloat(roomInfo.location.hardness));
-
     let container = document.getElementById("map");
     let options = {
       center: new window.kakao.maps.LatLng(
@@ -66,6 +63,18 @@ const RoomInfoTabs = (room: any) => {
     };
     if (container) {
       let map = new window.kakao.maps.Map(container, options);
+      var markerPosition = new kakao.maps.LatLng(
+        options.center.getLat(),
+        options.center.getLng()
+      );
+
+      // 마커를 생성합니다
+      var marker = new kakao.maps.Marker({
+        position: markerPosition,
+      });
+
+      // 마커가 지도 위에 표시되도록 설정합니다
+      marker.setMap(map);
     }
   }, [roomInfo]);
 
