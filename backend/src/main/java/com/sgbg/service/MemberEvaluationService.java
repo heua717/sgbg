@@ -25,6 +25,7 @@ public class MemberEvaluationService implements IMemberEvaluationService {
                 .room(room)
                 .evaluator(evaluator)
                 .user(user)
+                .review(memberEvaluationReq.getReview())
                 .score(memberEvaluationReq.getReview().getScore())
                 .build();
 

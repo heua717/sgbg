@@ -35,11 +35,12 @@ public class MemberEvaluation {
     private Room room;
 
     @Builder
-    public MemberEvaluation(int score, User evaluator, User user, Room room) {
+    public MemberEvaluation(int score, User evaluator, User user, Room room, Review review) {
         this.score = score;
         this.evaluator = evaluator;
         this.user = user;
         this.room = room;
+        this.review = review;
     }
 
     public void addMemberEvaluation(Room room, User evaluator, User user) {
