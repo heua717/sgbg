@@ -55,6 +55,7 @@ const ReadRoom = () => {
     console.log('members= ', members); // ok
     // ishost; 현재 유저가 호스트이면
     if (members[0].kakaoId === userAuth.userId) {
+      console.log('----------------is host true--------------------');
       setIsHost(true)
     } else {
       setIsHost(false)
