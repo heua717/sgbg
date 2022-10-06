@@ -52,7 +52,13 @@ const ReadRoom = () => {
 
 
   const getIsInThisRoom = (members:members[]) => {
-    console.log('members= ', members);
+    console.log('members= ', members); // ok
+    // members 값이 제대로 저장이 안돼서 한 번더 저장해줌
+    setRoom({
+      ...room,
+      members: members
+    })
+    
     // ishost; 현재 유저가 호스트이면
     if (members[0].kakaoId === userAuth.userId) {
       setIsHost(true)
@@ -298,9 +304,9 @@ const ReadRoom = () => {
         </div>
       </div>
       {/* 탭 구현 */}
-      {room.members.map((member: members)=> (
+      {/* {room.members.map((member: members)=> (
         <p>{member.kakaoId}</p>
-      ))}
+      ))} */}
       <div>
         <RoomTabs room={room} isInThisRoom={isInThisRoom} isHost={isHost} />
       </div>

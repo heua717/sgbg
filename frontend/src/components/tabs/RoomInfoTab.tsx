@@ -33,7 +33,7 @@ const RoomInfoTabs = (room: any) => {
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
-          setRoomInfo(data.roomInfo);
+          setRoomInfo({ ...data.roomInfo });
           console.log(data.roomInfo);
         })
         .catch((e) => {
@@ -112,7 +112,7 @@ const RoomInfoTabs = (room: any) => {
 
       <div className="text-sm grid grid-cols-10">
         <p className="col-span-4 font-bold">금액</p>
-        <p className="font-bold col-start-5 col-end-9">{roomInfo.price}원</p>
+        <p className="font-bold col-start-5 col-end-9">{roomInfo.price}SB</p>
       </div>
       <hr className="my-2" />
 
