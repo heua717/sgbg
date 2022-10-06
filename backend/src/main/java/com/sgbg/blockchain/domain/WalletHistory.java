@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
