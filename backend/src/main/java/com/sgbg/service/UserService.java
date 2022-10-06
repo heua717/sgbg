@@ -60,12 +60,9 @@ public class UserService implements IUserService {
         Participation participation = participationRepository.findParticipationByUserAndRoom(user, room).orElse(null);
         if (participation == null) {
             participation = Participation.builder()
-                    .isParticipate(true)
                     .user(user)
                     .room(room)
                     .build();
-        } else {
-            participation.setParticipate(true);
         }
 
         participation.addMember(user, room);
@@ -82,27 +79,14 @@ public class UserService implements IUserService {
         List<Room> myRoomsByUserId = participationRepository.findMyRoomsByUserId(userId);
         List<Room> getRooms = new ArrayList<>();
 
-        for (Room room: myRoomsByUserId) {
-            if (isHost) {
-                if (room.getHostId().equals(userId)) {
-                    getRooms.add(room);
-                }
-            } else {
-                if (!room.getHostId().equals(userId)) {
-                    getRooms.add(room);
-                }
-            }
+        if (isHost) { // host = true
+            return myRoomsByUserId
+                    .stream().filter(room -> room.getHostId().equals(userId))
+                    .collect(Collectors.toList());
         }
-        return getRooms;
-
-//        if (isHost) { // host = true
-//            return myRoomsByUserId
-//                    .stream().filter(room -> room.getHostId().equals(userId))
-//                    .collect(Collectors.toList());
-//        }
-//        return myRoomsByUserId
-//                .stream().filter(room -> !room.getHostId().equals(userId))
-//                .collect(Collectors.toList());
+        return myRoomsByUserId
+                .stream().filter(room -> !room.getHostId().equals(userId))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -118,7 +102,8 @@ public class UserService implements IUserService {
         }
         Participation participation = participationRepository.findParticipationByUserAndRoom(user, room).orElse(null);
         if (participation != null) {
-            participation.deleteMember();
+            participation.deleteMember(user, room);
+            participationRepository.delete(participation);
         }
 
         return room;
