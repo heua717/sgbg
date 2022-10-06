@@ -66,7 +66,14 @@ public class SingleBungleService implements ISingleBungleService {
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.deploy(web3j, credentials, contractGasProvider, cashContractAddress, credentials.getAddress(), BigInteger.valueOf(duration), BigInteger.valueOf(minimumAmount)).send();
         wallet.setCash(hostMoney-minimumAmount);
-
+        WalletHistory userWalletHistory = WalletHistory.builder()
+                .wallet(wallet)
+                .totalMoneyBeforeTransaction(wallet.getCash())
+                .money(minimumAmount)
+                .createdAt(LocalDateTime.now())
+                .type("create")
+                .build();
+        walletHistoryRepository.save(userWalletHistory);
         // contract 로부터 transactionReceipt를 받아와서 transaction 저장
         TransactionReceipt receipt = contract.getTransactionReceipt().orElse(null);
         if (receipt == null) {
