@@ -62,9 +62,9 @@ const ReadRoom = () => {
     
     const newMembers = members.splice(1)
     newMembers.forEach((member: members) => {
-      console.log(member);
+      // console.log(member);
       
-      console.log('readroom kakaoid', member.kakaoId, 'readroom current user=', userAuth.userId);
+      // console.log('readroom kakaoid', member.kakaoId, 'readroom current user=', userAuth.userId);
       
       if (member.kakaoId === userAuth.userId) {
         setIsInThisRoom(true);
@@ -160,14 +160,14 @@ const ReadRoom = () => {
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
-          console.log('read room data=', data);
+          // console.log('read room data=', data);
           
           setRoom(data.roomInfo);
           getIsInThisRoom(data.roomInfo.members);
         })
         .catch((e) => {});
     }
-    console.log('readroommembers=',  room.members);
+    // console.log('readroommembers=',  room.members);
   }, [])
 
   const navigate = useNavigate();

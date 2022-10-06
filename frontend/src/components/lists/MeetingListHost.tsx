@@ -47,6 +47,8 @@ const MeetingListHost = () => {
   useEffect(() => {
     getMyPageHostList()
       .then(({ data }) => {
+        console.log(data);
+
         setRoomList([...data.roomListInfo]);
       })
       .catch();
