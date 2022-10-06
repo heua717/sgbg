@@ -33,7 +33,7 @@ const RoomInfoTabs = (room: any) => {
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
-          setRoomInfo({ ...data.roomInfo });
+          setRoomInfo(data.roomInfo);
           console.log(data.roomInfo);
         })
         .catch((e) => {
