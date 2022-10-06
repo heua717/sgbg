@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
@@ -65,8 +66,24 @@ public class SingleBungleService implements ISingleBungleService {
         Credentials credentials = Credentials.create(wallet.getPrivateKey(), wallet.getPublicKey());
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.deploy(web3j, credentials, contractGasProvider, cashContractAddress, credentials.getAddress(), BigInteger.valueOf(duration), BigInteger.valueOf(minimumAmount)).send();
-        contract.sgbgApprove(contract.getContractAddress(), BigInteger.valueOf(minimumAmount)).send();
-        contract.enterRoom(credentials.getAddress(), BigInteger.valueOf(minimumAmount)).send();
+        System.out.println("=======================================");
+        System.out.println("sgbg Approve ==========================");
+        System.out.println("=======================================");
+        TransactionReceipt send = contract.sgbgApprove(contract.getContractAddress(), BigInteger.valueOf(minimumAmount)).send();
+
+        for(Log log: send.getLogs()) {
+            System.out.println(log);
+        }
+
+        System.out.println("=======================================");
+        System.out.println("sgbg Enter Room =======================");
+        System.out.println("=======================================");
+        TransactionReceipt send1 = contract.enterRoom(credentials.getAddress(), BigInteger.valueOf(minimumAmount)).send();
+
+        for(Log log: send1.getLogs()) {
+            System.out.println(log);
+        }
+
         wallet.setCash(hostMoney-minimumAmount);
         WalletHistory userWalletHistory = WalletHistory.builder()
                 .wallet(wallet)
