@@ -5,6 +5,8 @@ const UserReviewCard = (props: any) => {
   const [selected, setSelected] = useState<"BEST" | "GOOD" | "BAD">("GOOD");
   const handleClick = (event: any) => {
     const name = event.target.name;
+    console.log(event.target);
+
     console.log(name);
 
     props.handleEvalMember(props.member.kakaoId, name);
