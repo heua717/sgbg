@@ -131,11 +131,10 @@ public class WalletController {
     public ResponseEntity<String> deployAdminCash() throws Exception {
 
         String contract = walletService.deployAdminCash();
+        System.out.println("controller : "+ contract);
         return ResponseEntity.status(HttpStatus.OK).body(contract);
-        // 로컬로 돌리면 안되고 배포용으로 돌려야 한다.
-        //
     }
-//
+
 //    @PostMapping("/admin")
 //    public ResponseEntity<String> makeAdmin() throws Exception{
 ////        walletService.makeAdmin();

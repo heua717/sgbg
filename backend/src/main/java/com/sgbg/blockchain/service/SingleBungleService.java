@@ -65,6 +65,7 @@ public class SingleBungleService implements ISingleBungleService {
         Credentials credentials = Credentials.create(wallet.getPrivateKey(), wallet.getPublicKey());
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.deploy(web3j, credentials, contractGasProvider, cashContractAddress, credentials.getAddress(), BigInteger.valueOf(duration), BigInteger.valueOf(minimumAmount)).send();
+        wallet.setCash(hostMoney-minimumAmount);
 
         // contract 로부터 transactionReceipt를 받아와서 transaction 저장
         TransactionReceipt receipt = contract.getTransactionReceipt().orElse(null);
