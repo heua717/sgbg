@@ -12,8 +12,8 @@ const Logo = () => {
     const url = window.location.href
     // console.log(url);
     
-    if (url === 'http://localhost:3000/' || url === 'http://j7a707.p.ssafy.io/') {
-      // console.log('open drawer');
+    if (url === 'http://localhost:3000/' || url === 'https://j7a707.p.ssafy.io/') {
+      console.log('open drawer');
       !isOpen? setIsOpen(true) : setIsOpen(false)
     } else {
       navigate('/')
