@@ -9,7 +9,6 @@ import SearchMapCard from "../../components/cards/SearchMapCard";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 
-
 type SearchMapCardProps = {
   id: string;
   place_name: string;
@@ -30,23 +29,26 @@ type SelectedLocation = {
 };
 
 const CreateRoomMap = () => {
-  const [selected, setSelected] = useState<SelectedLocation>({id: '', name: '', x: '', y: '', road_address: ''});
+  const [selected, setSelected] = useState<SelectedLocation>({
+    id: "",
+    name: "",
+    x: "",
+    y: "",
+    road_address: "",
+  });
   const [searchResults, setSearchResults] = useState<SearchMapCardProps[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const [keyword, setKeyword] = useState<string>("");
-  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo)
+  const [room, setRoom] = useRecoilState<roomMore>(inputRoomInfo);
 
   useEffect(() => {
     handleSearch(keyword, page);
-  }, [keyword, page])
+  }, [keyword, page]);
 
-
-  const newaddr = selected.road_address.split(" ")
+  const newaddr = selected.road_address.split(" ");
   console.log(newaddr);
-  console.log(newaddr[0] + ' ' + newaddr[1]);
-  
-  ;
+  console.log(newaddr[0] + " " + newaddr[1]);
 
   const handleSearch = (keyword: string, page: number) => {
     searchMap(keyword, page)
@@ -59,46 +61,59 @@ const CreateRoomMap = () => {
       .catch((e) => console.error(e));
   };
 
-  const selectMapCard = (id: string, name: string, x: string, y: string, road_address: string) => {
+  const selectMapCard = (
+    id: string,
+    name: string,
+    x: string,
+    y: string,
+    road_address: string
+  ) => {
     setSelected({ id, name, x, y, road_address });
   };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const onClick = () => {
     // console.log(e.target);
-    const splitedRoadAddressList = selected.road_address.split(" ")
-    const shortRoadAddress = splitedRoadAddressList[0] + ' ' + splitedRoadAddressList[1]
+    const splitedRoadAddressList = selected.road_address.split(" ");
+    const shortRoadAddress =
+      splitedRoadAddressList[0] + " " + splitedRoadAddressList[1];
 
     setRoom({
       ...room,
       location: {
         locationId: selected.id,
         name: selected.name,
-        latitude: selected.x,
-        hardness: selected.y,
-        roadAddress: shortRoadAddress
-      }
-    })
-    navigate(-1)
-    
-  }
+        latitude: selected.y,
+        hardness: selected.x,
+        roadAddress: shortRoadAddress,
+      },
+    });
+    navigate(-1);
+  };
 
   return (
     <div className="flex flex-col p-2">
       <SearchBar name={"createRoomMap"} handleKeyword={setKeyword} />
       {selected.id ? (
-          <div className="flex flex-col bg-yellow-100 rounded border border-gray-200 p-2 mb-2">
-            <span className="flex flex-row items-center">
-              <FontAwesomeIcon className="text-2xl text-blue-300 mr-2" icon={faCheck} />
-              <span className="font-semibold">{selected.name}</span>
-            </span>
-            <span className="font-light text-sm">{selected.road_address}</span>
-            <button className="w-full bg-blue-300 text-white rounded p-1" 
-            onClick={onClick}>위치 선택하기</button>
-          </div>
-          // (selected.id, selected.name, selected.x, selected.y)
+        <div className="flex flex-col bg-yellow-100 rounded border border-gray-200 p-2 mb-2">
+          <span className="flex flex-row items-center">
+            <FontAwesomeIcon
+              className="text-2xl text-blue-300 mr-2"
+              icon={faCheck}
+            />
+            <span className="font-semibold">{selected.name}</span>
+          </span>
+          <span className="font-light text-sm">{selected.road_address}</span>
+          <button
+            className="w-full bg-blue-300 text-white rounded p-1"
+            onClick={onClick}
+          >
+            위치 선택하기
+          </button>
+        </div>
       ) : (
+        // (selected.id, selected.name, selected.x, selected.y)
         ""
       )}
       {searchResults.length !== 0 ? (
@@ -122,7 +137,8 @@ const CreateRoomMap = () => {
                 className="mr-5"
                 onClick={() => {
                   setPage(page - 1);
-                }}>{`< 이전`}</span>
+                }}
+              >{`< 이전`}</span>
             ) : (
               ""
             )}
@@ -130,7 +146,8 @@ const CreateRoomMap = () => {
               <span
                 onClick={() => {
                   setPage(page + 1);
-                }}>{`다음 >`}</span>
+                }}
+              >{`다음 >`}</span>
             ) : (
               ""
             )}
