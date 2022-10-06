@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@DynamicInsert
 @Entity
 public class WalletHistory {
 
@@ -37,7 +36,6 @@ public class WalletHistory {
 
     private long roomId;
 
-    @ColumnDefault("")
     private String roomName;
 
     @Builder
