@@ -74,12 +74,14 @@ const CreateWallet = () => {
           return makeWallet(pw)
           .then(({ data }) => {
             if (data.statusCode === 2000) {
+              console.log('wallet data=', data);
               Swal.showValidationMessage(`지갑 생성에 성공했습니다.`);
               navigator("/wallet");
             } else {
               throw new Error(data.message);
             }
           }).catch((error) => {
+            console.log('wallet error= ', error);
             Swal.showValidationMessage(`지갑 생성에 실패했습니다.`);
           })
         } else {
