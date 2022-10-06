@@ -50,7 +50,6 @@ public class RoomService implements IRoomService {
 
         // User - Room 관계 엔티티 생성
         Participation participation = Participation.builder()
-                .isParticipate(true)
                 .user(user)
                 .room(room)
                 .build();
