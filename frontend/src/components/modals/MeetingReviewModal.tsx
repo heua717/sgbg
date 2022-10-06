@@ -10,7 +10,7 @@ const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
     //axios
     postEvalHost(roomId, true)
       .then(({ data }) => {
-        if (data.statusCode === 2000) {
+        if (data.statusCode === 2010) {
           setIsVisible(false);
           navigator(`/eval/${roomId}`);
         } else {
@@ -43,7 +43,7 @@ const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
     //axios
     postEvalHost(roomId, false)
       .then(({ data }) => {
-        if (data.statusCode === 2000) {
+        if (data.statusCode === 2010) {
           setIsVisible(false);
           window.location.reload();
         } else {
@@ -79,7 +79,8 @@ const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
     <div
       className={`${
         isVisible ? "" : "hidden"
-      } fixed left-0 bottom-0 w-full h-[30vh] flex flex-col bg-slate-200 border-t p-4`}>
+      } fixed left-0 bottom-0 w-full h-[30vh] flex flex-col bg-slate-200 border-t p-4`}
+    >
       {/* 닫기 버튼 */}
       <div className="flex justify-end" onClick={handleClose}>
         <FontAwesomeIcon className="text-2xl m-1" icon={faXmark} />
@@ -93,10 +94,16 @@ const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
       </div>
       {/* 성공여부 버튼 */}
       <div className="mt-4 mx-auto">
-        <button className="bg-yellow-100 rounded-lg py-2 px-3 mr-8" onClick={handleSuccess}>
+        <button
+          className="bg-yellow-100 rounded-lg py-2 px-3 mr-8"
+          onClick={handleSuccess}
+        >
           성공했어요 😆
         </button>
-        <button className="bg-blue-200 rounded-lg py-2 px-3" onClick={handleFail}>
+        <button
+          className="bg-blue-200 rounded-lg py-2 px-3"
+          onClick={handleFail}
+        >
           실패했어요 😞
         </button>
       </div>
