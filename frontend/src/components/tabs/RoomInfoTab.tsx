@@ -56,10 +56,17 @@ const RoomInfoTabs = (room: any) => {
     console.log("FLOAT lat : " + parseFloat(roomInfo.location.latitude));
     console.log("FLOAT hardness : " + parseFloat(roomInfo.location.hardness));
 
-    setPosition({
-      lat: parseFloat(roomInfo.location.latitude),
-      lng: parseFloat(roomInfo.location.hardness),
-    });
+    let container = document.getElementById("map");
+    let options = {
+      center: new window.kakao.maps.LatLng(
+        parseFloat(roomInfo.location.latitude),
+        parseFloat(roomInfo.location.hardness)
+      ),
+      level: 13,
+    };
+    if (container) {
+      let map = new window.kakao.maps.Map(container, options);
+    }
   }, [roomInfo]);
 
   return (
@@ -113,7 +120,7 @@ const RoomInfoTabs = (room: any) => {
       <div className="text-sm">
         <p className="font-bold my-5">모임 위치</p>
         <div className="mt-2">
-          <Map // 지도를 표시할 Container
+          {/* <Map // 지도를 표시할 Container
             center={{
               // 지도의 중심좌표
               lat: position.lat,
@@ -125,7 +132,10 @@ const RoomInfoTabs = (room: any) => {
               height: "200px",
             }}
             level={3} // 지도의 확대 레벨
-          ></Map>
+          ></Map> */}
+          <div className="w-full h-[200px]">
+            <div className="w-full h-full" id="map"></div>
+          </div>
         </div>
       </div>
     </div>
