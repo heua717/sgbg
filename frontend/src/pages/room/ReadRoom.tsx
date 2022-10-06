@@ -193,13 +193,14 @@ const ReadRoom = () => {
         })
         .catch((e) => {});
     }
-    
-    // 방장인 경우에만 출금 로직 진행
-    console.log('출금해라 ishost=', isHost);
-    if (isHost) { 
-      getWithdraw(room.roomId) }
     // console.log('readroommembers=',  room.members);
   }, [])
+
+  useEffect(()=>{
+     // 방장인 경우에만 출금 로직 진행
+     console.log('출금해라 ishost=', isHost);
+     if (isHost) { getWithdraw(room.roomId) }
+  }, [isHost])
 
   const navigate = useNavigate();
 
