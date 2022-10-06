@@ -61,6 +61,8 @@ const CommunityTab = (props: any) => {
     deleteComment(commentId)
     .then(({data})=> {
       console.log(data);
+      // 다 되면 현재 페이지 리다이렉트
+      readCommentList();
     })
   };
 

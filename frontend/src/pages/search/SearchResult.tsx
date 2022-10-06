@@ -47,8 +47,8 @@ const SearchResult = () => {
       console.log('searchresult axios else if=', value);
       
       getSearchKeywordResult(value).then((res) => {
-        console.log(res.data);
-        setResults((res.data))
+        console.log(res.data.roomListInfo);
+        setResults((res.data.roomListInfo))
       }).catch((err)=>{
         console.log(err);
         
