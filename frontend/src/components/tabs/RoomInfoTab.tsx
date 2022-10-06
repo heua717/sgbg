@@ -1,9 +1,9 @@
+/* global kakao */
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { readRoom } from "../../api/room";
 import { formatDate, roomMore } from "../../util/room";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 const RoomInfoTabs = (room: any) => {
   const navigator = useNavigate();
