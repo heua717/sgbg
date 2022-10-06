@@ -20,7 +20,7 @@ const Navbar = () => {
       })
       .catch((err) => {
         console.error(err.response.request.status);
-        if(err.response.request.status === 500) {
+        if(err.response.request.status === 500 ||err.response.request.status === 404) {
           Swal.fire({
             icon: 'error',
             text: '로그인 이후에 이용해주세요'

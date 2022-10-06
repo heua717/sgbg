@@ -102,7 +102,7 @@ const MeetingCard = (props:any): JSX.Element => {
             <p className="text-sm">{props.room.reservationDate? formatDate(props.room.reservationDate).split('  ')[1] : ''}</p>
           </div>
 
-          <span className="text-sm font-semibold">{props.room.price? props.room.price : '0'}원</span>
+          <span className="text-sm font-semibold">{props.room.price? props.room.price : '0'}SB</span>
         </div>
       </div>
     </div>
