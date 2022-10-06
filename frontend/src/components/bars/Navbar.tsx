@@ -10,6 +10,8 @@ const Navbar = () => {
   const navigator = useNavigate();
   const userAuth = useRecoilValue(auth);
   const handleWallet = () => {
+    navigator("/wallet/create");
+
     checkWallet()
       .then(({ data }) => {
         if (data.statusCode === 2000) {
