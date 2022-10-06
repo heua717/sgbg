@@ -9,7 +9,7 @@ import com.sgbg.blockchain.repository.TransactionRepository;
 import com.sgbg.blockchain.repository.WalletHistoryRepository;
 import com.sgbg.blockchain.repository.WalletRepository;
 import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
-import com.sgbg.blockchain.wrapper.Cash_sol_Cash;
+import com.sgbg.blockchain.wrapper.Contracts_Cash_sol_Cash;
 import com.sgbg.blockchain.wrapper.Contracts_SingleBungle_sol_SingleBungle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -131,6 +131,7 @@ public class SingleBungleService implements ISingleBungleService {
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
         TransactionReceipt receipt = contract.enterRoom(userAddress, BigInteger.valueOf(money)).send();
 
+
         // transactionReceipt를 통해 엔티티 저장
         Transaction transaction = Transaction.builder()
                 .roomId(roomId)
@@ -230,7 +231,7 @@ public class SingleBungleService implements ISingleBungleService {
         // 스마트 컨트랙트를 사용하여 방 모임에 대한 모집 끝남을 알린다.
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Credentials credentialsAdmin = Credentials.create(adminPrivateKey);
-        Cash_sol_Cash cashContract = Cash_sol_Cash.load(cashContractAddress, web3j, credentialsAdmin, contractGasProvider);
+        Contracts_Cash_sol_Cash cashContract = Contracts_Cash_sol_Cash.load(cashContractAddress, web3j, credentialsAdmin, contractGasProvider);
         BigInteger beforeWithdraw = cashContract.balanceOf(hostAddress).send();
 
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);

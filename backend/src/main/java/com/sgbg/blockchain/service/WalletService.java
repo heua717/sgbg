@@ -9,7 +9,7 @@ import com.sgbg.blockchain.repository.WalletHistoryRepository;
 import com.sgbg.blockchain.repository.WalletRepository;
 import com.sgbg.blockchain.service.interfaces.IWalletService;
 import com.sgbg.blockchain.domain.Wallet;
-import com.sgbg.blockchain.wrapper.Cash_sol_Cash;
+import com.sgbg.blockchain.wrapper.Contracts_Cash_sol_Cash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -112,7 +112,7 @@ public class WalletService implements IWalletService {
         // 지갑 address와 money를 통해 우리가 만든 토큰을 충전한다.
         Credentials credentialsAdmin = Credentials.create(adminPrivateKey);
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
-        Cash_sol_Cash cashContract = Cash_sol_Cash.load(cashContractAddress, web3j, credentialsAdmin, contractGasProvider);
+        Contracts_Cash_sol_Cash cashContract = Contracts_Cash_sol_Cash.load(cashContractAddress, web3j, credentialsAdmin, contractGasProvider);
 
         cashContract.approve(admin, BigInteger.valueOf(money)).send();
         BigInteger num = cashContract.balanceOf(address).send();
@@ -195,7 +195,7 @@ public class WalletService implements IWalletService {
         System.out.println("credential address : " + credentials.getAddress());
         System.out.println("address : " + wallet.getAddress());
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
-        Cash_sol_Cash cash_sol_cash = Cash_sol_Cash.deploy(web3j, credentials, contractGasProvider, BigInteger.valueOf(10000000000L)).send();
+        Contracts_Cash_sol_Cash cash_sol_cash = Contracts_Cash_sol_Cash.deploy(web3j, credentials, contractGasProvider, BigInteger.valueOf(10000000000L)).send();
         return cash_sol_cash.getContractAddress();
     }
 
