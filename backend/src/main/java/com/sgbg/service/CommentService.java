@@ -73,7 +73,7 @@ public class CommentService implements ICommentService {
 
     @Override
     public List<CommentRes> detailComment(Long roomId) throws Exception {
-        List<Comment> commentList = commentRepository.findAllByRoom_id(roomId);
+        List<Comment> commentList = commentRepository.findAllByRoom_idOrderByCreatedAtDesc(roomId);
         List<CommentRes> commentResList = new ArrayList<>();
 
         for (Comment comment : commentList) {
