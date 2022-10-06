@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getParticipantBadge } from "../../util/profile";
 
 const UserReviewCard = (props: any) => {
   const [selected, setSelected] = useState<"BEST" | "GOOD" | "BAD">("GOOD");
   const handleClick = (event: any) => {
-    const { name } = event.target;
+    const name = event.target.name;
     console.log(name);
 
     props.handleEvalMember(props.member.kakaoId, name);
     setSelected(name);
   };
+
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]);
+
   return (
     <div className="w-full flex flex-row justify-between items-center border rounded-lg p-2 mb-1">
       {/* 피평가자 정보 */}
