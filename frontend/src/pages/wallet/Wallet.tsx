@@ -82,7 +82,11 @@ const Wallet = (): JSX.Element => {
           });
       },
       allowOutsideClick: false,
-    }).catch(()=> { navigator(-1)})
+    }).then((result)=>{
+      if (!result.isConfirmed){
+        navigator(-1)
+      }
+    })
   }, []);
 
   const handleCharge = () => {
