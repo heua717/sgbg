@@ -86,11 +86,11 @@ const CommunityTab = (props: any) => {
     console.log('useeffect userauth=', userAuth);
     if (!userAuth.isLogined ){
       Swal.fire({
-        title: '모임에 참여한 사용자만 접근 가능합니다.',
+        title: '로그인 후 이용해주세요.',
         icon: 'error',
         timer: 5000,
       }).then(()=>{
-        navigate(0);
+        navigate('/login');
       }) 
       // || (!props.isInThisRoom) || (!props.isHost) 
     } else if (userAuth.isLogined && (props.isHost || props.isInThisRoom)) {
