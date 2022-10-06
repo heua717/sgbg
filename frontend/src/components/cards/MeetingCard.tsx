@@ -66,7 +66,7 @@ const MeetingCard = (props:any): JSX.Element => {
         <div className={`absolute top-0 left-0 rounded ${bgColor} text-sm font-semibold px-2 py-1`}>{meetingText}</div>
         <img
           className="w-full h-full rounded"
-          src={process.env.PUBLIC_URL + `/img/${props.room.parentCategory}_${props.room.childCategory.replace('/', '')}.jpg`}
+          src={process.env.PUBLIC_URL + `/img/${props.room.parentCategory}_${props.room.childCategory.replaceAll('/', '')}.jpg`}
           alt="소분류 카테고리 사진"></img>
 
         <div className={`absolute bottom-0 right-0 rounded ${getMemberBadgeColor()} text-sm font-semibold px-2`}>
