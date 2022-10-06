@@ -59,17 +59,40 @@ const MeetingListParticipant = () => {
       setSelectedRoomId(roomId);
       setIsVisibleModal(true);
     }
-  }
+  };
   return (
     <div className="w-full">
       {roomList.map((room) => {
-        return room.hostReview && room.memberReview ? (
-          <MeetingCard key={room.roomId} name="meetingListParticipant" room={room} />
-        ) : (
-            <UnevalMeetingCard key={room.roomId} name="meetingListParticipant" room={room} handleReview={ handleReview } />
-        );
+        if (room.hostReview === null) {
+          return (
+            <MeetingCard
+              key={room.roomId}
+              name="meetingListParticipant"
+              room={room}
+            />
+          );
+        } else {
+          return room.hostReview && room.memberReview ? (
+            <MeetingCard
+              key={room.roomId}
+              name="meetingListParticipant"
+              room={room}
+            />
+          ) : (
+            <UnevalMeetingCard
+              key={room.roomId}
+              name="meetingListParticipant"
+              room={room}
+              handleReview={handleReview}
+            />
+          );
+        }
       })}
-      <MeetingReviewModal isVisible={isVisibleModal} setIsVisible={setIsVisibleModal} roomId={selectedRoomId} />
+      <MeetingReviewModal
+        isVisible={isVisibleModal}
+        setIsVisible={setIsVisibleModal}
+        roomId={selectedRoomId}
+      />
     </div>
   );
 };
