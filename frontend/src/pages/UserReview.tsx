@@ -65,7 +65,7 @@ const UserReview = () => {
     //axios
     if (meeting_id) {
       postEvalMember(meeting_id, evals).then(({ data }) => {
-        if (data.statusCode === 2000) {
+        if (data.statusCode === 2010) {
           Swal.fire({
             toast: true,
             position: "center",
