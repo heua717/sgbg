@@ -298,6 +298,9 @@ const ReadRoom = () => {
         </div>
       </div>
       {/* 탭 구현 */}
+      {room.members.map((member: members)=> (
+        <p>{member.kakaoId}</p>
+      ))}
       <div>
         <RoomTabs room={room} isInThisRoom={isInThisRoom} isHost={isHost} />
       </div>
