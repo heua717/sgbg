@@ -6,7 +6,7 @@ import { formatOnlyDate } from "../../util/room";
 const FinishedMeetingCard = (props: any) => {
   const getSuccess = () => {
     if (props.room.members.length && props.room.hostReviewResult) {
-      return (props.room.members.length / props.room.hostReviewResult) * 100;
+      return (props.room.hostReviewResult / props.room.members.length) * 100;
     } else {
       return -1;
     }
