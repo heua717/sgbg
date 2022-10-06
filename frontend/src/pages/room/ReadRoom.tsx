@@ -1,7 +1,6 @@
 import MeetingCard from "../../components/cards/MeetingCard";
 import Logo from "../../components/etc/Logo";
 import RoomTabs from "../../components/tabs/RoomTabs";
-import BtnAddOrDelete from "../../components/buttons/BtnAddOrDelete";
 import { roomMore } from "../../util/room";
 import { useEffect, useState } from "react";
 import { readRoom, intoRoom, outRoom } from "../../api/room";
@@ -10,6 +9,7 @@ import { auth } from "../../store/auth";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import { members } from "../../util/room";
+import { withdrawWallet } from "../../api/profile";
 
 const ReadRoom = () => {
   const { meeting_id } = useParams<{ meeting_id: string }>();
@@ -155,6 +155,30 @@ const ReadRoom = () => {
     }
   };
 
+  const getWithdraw = (roomId: number) => {
+    const today = new Date().getTime()
+    const endDate = new Date(room.endDate).getTime()
+    // console.log('into isimminent= ', endDate-today);
+    
+    if (room.members.length >= room.minUser) {
+      // 모집 마감일과 오늘 날짜의 차이가 24시간 이내일때 --> alert 띄우기
+      if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
+        Swal.fire({
+          text: '더 이상 모집하지 않고, 이 인원대로 모집하시겠습니까?',
+          showCancelButton: true,
+        }).then(()=> {
+          withdrawWallet(roomId).then(()=> navigate('/wallet'))
+        })
+      } // 모집 마감일이 이미 지나면 알아서 출금
+      else if((endDate - today) < 0) {
+        Swal.fire({
+          text: '모집이 마감되었습니다. 내 지갑으로 출금이 진행됩니다.'
+        }).then(()=> {
+          withdrawWallet(roomId).then(()=>{navigate('/wallet')})
+        })
+      }
+    }
+  }
 
   useEffect(() => {
     if (meeting_id) {
@@ -164,6 +188,8 @@ const ReadRoom = () => {
           
           setRoom(data.roomInfo);
           getIsInThisRoom(data.roomInfo.members);
+          // 방장인 경우에만 출금 로직 진행
+          if (isHost) { getWithdraw(data.roomInfo.roomId) }
         })
         .catch((e) => {});
     }
