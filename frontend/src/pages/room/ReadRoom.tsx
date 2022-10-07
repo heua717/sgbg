@@ -203,6 +203,7 @@ const ReadRoom = () => {
   }
 
   useEffect(() => {
+    getIsDone()
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
@@ -219,7 +220,6 @@ const ReadRoom = () => {
 
   useEffect(()=>{
      // 방장인 경우에만 출금 로직 진행
-     getIsDone()
      console.log('출금해라 ishost=', isHost);
      if (isHost) { getWithdraw(room.roomId) }
   }, [isHost])
