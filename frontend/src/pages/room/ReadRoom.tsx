@@ -85,16 +85,19 @@ const ReadRoom = () => {
 
 
     if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
+      console.log('마감임박 isdone');
       setIsDone(false)
     } else if ((endDate - today) < 0) {
+      console.log('모집마감 isdone');
       setIsDone(true)
     } else{
+      console.log('모집 중 is done');
       setIsDone(false)
     }
     // 아니면 모집 중    
   }
 
-  
+
   const onClickInAndOut = () => {
     // 참여자 늘리는 axios 요청 보내기
     // 로그인이 안되어 있으면 로그인 페이지로 넘기기
@@ -216,9 +219,9 @@ const ReadRoom = () => {
 
   useEffect(()=>{
      // 방장인 경우에만 출금 로직 진행
+     getIsDone()
      console.log('출금해라 ishost=', isHost);
      if (isHost) { getWithdraw(room.roomId) }
-     getIsDone()
   }, [isHost])
 
   const navigate = useNavigate();
