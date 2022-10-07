@@ -188,8 +188,11 @@ const ReadRoom = () => {
         Swal.fire({
           text: '더 이상 모집하지 않고, 이 인원대로 모집하시겠습니까?',
           showCancelButton: true,
-        }).then(()=> {
+        }).then((result)=> {
           withdrawWallet(roomId).then(()=> navigate('/wallet'))
+          if (!result.isConfirmed) {
+            navigate('/')
+          }
         })
       } // 모집 마감일이 이미 지나면 알아서 출금
       else if((endDate - today) < 0) {
