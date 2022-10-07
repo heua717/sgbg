@@ -276,7 +276,7 @@ public class SingleBungleService implements ISingleBungleService {
                 .totalMoneyBeforeTransaction(hostWallet.getCash())
                 .money(withdrawMoney)
                 .createdAt(LocalDateTime.now())
-                .type("end")
+                .type("withdraw")
                 .build();
         walletHistoryRepository.save(hostWalletHistory);
 
