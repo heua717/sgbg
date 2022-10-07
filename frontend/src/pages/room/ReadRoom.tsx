@@ -203,7 +203,7 @@ const ReadRoom = () => {
   }
 
   useEffect(() => {
-    getIsDone()
+    // getIsDone()
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
