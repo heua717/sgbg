@@ -1,7 +1,7 @@
 package com.sgbg.common.handler;
 
-import com.sgbg.common.exception.EmptyListException;
-import com.sgbg.common.exception.NotFoundException;
+import com.sgbg.common.util.exception.EmptyListException;
+import com.sgbg.common.util.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
