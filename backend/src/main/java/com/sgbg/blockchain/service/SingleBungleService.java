@@ -165,7 +165,12 @@ public class SingleBungleService implements ISingleBungleService {
                 .build();
         walletHistoryRepository.save(userWalletHistory);
 
-        userWallet.setCash(userWallet.getCash() - money);
+        long money1 = userWallet.getCash() - money;
+        System.out.println("============================");
+        System.out.println(money1);
+        userWallet.setCash(money1);
+        System.out.println(userWallet.getCash());
+        System.out.println("============================");
 
         return userWallet; // 반환값을 어떻게 할지는 의논 후 결정
     }
