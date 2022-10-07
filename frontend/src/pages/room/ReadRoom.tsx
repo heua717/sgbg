@@ -49,6 +49,7 @@ const ReadRoom = () => {
   // 현재 유저가 이 모임 참여자 목록에 있는 지 없는 지 판단
   const [isInThisRoom, setIsInThisRoom] = useState(false);
   const [isHost, setIsHost] = useState(false)
+  const [isDone, setIsDone] = useState(false)
 
 
   const getIsInThisRoom = (members:members[]) => {
@@ -60,6 +61,8 @@ const ReadRoom = () => {
     } else {
       setIsHost(false)
     }
+
+  
     
     const newMembers = members.splice(1)
     newMembers.forEach((member: members) => {
@@ -76,7 +79,22 @@ const ReadRoom = () => {
     });
   };
 
+  const getIsDone = () =>{
+    const today = new Date().getTime()
+    const endDate = new Date(room.endDate).getTime()
 
+
+    if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
+      setIsDone(false)
+    } else if ((endDate - today) < 0) {
+      setIsDone(true)
+    } else{
+      setIsDone(false)
+    }
+    // 아니면 모집 중    
+  }
+
+  
   const onClickInAndOut = () => {
     // 참여자 늘리는 axios 요청 보내기
     // 로그인이 안되어 있으면 로그인 페이지로 넘기기
@@ -161,7 +179,7 @@ const ReadRoom = () => {
     const endDate = new Date(room.endDate).getTime()
     // console.log('into isimminent= ', endDate-today);
     
-    if (room.members.length >= room.minUser) {
+    // if (room.members.length >= room.minUser) {
       // 모집 마감일과 오늘 날짜의 차이가 24시간 이내일때 --> alert 띄우기
       if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
         Swal.fire({
@@ -178,7 +196,7 @@ const ReadRoom = () => {
           withdrawWallet(roomId).then(()=>{navigate('/wallet')})
         })
       }
-    }
+    // }
   }
 
   useEffect(() => {
@@ -200,6 +218,7 @@ const ReadRoom = () => {
      // 방장인 경우에만 출금 로직 진행
      console.log('출금해라 ishost=', isHost);
      if (isHost) { getWithdraw(room.roomId) }
+     getIsDone()
   }, [isHost])
 
   const navigate = useNavigate();
@@ -290,7 +309,7 @@ const ReadRoom = () => {
         <div className="px-3">
           <MeetingCard name="readRoom" room={room} />
           {/* <BtnAddOrDelete room={room}/> */}
-          {!isHost && (
+          {(!isHost || !isDone )&& (
             <div>
             {islogining ? (
               <div className="w-full flex flex-col justify-center items-center">
