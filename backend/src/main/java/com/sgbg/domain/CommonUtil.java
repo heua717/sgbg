@@ -1,7 +1,7 @@
 package com.sgbg.domain;
 
-import com.sgbg.common.exception.ApplicationException;
-import com.sgbg.common.exception.DomainException;
+import com.sgbg.common.util.exception.ApplicationException;
+import com.sgbg.blockchain.common.exception.DomainException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;

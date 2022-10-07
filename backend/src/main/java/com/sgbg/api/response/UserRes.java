@@ -1,25 +1,27 @@
 package com.sgbg.api.response;
 
 
+import com.sgbg.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
-public class UserRes {
-    @Schema(name = "이름", example = "Bungle")
-    private String name;
+@Getter
+@Setter
+public class UserRes extends BaseResponseBody {
 
-    @Schema(name = "이메일", example = "sgbg@sgbg.com")
-    private String email;
+    @Schema(name = "user", description = "회원 정보")
+    BaseUserRes user;
 
-    @Schema(name = "방장 신뢰도 점수", example = "95")
-    private int hostScore;
+    public static UserRes of(Integer statusCode, String message, String kakaoId, User user) {
+        UserRes res = new UserRes();
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+        res.setUser(user, kakaoId);
+        return res;
+    }
 
-    @Schema(name = "참가자 점수", example = "84")
-    private int memberScore;
-
-//    public static UserRes of(String name, String email, int hostScore, int memberScore) {
-//        this.name = name;
-//        this.email = email;
-//        this.hostScore = hostScore;
-//        this.memberScore = memberScore;
-//    }
+    public void setUser(User user, String kakaoId) {
+        this.user = BaseUserRes.of(user, kakaoId);
+    }
 }

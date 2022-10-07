@@ -47,7 +47,7 @@ public class RoomReq {
     @Schema(name = "모집 마감 날짜", example = "2022-12-20T20:00:00")
     private LocalDateTime endDate;
 
-    @Schema(name = "참여 가능 온도", example = "35.4")
+    @Schema(name = "참여 가능 참여자 점수", example = "84")
     private Double minMemberScore;
 
     @Schema(name = "방 정보(설명)", example = "모여서 인생 걸고 보드게임 하실분 모집합니다. 할리갈리 선출입니다.")
@@ -86,6 +86,7 @@ public class RoomReq {
                 .price(roomReq.price)
                 .location(roomReq.location)
                 .reservationDate(roomReq.reservationDate)
+                .createdDate(LocalDateTime.now())
                 .endDate(roomReq.endDate)
                 .minMemberScore(roomReq.minMemberScore)
                 .description(roomReq.description)

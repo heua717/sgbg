@@ -27,13 +27,6 @@ const CreateWallet = () => {
     } else {
       checkWallet().then(({data}) => {
         if (data.statusCode === 2000) {
-          Swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: '이미 지갑이 존재합니다.',
-            showConfirmButton: false,
-            timer: 1500
-          });
           navigator("/wallet");
           return;
         }
@@ -56,7 +49,7 @@ const CreateWallet = () => {
         if (pw.match(reg)) {
           return makeWallet(pw)
           .then(({ data }) => {
-            if (data.statusCode === 2000) {
+            if (data.statusCode === 2010) {
               console.log('wallet data=', data);
               Swal.showValidationMessage(`지갑 생성에 성공했습니다.`);
               navigator("/wallet");

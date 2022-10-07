@@ -1,5 +1,6 @@
 package com.sgbg.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,9 +19,11 @@ public class Auth {
     @Column(name = "auth_id")
     private Long id;
 
+    @Column(name = "kakao_number")
     private Long kakaoNumber; // 카카오 고유 회원 번호
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
