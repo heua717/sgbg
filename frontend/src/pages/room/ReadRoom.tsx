@@ -49,6 +49,7 @@ const ReadRoom = () => {
   // 현재 유저가 이 모임 참여자 목록에 있는 지 없는 지 판단
   const [isInThisRoom, setIsInThisRoom] = useState(false);
   const [isHost, setIsHost] = useState(false)
+  const [isDone, setIsDone] = useState(false)
 
 
   const getIsInThisRoom = (members:members[]) => {
@@ -60,6 +61,8 @@ const ReadRoom = () => {
     } else {
       setIsHost(false)
     }
+
+  
     
     const newMembers = members.splice(1)
     newMembers.forEach((member: members) => {
@@ -75,6 +78,24 @@ const ReadRoom = () => {
       }
     });
   };
+
+  const getIsDone = () =>{
+    const today = new Date().getTime()
+    const endDate = new Date(room.endDate).getTime()
+
+
+    if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
+      console.log('마감임박 isdone');
+      setIsDone(false)
+    } else if ((endDate - today) < 0) {
+      console.log('모집마감 isdone');
+      setIsDone(true)
+    } else{
+      console.log('모집 중 is done');
+      setIsDone(false)
+    }
+    // 아니면 모집 중    
+  }
 
 
   const onClickInAndOut = () => {
@@ -161,7 +182,7 @@ const ReadRoom = () => {
     const endDate = new Date(room.endDate).getTime()
     // console.log('into isimminent= ', endDate-today);
     
-    if (room.members.length >= room.minUser) {
+    // if (room.members.length >= room.minUser) {
       // 모집 마감일과 오늘 날짜의 차이가 24시간 이내일때 --> alert 띄우기
       if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
         Swal.fire({
@@ -178,10 +199,11 @@ const ReadRoom = () => {
           withdrawWallet(roomId).then(()=>{navigate('/wallet')})
         })
       }
-    }
+    // }
   }
 
   useEffect(() => {
+    getIsDone()
     if (meeting_id) {
       readRoom(meeting_id)
         .then(({ data }) => {
@@ -290,7 +312,7 @@ const ReadRoom = () => {
         <div className="px-3">
           <MeetingCard name="readRoom" room={room} />
           {/* <BtnAddOrDelete room={room}/> */}
-          {!isHost && (
+          {(!isHost || !isDone )&& (
             <div>
             {islogining ? (
               <div className="w-full flex flex-col justify-center items-center">

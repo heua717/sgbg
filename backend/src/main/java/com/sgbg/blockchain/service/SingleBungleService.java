@@ -248,7 +248,7 @@ public class SingleBungleService implements ISingleBungleService {
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
 //        TransactionReceipt receipt = contract.withdraw(hostAddress).send();
 
-        BigInteger afterWithdraw = cashContract.balanceOf(hostAddress).send();
+//        BigInteger afterWithdraw = cashContract.balanceOf(hostAddress).send();
 //        long withdrawMoney = afterWithdraw.longValue() - beforeWithdraw.longValue();
 
         // transaction 엔티티 저장
@@ -269,7 +269,7 @@ public class SingleBungleService implements ISingleBungleService {
         long withdrawMoney = room.getPrice() * room.getMembers().size();
 
         // 모임에서 모인 돈을 계산하여 hostWallet.setCash()를 해준다.
-        hostWallet.setCash(afterWithdraw.longValue());
+        hostWallet.setCash(hostWallet.getCash()+withdrawMoney);
 
         WalletHistory hostWalletHistory = WalletHistory.builder()
                 .wallet(hostWallet)

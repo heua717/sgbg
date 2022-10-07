@@ -68,7 +68,7 @@ const MeetingListParticipant = () => {
     <div className="w-full">
       {isEmpty && (
           <p className="mt-10 text-lg text-center font-semibold">참여한 모임이 없습니다.</p>
-          )}
+      )}
       {roomList.map((room) => {
         if (room.hostReview === null) {
           return (
