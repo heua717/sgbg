@@ -12,7 +12,7 @@ type WalletHistory = {
   totalMoneyBeforeTransaction: number;
   money: number;
   createdAt: string;
-  type: "charge" | "enter" | "exit";
+  type: "charge" | "withdraw" | "exit" | "create" | "enter";
   roomId: string;
   roomName: string;
 };
@@ -167,7 +167,7 @@ const Wallet = (): JSX.Element => {
                 </div>
                 <div className="flex flex-col">
                   <div className="flex flex-row mb-1">
-                    <p className="mr-1">{history.type === "exit" ? "-" : "+"}</p>
+                    <p className="mr-1">{(history.type === "create" || history.type === "enter") ? "-" : "+"}</p>
                     {history.money && history.money} SBTKN
                   </div>
                   <p className="text-xs text-right">

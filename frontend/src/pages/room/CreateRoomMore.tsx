@@ -90,10 +90,26 @@ const CreateRoomMore = () => {
       createRoom(room)
         .then(({ data }) => {
           console.log(data);
-          setLoading(false);
-          setRoomList(roomList.concat(data));
-          // 상세 페이지로 리다이렉트
-          navigate("/");
+          if (data.statusCode === 4010) {
+            Swal.fire({
+              icon: 'error',
+              text: '잔액이 부족합니다. 충전 후에 모임을 생성해주세요'
+            }).then(()=>{
+              navigate('/wallet')
+            })
+          } else if (data.statusCode === 4020) {
+            Swal.fire({
+              icon: 'error',
+              text: '지갑이 존재하지 않습니다.',
+            }).then(()=>{
+              navigate('/wallet/create')
+            })
+          } else if (data.statusCode === 2010) {
+            setLoading(false);
+            setRoomList(roomList.concat(data));
+            // 상세 페이지로 리다이렉트
+            navigate("/");
+          }
           // recoil 초기화
           resetRecoil();
         })
@@ -101,21 +117,7 @@ const CreateRoomMore = () => {
           setLoading(false);
           // console.log(err);
           // console.log(err.config.data);
-          if (err.statusCode === 4010) {
-            Swal.fire({
-              icon: 'error',
-              text: '잔액이 부족합니다. 충전 후에 모임을 생성해주세요'
-            }).then(()=>{
-              navigate('/wallet')
-            })
-          } else if (err.statusCode === 4020) {
-            Swal.fire({
-              icon: 'error',
-              text: '지갑이 존재하지 않습니다.',
-            }).then(()=>{
-              navigate('/wallet/create')
-            })
-          }
+          
         });
     } catch {
       setLoading(false);
