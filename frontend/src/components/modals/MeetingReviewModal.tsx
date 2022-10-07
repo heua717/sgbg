@@ -89,7 +89,7 @@ const MeetingReviewModal = (props: any) => {
 
       {/* 멘트 */}
       <div className="flex flex-col justify-center items-center font-semibold">
-        <span>{`${[props.room.parentCategory]} ${props.room.title}`}</span>
+        <span>{`[기타] 같이 발표 준비해요~! 모임이`}</span>
         <span>{`완료되었어요!`} </span>
         <span>{`모임을 성공적으로 마치셨나요?`}</span>
       </div>
