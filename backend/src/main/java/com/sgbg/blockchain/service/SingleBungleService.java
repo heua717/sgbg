@@ -75,6 +75,7 @@ public class SingleBungleService implements ISingleBungleService {
         TransactionReceipt send = contract.sgbgApprove(contract.getContractAddress(), BigInteger.valueOf(minimumAmount)).send();
 
         wallet.setCash(hostMoney-minimumAmount);
+
         WalletHistory userWalletHistory = WalletHistory.builder()
                 .wallet(wallet)
                 .totalMoneyBeforeTransaction(wallet.getCash())
@@ -169,6 +170,7 @@ public class SingleBungleService implements ISingleBungleService {
         System.out.println("============================");
         System.out.println(money1);
         userWallet.setCash(money1);
+        walletRepository.save(userWallet);
         System.out.println(userWallet.getCash());
         System.out.println("============================");
 
