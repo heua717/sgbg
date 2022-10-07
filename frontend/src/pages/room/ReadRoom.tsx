@@ -79,23 +79,23 @@ const ReadRoom = () => {
     });
   };
 
-  const getIsDone = () =>{
-    const today = new Date().getTime()
-    const endDate = new Date(room.endDate).getTime()
+  // const getIsDone = () =>{
+  //   const today = new Date().getTime()
+  //   const endDate = new Date(room.endDate).getTime()
 
 
-    if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
-      console.log('마감임박 isdone');
-      setIsDone(false)
-    } else if ((endDate - today) < 0) {
-      console.log('모집마감 isdone');
-      setIsDone(true)
-    } else{
-      console.log('모집 중 is done');
-      setIsDone(false)
-    }
-    // 아니면 모집 중    
-  }
+  //   if ((endDate - today) <= 86400000 && (endDate - today) > 0) {
+  //     console.log('마감임박 isdone');
+  //     setIsDone(false)
+  //   } else if ((endDate - today) < 0) {
+  //     console.log('모집마감 isdone');
+  //     setIsDone(true)
+  //   } else {
+  //     console.log('모집 중 is done');
+  //     setIsDone(false)
+  //   }
+  //   // 아니면 모집 중    
+  // }
 
 
   const onClickInAndOut = () => {
@@ -312,7 +312,7 @@ const ReadRoom = () => {
         <div className="px-3">
           <MeetingCard name="readRoom" room={room} />
           {/* <BtnAddOrDelete room={room}/> */}
-          {(!isHost || !isDone )&& (
+          {(!isHost)&& (
             <div>
             {islogining ? (
               <div className="w-full flex flex-col justify-center items-center">
