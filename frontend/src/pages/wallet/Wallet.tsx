@@ -170,12 +170,12 @@ const Wallet = (): JSX.Element => {
                     <p className="mr-1">{(history.type === "create" || history.type === "enter") ? "-" : "+"}</p>
                     {history.money && history.money} SBTKN
                   </div>
-                  <p className="text-xs text-right">
+                  {/* <p className="text-xs text-right">
                     {history.totalMoneyBeforeTransaction &&
                       history.money &&
                       history.totalMoneyBeforeTransaction + history.money}{" "}
                     SBTKN
-                  </p>
+                  </p> */}
                 </div>
               </div>
             ))}
