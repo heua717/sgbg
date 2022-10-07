@@ -99,7 +99,6 @@ const MeetingListParticipant = () => {
         isVisible={isVisibleModal}
         setIsVisible={setIsVisibleModal}
         roomId={selectedRoomId}
-        room = {room}
       />
     </div>
   );
