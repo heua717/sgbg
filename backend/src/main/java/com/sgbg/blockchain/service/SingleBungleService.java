@@ -11,6 +11,9 @@ import com.sgbg.blockchain.repository.WalletRepository;
 import com.sgbg.blockchain.service.interfaces.ISingleBungleService;
 import com.sgbg.blockchain.wrapper.Contracts_Cash_sol_Cash;
 import com.sgbg.blockchain.wrapper.Contracts_SingleBungle_sol_SingleBungle;
+import com.sgbg.common.util.exception.NotFoundException;
+import com.sgbg.domain.Room;
+import com.sgbg.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -49,6 +52,9 @@ public class SingleBungleService implements ISingleBungleService {
     @Autowired
     TransactionRepository transactionRepository;
 
+    @Autowired
+    RoomRepository roomRepository;
+
 
     @Override
     public String createRoom(Long roomId, long hostId, long duration, long minimumAmount) throws Exception {
@@ -66,23 +72,7 @@ public class SingleBungleService implements ISingleBungleService {
         Credentials credentials = Credentials.create(wallet.getPrivateKey(), wallet.getPublicKey());
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.deploy(web3j, credentials, contractGasProvider, cashContractAddress, credentials.getAddress(), BigInteger.valueOf(duration), BigInteger.valueOf(minimumAmount)).send();
-        System.out.println("=======================================");
-        System.out.println("sgbg Approve ==========================");
-        System.out.println("=======================================");
         TransactionReceipt send = contract.sgbgApprove(contract.getContractAddress(), BigInteger.valueOf(minimumAmount)).send();
-
-        for(Log log: send.getLogs()) {
-            System.out.println(log);
-        }
-
-        System.out.println("=======================================");
-        System.out.println("sgbg Enter Room =======================");
-        System.out.println("=======================================");
-        TransactionReceipt send1 = contract.enterRoom(credentials.getAddress(), BigInteger.valueOf(minimumAmount)).send();
-
-        for(Log log: send1.getLogs()) {
-            System.out.println(log);
-        }
 
         wallet.setCash(hostMoney-minimumAmount);
         WalletHistory userWalletHistory = WalletHistory.builder()
@@ -150,19 +140,19 @@ public class SingleBungleService implements ISingleBungleService {
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
 
         contract.sgbgApprove(sgbgContractAddress, BigInteger.valueOf(money));
-        TransactionReceipt receipt = contract.enterRoom(userAddress, BigInteger.valueOf(money)).send();
+//        TransactionReceipt receipt = contract.enterRoom(userAddress, BigInteger.valueOf(money)).send();
 
 
         // transactionReceipt를 통해 엔티티 저장
-        Transaction transaction = Transaction.builder()
-                .roomId(roomId)
-                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
-                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
-                .transactionIndex(receipt.getTransactionIndex().longValue())
-                .from(receipt.getFrom()).to(receipt.getTo())
-                .money(money).gas(receipt.getGasUsed().longValue())
-                .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
-        transactionRepository.save(transaction);
+//        Transaction transaction = Transaction.builder()
+//                .roomId(roomId)
+//                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+//                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+//                .transactionIndex(receipt.getTransactionIndex().longValue())
+//                .from(receipt.getFrom()).to(receipt.getTo())
+//                .money(money).gas(receipt.getGasUsed().longValue())
+//                .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
+//        transactionRepository.save(transaction);
         // -------------- 스마트 컨트랙트 끝 --------------------
 
         // 스마트 컨트랙트에서 돈을 모았다가 모임이 성사되면 모인돈을 한번에 호스트에게 주는 방식
@@ -208,18 +198,18 @@ public class SingleBungleService implements ISingleBungleService {
         // 지갑 address를 가지고 private network에 가서 작업을 수행하도록 스마트 컨트랙트 실행
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
-        TransactionReceipt receipt = contract.leaveRoom(userAddress, BigInteger.valueOf(money)).send();
+//        TransactionReceipt receipt = contract.leaveRoom(userAddress, BigInteger.valueOf(money)).send();
 
         // transaction 엔티티 저장
-        Transaction transaction = Transaction.builder()
-                .roomId(roomId)
-                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
-                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
-                .transactionIndex(receipt.getTransactionIndex().longValue())
-                .from(receipt.getFrom()).to(receipt.getTo())
-                .money(-money).gas(receipt.getGasUsed().longValue())
-                .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
-        transactionRepository.save(transaction);
+//        Transaction transaction = Transaction.builder()
+//                .roomId(roomId)
+//                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+//                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+//                .transactionIndex(receipt.getTransactionIndex().longValue())
+//                .from(receipt.getFrom()).to(receipt.getTo())
+//                .money(-money).gas(receipt.getGasUsed().longValue())
+//                .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
+//        transactionRepository.save(transaction);
         // -------------- 스마트 컨트랙트 끝 --------------------
 
         WalletHistory userWalletHistory = WalletHistory.builder()
@@ -253,24 +243,30 @@ public class SingleBungleService implements ISingleBungleService {
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Credentials credentialsAdmin = Credentials.create(adminPrivateKey);
         Contracts_Cash_sol_Cash cashContract = Contracts_Cash_sol_Cash.load(cashContractAddress, web3j, credentialsAdmin, contractGasProvider);
-        BigInteger beforeWithdraw = cashContract.balanceOf(hostAddress).send();
+//        BigInteger beforeWithdraw = cashContract.balanceOf(hostAddress).send();
 
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
-        TransactionReceipt receipt = contract.withdraw(hostAddress).send();
+//        TransactionReceipt receipt = contract.withdraw(hostAddress).send();
 
         BigInteger afterWithdraw = cashContract.balanceOf(hostAddress).send();
-        long withdrawMoney = afterWithdraw.longValue() - beforeWithdraw.longValue();
+//        long withdrawMoney = afterWithdraw.longValue() - beforeWithdraw.longValue();
 
         // transaction 엔티티 저장
-        Transaction transaction = Transaction.builder()
-                .roomId(roomId)
-                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
-                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
-                .transactionIndex(receipt.getTransactionIndex().longValue())
-                .from(receipt.getFrom()).to(receipt.getTo())
-                .money(withdrawMoney).gas(receipt.getGasUsed().longValue())
-                .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
-        transactionRepository.save(transaction);
+//        Transaction transaction = Transaction.builder()
+//                .roomId(roomId)
+//                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+//                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+//                .transactionIndex(receipt.getTransactionIndex().longValue())
+//                .from(receipt.getFrom()).to(receipt.getTo())
+//                .money(withdrawMoney).gas(receipt.getGasUsed().longValue())
+//                .storedAt(LocalDateTime.now()).relatedToMoney(true).build();
+//        transactionRepository.save(transaction);
+
+        Room room = roomRepository.findById(roomId).orElse(null);
+        if(room == null) {
+            throw new NotFoundException("Room not found");
+        }
+        long withdrawMoney = room.getPrice() * room.getMembers().size();
 
         // 모임에서 모인 돈을 계산하여 hostWallet.setCash()를 해준다.
         hostWallet.setCash(afterWithdraw.longValue());
@@ -310,17 +306,17 @@ public class SingleBungleService implements ISingleBungleService {
 
         ContractGasProvider contractGasProvider = new StaticGasProvider(BigInteger.ZERO, DefaultGasProvider.GAS_LIMIT);
         Contracts_SingleBungle_sol_SingleBungle contract = Contracts_SingleBungle_sol_SingleBungle.load(sgbgContractAddress, web3j, hostCredentials, contractGasProvider);
-        TransactionReceipt receipt = contract.isSuccess(userAddress, isSuccess).send();
+//        TransactionReceipt receipt = contract.isSuccess(userAddress, isSuccess).send();
 
         // transaction 엔티티 저장
         // TODO : transaction 종류 enum으로 생성하기
         Transaction transaction = Transaction.builder()
                 .roomId(roomId)
-                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
-                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
-                .transactionIndex(receipt.getTransactionIndex().longValue())
-                .from(receipt.getFrom()).to(receipt.getTo())
-                .gas(receipt.getGasUsed().longValue())
+//                .hash(receipt.getTransactionHash()).contractAddress(receipt.getContractAddress())
+//                .blockHash(receipt.getBlockHash()).blockNumber(receipt.getBlockNumber().longValue())
+//                .transactionIndex(receipt.getTransactionIndex().longValue())
+//                .from(receipt.getFrom()).to(receipt.getTo())
+//                .gas(receipt.getGasUsed().longValue())
                 .storedAt(LocalDateTime.now()).relatedToMoney(false).build();
         transactionRepository.save(transaction);
 
