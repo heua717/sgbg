@@ -156,6 +156,6 @@ public class UserService implements IUserService {
             }
         }
 
-        user.setMemberScore((int) (totalScore / (totalReviewers * 10)));
+        user.setMemberScore((int) (totalScore / (totalReviewers * 10))*100);
     }
 }
