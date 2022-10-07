@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { postEvalHost } from "../../api/eval";
 
-const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
+//isVisible, setIsVisible, roomId, room
+const MeetingReviewModal = (props: any) => {
   const navigator = useNavigate();
   const handleSuccess = () => {
     //axios
-    postEvalHost(roomId, true)
+    postEvalHost(props.roomId, true)
       .then(({ data }) => {
         if (data.statusCode === 2010) {
-          setIsVisible(false);
-          navigator(`/eval/${roomId}`);
+          props.setIsVisible(false);
+          navigator(`/eval/${props.roomId}`);
         } else {
           Swal.fire({
             toast: true,
@@ -22,7 +23,7 @@ const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
             timer: 1000,
             title: `다시 리뷰해주세요.`,
           }).then(() => {
-            setIsVisible(false);
+            props.setIsVisible(false);
           });
         }
       })
@@ -35,16 +36,16 @@ const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
           timer: 1000,
           title: `다시 리뷰해주세요.`,
         }).then(() => {
-          setIsVisible(false);
+          props.setIsVisible(false);
         });
       });
   };
   const handleFail = () => {
     //axios
-    postEvalHost(roomId, false)
+    postEvalHost(props.roomId, false)
       .then(({ data }) => {
         if (data.statusCode === 2010) {
-          setIsVisible(false);
+          props.setIsVisible(false);
           window.location.reload();
         } else {
           Swal.fire({
@@ -55,7 +56,7 @@ const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
             timer: 1000,
             title: `다시 리뷰해주세요.`,
           }).then(() => {
-            setIsVisible(false);
+            props.setIsVisible(false);
           });
         }
       })
@@ -68,17 +69,17 @@ const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
           timer: 1000,
           title: `다시 리뷰해주세요.`,
         }).then(() => {
-          setIsVisible(false);
+          props.setIsVisible(false);
         });
       });
   };
   const handleClose = () => {
-    setIsVisible(false);
+    props.setIsVisible(false);
   };
   return (
     <div
       className={`${
-        isVisible ? "" : "hidden"
+        props.isVisible ? "" : "hidden"
       } fixed left-0 bottom-0 w-full h-[30vh] flex flex-col bg-slate-200 border-t p-4`}
     >
       {/* 닫기 버튼 */}
@@ -88,7 +89,7 @@ const MeetingReviewModal = ({ isVisible, setIsVisible, roomId }: any) => {
 
       {/* 멘트 */}
       <div className="flex flex-col justify-center items-center font-semibold">
-        <span>{`[이색놀거리] 블루 하와이안 만들기 모임이`}</span>
+        <span>{`[기타] 같이 발표 준비해요~! 모임이`}</span>
         <span>{`완료되었어요!`} </span>
         <span>{`모임을 성공적으로 마치셨나요?`}</span>
       </div>
