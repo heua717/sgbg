@@ -7,6 +7,7 @@
 
 블록체인 기반 단기 모임 서비스
 
+<br/>
 
 ## 기술 스택
 ##### FrontEnd
@@ -51,7 +52,16 @@
 
 ## 산출물
 
-<br/>
+- [원페이퍼 기획서](https://heather-slice-e94.notion.site/265e48fade1f45e3b7e9a084a7acf1bd)
+
+- [기능 명세서](https://heather-slice-e94.notion.site/157e13f6513b4a4eb99c1805e35f6247)
+
+- [API 명세서](https://heather-slice-e94.notion.site/API-a81538d6752d439cbcaf080da71eeff0)
+
+- [ER 다이어그램](https://heather-slice-e94.notion.site/ER-37043edd33be4312838641545e3eaa80)
+
+- [아키텍처](https://heather-slice-e94.notion.site/Architecture-26a066f7ec5f4e978b8345323b07f86c)
+
 
 <br/>
 
